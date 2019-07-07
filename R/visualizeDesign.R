@@ -19,7 +19,8 @@
 #'
 #' @return A list with two elements:
 #' \itemize{
-#' \item sampledata A \code{data.frame}, expanded from the input \code{sampleData}
+#' \item sampledata A \code{data.frame}, expanded from the input
+#' \code{sampleData}
 #' \item plotlist Plots
 #' }
 #'
@@ -36,18 +37,61 @@
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip
 #' @importFrom stats model.matrix as.formula relevel
+#' @importFrom methods is
 #'
 visualizeDesign <- function(sampleData, designFormula,
-                            flipCoord = FALSE, textSize = 5, textSizeLabs = 12,
+                            flipCoord = FALSE, textSize = 5,
+                            textSizeLabs = 12,
                             lineWidth = 25, refLevels = list()) {
+  ## TODO: Allow design of ~1 (currently fails, needs at least 1 term)
+
+  ## ----------------------------------------------------------------------- ##
+  ## Check input arguments
+  ## ----------------------------------------------------------------------- ##
+  if (!methods::is(sampleData, "data.frame")) {
+    stop("'sampleData' must be a data.frame")
+  }
+
+  if (!methods::is(designFormula, "formula") &&
+      !methods::is(designFormula, "character")) {
+    stop("'designFormula' must be a formula or a character string")
+  }
+  if (methods::is(designFormula, "character") &&
+      substr(designFormula, 1, 1) != "~") {
+    stop("If 'designFormula' is a character string, it must start with ~")
+  }
+  if (any(grepl("\\|", designFormula))) {
+    stop("'designFormula' can't contain |")
+  }
+
+  if (!methods::is(flipCoord, "logical") | length(flipCoord) != 1) {
+    stop("'flipCoord' must be a logical scalar")
+  }
+
+  if ((!is.numeric(textSize) | length(textSize) != 1) ||
+      (!is.numeric(textSizeLabs) | length(textSizeLabs) != 1) ||
+      (!is.numeric(lineWidth) | length(lineWidth) != 1)) {
+    stop("'textSize', 'textSizeLabs' and 'lineWidth' must be numeric scalars")
+  }
+
+  ## ----------------------------------------------------------------------- ##
+  ## Extract terms from the design formula
+  ## ----------------------------------------------------------------------- ##
   designFormula <- stats::as.formula(designFormula)
   terms <- strsplit(gsub(" ", "", as.character(designFormula)[2]),
                     "\\~|\\+|\\:|\\*|\\^|\\-")[[1]]
   terms <- setdiff(terms, c("0", "1"))
   terms <- unique(terms)
-  stopifnot(all(terms %in% colnames(sampleData)))
+  if (!all(terms %in% colnames(sampleData))) {
+    stop("Not all terms in the design matrix can be generated from ",
+         "the column names of the sample data")
+  }
   sampleData <- sampleData %>% dplyr::select(terms)
 
+  ## ----------------------------------------------------------------------- ##
+  ## Set reference levels of factors. Note that this should not be done
+  ## here, but in the main app
+  ## ----------------------------------------------------------------------- ##
   for (cn in colnames(sampleData)) {
     if ((is.character(sampleData[, cn]) || is.factor(sampleData[, cn])) &&
         paste0(cn, "_ref") %in% names(refLevels)) {
@@ -55,8 +99,15 @@ visualizeDesign <- function(sampleData, designFormula,
                                          ref = refLevels[[paste0(cn, "_ref")]])
     }
   }
+
+  ## ----------------------------------------------------------------------- ##
+  ## Create design matrix
+  ## ----------------------------------------------------------------------- ##
   mm <- stats::model.matrix(designFormula, data = sampleData)
 
+  ## ----------------------------------------------------------------------- ##
+  ## Add modeled value column to sample data
+  ## ----------------------------------------------------------------------- ##
   sampleData$value <- ""
   for (i in seq_len(nrow(sampleData))) {
     idxkeep <- which(mm[i, ] != 0)
@@ -72,6 +123,9 @@ visualizeDesign <- function(sampleData, designFormula,
   }
   sampleData <- sampleData %>% dplyr::distinct()
 
+  ## ----------------------------------------------------------------------- ##
+  ## Define terms to include in the plot, and terms used for splitting plots
+  ## ----------------------------------------------------------------------- ##
   if (length(terms) == 1) {
     plot_terms <- terms
   } else {
@@ -83,20 +137,29 @@ visualizeDesign <- function(sampleData, designFormula,
     split_terms <- c()
   }
 
+  ## ----------------------------------------------------------------------- ##
+  ## Add \n if the modeled value has too many characters
+  ## ----------------------------------------------------------------------- ##
   plot_data <- sampleData %>%
     dplyr::mutate(value = vapply(value, function(i)
       addNewLine(i, lineWidth), ""))
 
+  ## ----------------------------------------------------------------------- ##
+  ## Add value of split terms (to use for plot titles)
+  ## ----------------------------------------------------------------------- ##
   if (length(split_terms) > 0) {
     for (st in split_terms) {
       plot_data[[st]] <- paste0(st, " = ", plot_data[[st]])
     }
     plot_data <- plot_data  %>%
-      tidyr::unite("groupby", split_terms, sep = ",")
+      tidyr::unite("groupby", split_terms, sep = ", ")
   } else {
     plot_data$groupby <- ""
   }
 
+  ## ----------------------------------------------------------------------- ##
+  ## Create plot(s)
+  ## ----------------------------------------------------------------------- ##
   ggp <- lapply(split(
     plot_data, f = plot_data$groupby),
     function(w) {
@@ -120,7 +183,7 @@ visualizeDesign <- function(sampleData, designFormula,
                                 seq_len(length(unique(
                                   sampleData[, plot_terms[2]])) - 1))
       }
-      for (i in 1:nrow(w)) {
+      for (i in seq_len(nrow(w))) {
         gg <- gg +
           ggplot2::annotate(
             "text",
@@ -135,16 +198,21 @@ visualizeDesign <- function(sampleData, designFormula,
       }
       gg
     })
+
+  ## ----------------------------------------------------------------------- ##
+  ## Return
+  ## ----------------------------------------------------------------------- ##
   list(sampledata = sampleData, plotlist = ggp)
 }
 
+## Add \n if a string is longer than lineWidth
 addNewLine <- function(st, lineWidth) {
   if (nchar(st) > lineWidth) {
     st0 <- strsplit(st, "\\+")[[1]]
-    cs <- cumsum(sapply(st0, nchar))
+    cs <- cumsum(vapply(st0, nchar, 0))
     csgr <- cs %/% lineWidth
-    st1 <- sapply(split(st0, csgr),
-                  function(x) paste(x, collapse = "+"))
+    st1 <- vapply(split(st0, csgr),
+                  function(x) paste(x, collapse = "+"), "")
     st <- paste(st1, collapse = "+\n")
   }
   st

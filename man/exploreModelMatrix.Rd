@@ -16,7 +16,7 @@ in \code{sampleData}.}
 A Shiny app object
 }
 \description{
-Given a sample data table and a design formula, explore the resulting design
+Given a sample table and a design formula, explore the resulting design
 matrix graphically in a shiny app.
 }
 \examples{

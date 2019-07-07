@@ -31,7 +31,8 @@ character/factor columns of \code{sampleData}. Names must be of the form
 \value{
 A list with two elements:
 \itemize{
-\item sampledata A \code{data.frame}, expanded from the input \code{sampleData}
+\item sampledata A \code{data.frame}, expanded from the input
+\code{sampleData}
 \item plotlist Plots
 }
 }
