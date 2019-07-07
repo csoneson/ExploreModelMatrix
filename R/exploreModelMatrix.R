@@ -24,7 +24,7 @@
 #' }
 #'
 #' @importFrom shinydashboard dashboardPage dashboardHeader dashboardSidebar
-#'   dashboardBody menuItem
+#'   dashboardBody menuItem box
 #' @importFrom shiny uiOutput numericInput fluidRow column reactiveValues
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput
@@ -43,7 +43,7 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ),
 
       shinydashboard::dashboardSidebar(
-        width = 300,
+        width = 250,
         shiny::uiOutput("choose_sampledata_file"),
         shiny::uiOutput("choose_design_formula"),
         shinydashboard::menuItem(
@@ -66,24 +66,31 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                               value = 12, min = 1, max = 25, step = 1),
           shiny::numericInput(inputId = "linewidth",
                               label = "Maximal line width",
-                              value = 25, min = 1, max = 100, step = 1),
-          shiny::checkboxInput(inputId = "showfulltable",
-                               label = "Show full sample table",
-                               value = FALSE),
-          shiny::checkboxInput(inputId = "showtablesummary",
-                               label = "Show sample table summary",
-                               value = FALSE)
+                              value = 25, min = 1, max = 100, step = 1)
         )
       ),
 
       shinydashboard::dashboardBody(
         shiny::fluidRow(
-          shiny::column(8, shiny::uiOutput("plot_design")),
-          shiny::column(4, DT::dataTableOutput("table_sampledata"))
+          shiny::column(8, shinydashboard::box(
+            width = NULL, status = "info",
+            title = "Predicted values",
+            shiny::uiOutput("plot_design"))
+          ),
+          shiny::column(4, shinydashboard::box(
+            width = NULL, status = "warning",
+            title = "Predicted values",
+            DT::dataTableOutput("table_sampledata")))
         ),
         shiny::fluidRow(
-          shiny::column(7, DT::dataTableOutput("table_full")),
-          shiny::column(5, shiny::verbatimTextOutput("table_summary"))
+          shiny::column(7, shinydashboard::box(
+            width = NULL, title = "Full sample table",
+            collapsible = TRUE, collapsed = TRUE,
+            DT::dataTableOutput("table_full"))),
+          shiny::column(5, shinydashboard::box(
+            width = NULL, title = "Sample table summary",
+            collapsible = TRUE, collapsed = TRUE,
+            shiny::verbatimTextOutput("table_summary")))
         )
       )
     )
@@ -169,7 +176,7 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$table_summary <- shiny::renderPrint({
-      if (is.null(values$sampledata) || !input$showtablesummary) {
+      if (is.null(values$sampledata)) {
         NULL
       } else {
         summary(values$sampledata)
@@ -177,7 +184,7 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$table_full <- DT::renderDataTable({
-      if (is.null(values$sampledata) || !input$showfulltable) {
+      if (is.null(values$sampledata)) {
         NULL
       } else {
         DT::datatable(values$sampledata,
