@@ -48,7 +48,7 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         shiny::uiOutput("choose_design_formula"),
         shinydashboard::menuItem(
           "Choose reference levels", icon = shiny::icon("bookmark"),
-          shiny::uiOutput("dynamicUI")
+          shiny::uiOutput("reflevels")
         ),
         shinydashboard::menuItem(
           "Settings", icon = shiny::icon("paint-brush"),
@@ -112,7 +112,9 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::isolate(values$sampledata <- cdt)
     })
 
-    output$dynamicUI <- renderUI({
+    ## TODO: Set the levels of factors in values$sampledata rather than in visualizeDesign()
+
+    output$reflevels <- renderUI({
       if (is.null(values$sampledata)) {
         NULL
       } else {
