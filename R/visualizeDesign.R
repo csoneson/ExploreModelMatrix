@@ -5,8 +5,13 @@
 #'   in \code{sampleData}.
 #' @param flipCoord A \code{logical}, whether to flip the coordinate axes.
 #' @param textSize A \code{numeric} scalar giving the text size in the plot.
+#' @param textSizeLabs A \code{numeric} scalar giving the text size for the axis
+#'   labels.
 #' @param lineWidth A \code{numeric} scalar giving the maximal line width in
 #'   the plot.
+#' @param refLevels A named \code{list} with reference levels for the
+#'   character/factor columns of \code{sampleData}. Names must be of the form
+#'   <colname>_ref.
 #'
 #' @author Charlotte Soneson
 #'
@@ -30,11 +35,11 @@
 #' @importFrom tidyr unite
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip
-#' @importFrom stats model.matrix as.formula
+#' @importFrom stats model.matrix as.formula relevel
 #'
 visualizeDesign <- function(sampleData, designFormula,
-                            flipCoord = FALSE, textSize = 5,
-                            lineWidth = 25) {
+                            flipCoord = FALSE, textSize = 5, textSizeLabs = 12,
+                            lineWidth = 25, refLevels = list()) {
   designFormula <- stats::as.formula(designFormula)
   terms <- strsplit(gsub(" ", "", as.character(designFormula)[2]),
                     "\\~|\\+|\\:|\\*|\\^|\\-")[[1]]
@@ -42,6 +47,14 @@ visualizeDesign <- function(sampleData, designFormula,
   terms <- unique(terms)
   stopifnot(all(terms %in% colnames(sampleData)))
   sampleData <- sampleData %>% dplyr::select(terms)
+
+  for (cn in colnames(sampleData)) {
+    if ((is.character(sampleData[, cn]) || is.factor(sampleData[, cn])) &&
+        paste0(cn, "_ref") %in% names(refLevels)) {
+      sampleData[, cn] <- stats::relevel(factor(sampleData[, cn]),
+                                         ref = refLevels[[paste0(cn, "_ref")]])
+    }
+  }
   mm <- stats::model.matrix(designFormula, data = sampleData)
 
   sampleData$value <- ""
@@ -98,7 +111,9 @@ visualizeDesign <- function(sampleData, designFormula,
                               seq_len(length(unique(
                                 sampleData[, plot_terms[1]])) - 1)) +
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-                       panel.grid.minor = ggplot2::element_blank())
+                       panel.grid.minor = ggplot2::element_blank(),
+                       axis.text = ggplot2::element_text(size = textSizeLabs),
+                       axis.title = ggplot2::element_text(size = textSizeLabs))
       if (length(plot_terms) > 1) {
         gg <- gg +
           ggplot2::geom_vline(xintercept = 0.5 +

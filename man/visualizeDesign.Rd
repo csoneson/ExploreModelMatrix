@@ -5,7 +5,8 @@
 \title{Visualize design matrix}
 \usage{
 visualizeDesign(sampleData, designFormula, flipCoord = FALSE,
-  textSize = 5, lineWidth = 25)
+  textSize = 5, textSizeLabs = 12, lineWidth = 25,
+  refLevels = list())
 }
 \arguments{
 \item{sampleData}{A \code{data.frame} with sample information.}
@@ -17,8 +18,15 @@ in \code{sampleData}.}
 
 \item{textSize}{A \code{numeric} scalar giving the text size in the plot.}
 
+\item{textSizeLabs}{A \code{numeric} scalar giving the text size for the axis
+labels.}
+
 \item{lineWidth}{A \code{numeric} scalar giving the maximal line width in
 the plot.}
+
+\item{refLevels}{A named \code{list} with reference levels for the
+character/factor columns of \code{sampleData}. Names must be of the form
+<colname>_ref.}
 }
 \value{
 A list with two elements:

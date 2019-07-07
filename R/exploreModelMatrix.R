@@ -27,7 +27,7 @@
 #'   dashboardBody menuItem
 #' @importFrom shiny uiOutput numericInput fluidRow column reactiveValues
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
-#'   shinyApp icon renderPlot
+#'   shinyApp icon renderPlot tagList selectInput
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim
 #' @importFrom cowplot plot_grid
@@ -47,6 +47,10 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         shiny::uiOutput("choose_sampledata_file"),
         shiny::uiOutput("choose_design_formula"),
         shinydashboard::menuItem(
+          "Choose reference levels", icon = shiny::icon("bookmark"),
+          shiny::uiOutput("dynamicUI")
+        ),
+        shinydashboard::menuItem(
           "Settings", icon = shiny::icon("paint-brush"),
           shiny::numericInput(inputId = "plot_height",
                               label = "Plot height (numeric, in pixels)",
@@ -55,11 +59,20 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                label = "Flip coordinates",
                                value = FALSE),
           shiny::numericInput(inputId = "textsize",
-                              label = "Text size",
+                              label = "Text size, matrix entries",
                               value = 5, min = 1, max = 25, step = 1),
+          shiny::numericInput(inputId = "textsizelabs",
+                              label = "Text size, axis labels",
+                              value = 12, min = 1, max = 25, step = 1),
           shiny::numericInput(inputId = "linewidth",
                               label = "Maximal line width",
-                              value = 25, min = 1, max = 100, step = 1)
+                              value = 25, min = 1, max = 100, step = 1),
+          shiny::checkboxInput(inputId = "showfulltable",
+                               label = "Show full sample table",
+                               value = FALSE),
+          shiny::checkboxInput(inputId = "showtablesummary",
+                               label = "Show sample table summary",
+                               value = FALSE)
         )
       ),
 
@@ -67,6 +80,10 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         shiny::fluidRow(
           shiny::column(8, shiny::uiOutput("plot_design")),
           shiny::column(4, DT::dataTableOutput("table_sampledata"))
+        ),
+        shiny::fluidRow(
+          shiny::column(7, DT::dataTableOutput("table_full")),
+          shiny::column(5, shiny::verbatimTextOutput("table_summary"))
         )
       )
     )
@@ -95,6 +112,26 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::isolate(values$sampledata <- cdt)
     })
 
+    output$dynamicUI <- renderUI({
+      if (is.null(values$sampledata)) {
+        NULL
+      } else {
+        do.call(shiny::tagList, lapply(colnames(values$sampledata), function(i) {
+          vct <- values$sampledata[, i]
+          if (is.character(vct) || is.factor(vct)) {
+            shiny::selectInput(inputId = paste0(i, "_ref"),
+                               label = i,
+                               choices = unique(vct),
+                               selected = levels(factor(vct))[1],
+                               multiple = FALSE,
+                               selectize = TRUE)
+          } else {
+            NULL
+          }
+        }))
+      }
+    })
+
     output$choose_design_formula <- renderUI({
       if (!is.null(designFormula)) {
         shiny::textInput("designformula", "Design formula",
@@ -108,11 +145,14 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       if (is.null(values$sampledata) || input$designformula == "") {
         return(list(sampledata = NULL, designformula = NULL))
       } else {
+        ## TODO: Can we send only the relevant parts of input to refLevels?
         return(visualizeDesign(sampleData = values$sampledata,
                                designFormula = input$designformula,
                                flipCoord = input$flipcoord,
                                textSize = input$textsize,
-                               lineWidth = input$linewidth))
+                               textSizeLabs = input$textsizelabs,
+                               lineWidth = input$linewidth,
+                               refLevels = input))
       }
     })
 
@@ -121,6 +161,24 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         NULL
       } else {
         DT::datatable(generateOutput()$sampledata,
+                      options = list(scrollX = TRUE),
+                      rownames = FALSE)
+      }
+    })
+
+    output$table_summary <- shiny::renderPrint({
+      if (is.null(values$sampledata) || !input$showtablesummary) {
+        NULL
+      } else {
+        summary(values$sampledata)
+      }
+    })
+
+    output$table_full <- DT::renderDataTable({
+      if (is.null(values$sampledata) || !input$showfulltable) {
+        NULL
+      } else {
+        DT::datatable(values$sampledata,
                       options = list(scrollX = TRUE),
                       rownames = FALSE)
       }
