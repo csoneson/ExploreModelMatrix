@@ -9,9 +9,6 @@
 #'   labels.
 #' @param lineWidth A \code{numeric} scalar giving the maximal line width in
 #'   the plot.
-#' @param refLevels A named \code{list} with reference levels for the
-#'   character/factor columns of \code{sampleData}. Names must be of the form
-#'   <colname>_ref.
 #'
 #' @author Charlotte Soneson
 #'
@@ -36,13 +33,13 @@
 #' @importFrom tidyr unite
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip
-#' @importFrom stats model.matrix as.formula relevel
+#' @importFrom stats model.matrix as.formula
 #' @importFrom methods is
 #'
 visualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
                             textSizeLabs = 12,
-                            lineWidth = 25, refLevels = list()) {
+                            lineWidth = 25) {
   ## TODO: Allow design of ~1 (currently fails, needs at least 1 term)
 
   ## ----------------------------------------------------------------------- ##
@@ -87,18 +84,6 @@ visualizeDesign <- function(sampleData, designFormula,
          "the column names of the sample data")
   }
   sampleData <- sampleData %>% dplyr::select(terms)
-
-  ## ----------------------------------------------------------------------- ##
-  ## Set reference levels of factors. Note that this should not be done
-  ## here, but in the main app
-  ## ----------------------------------------------------------------------- ##
-  for (cn in colnames(sampleData)) {
-    if ((is.character(sampleData[, cn]) || is.factor(sampleData[, cn])) &&
-        paste0(cn, "_ref") %in% names(refLevels)) {
-      sampleData[, cn] <- stats::relevel(factor(sampleData[, cn]),
-                                         ref = refLevels[[paste0(cn, "_ref")]])
-    }
-  }
 
   ## ----------------------------------------------------------------------- ##
   ## Create design matrix

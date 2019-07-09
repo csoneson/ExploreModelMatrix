@@ -119,3 +119,42 @@ vd <- visualizeDesign(sampleData = sampleData,
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
+## Example 7 (see https://support.bioconductor.org/p/122613/)
+
+```{r}
+sampleData <- data.frame(group = factor(c(rep(1,6), rep(2,6), rep(3,6), rep(4,6))),
+                         subject = factor(c(1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8)),
+                         treat = factor(c(rep("a",6),rep("b",6),rep("a",6),rep("b",6))),
+                         time = factor(c(rep(c(1,2,3), 4), rep(c(1,4,5), 4))))
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ treat * time)
+cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
+app <- exploreModelMatrix(sampleData = sampleData,
+                          designFormula = ~ treat * time)
+if (interactive()) shiny::runApp(app)
+```
+
+## Example 8 (see https://support.bioconductor.org/p/122641/)
+
+```{r}
+sampleData <- data.frame(individual = factor(rep(1:3, each = 4)), 
+                         time = rep(rep(c("before", "after"), each = 2), 3), 
+                         exerc = rep(c("trained", "untrained"), 6))
+```
+
+## Example 9 (see https://support.bioconductor.org/p/80408/)
+
+```{r}
+sampleData = data.frame(
+  condition = factor(rep(c("ctrl_minus", "ctrl_plus", "ko_minus", "ko_plus"), 3)),
+  batch = factor(rep(1:6, each = 2)))
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ 0 + batch + condition)
+```
+
+## Session info
+
+```{r}
+sessionInfo()
+```
+

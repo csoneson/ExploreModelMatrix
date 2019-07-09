@@ -32,6 +32,7 @@
 #' @importFrom utils read.delim
 #' @importFrom cowplot plot_grid
 #' @importFrom methods is
+#' @importFrom stats model.matrix as.formula relevel
 #'
 exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
@@ -43,6 +44,10 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
   if (!is.null(designFormula) && !methods::is(designFormula, "formula")) {
     stop("'designFormula' must be a formula")
+  }
+
+  if (any(is.na(sampleData))) {
+    stop("'sampleData' can not contain NA values")
   }
 
   ## ----------------------------------------------------------------------- ##
@@ -100,13 +105,15 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shinydashboard::dashboardBody(
         shiny::fluidRow(
           shiny::column(8, shinydashboard::box(
-            width = NULL, status = "info",
-            title = "Predicted values",
+            width = NULL, status = "primary",
+            collapsible = TRUE, collapsed = FALSE,
+            title = "Fitted values",
             shiny::uiOutput("plot_design"))
           ),
           shiny::column(4, shinydashboard::box(
             width = NULL, status = "warning",
-            title = "Predicted values",
+            collapsible = TRUE, collapsed = FALSE,
+            title = "Fitted values",
             DT::dataTableOutput("table_sampledata")))
         ),
 
@@ -119,6 +126,23 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             width = NULL, title = "Sample table summary",
             collapsible = TRUE, collapsed = TRUE,
             shiny::verbatimTextOutput("table_summary")))
+        ),
+
+        shiny::fluidRow(
+          shiny::column(7, shinydashboard::box(
+            width = NULL, title = "Design matrix",
+            collapsible = TRUE, collapsed = TRUE,
+            shiny::verbatimTextOutput("design_matrix")
+          )),
+          shiny::column(5, shinydashboard::box(
+            width = NULL, title = "Rank",
+            collapsible = TRUE, collapsed = TRUE,
+            "Rank of design matrix: ",
+            shiny::textOutput("design_matrix_rank"),
+            "Number of columns in design matrix: ",
+            shiny::textOutput("design_matrix_ncol"),
+            shiny::uiOutput("rank_warning")
+          ))
         )
       )
     )
@@ -148,7 +172,8 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                          multiple = FALSE)
       })
     } else {
-      values$sampledata <- sampleData
+      values$sampledata <- sampleData %>%
+        dplyr::mutate_if(is.character, factor)
     }
 
     ## --------------------------------------------------------------------- ##
@@ -156,12 +181,10 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     shiny::observeEvent(input$sampledatasel, {
       cdt <- utils::read.delim(input$sampledatasel$datapath, header = TRUE,
-                               as.is = TRUE, sep = "\t", quote = "",
+                               as.is = FALSE, sep = "\t", quote = "",
                                check.names = FALSE)
       values$sampledata <- cdt
     })
-
-    ## TODO: Set the levels of factors in values$sampledata rather than in visualizeDesign()
 
     ## --------------------------------------------------------------------- ##
     ## Define inputs to choose reference levels
@@ -188,6 +211,20 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     ## --------------------------------------------------------------------- ##
+    ## Set reference levels of factors
+    ## --------------------------------------------------------------------- ##
+    shiny::observe({
+      for (nm in colnames(values$sampledata)) {
+        if (!is.null(input[[paste0(nm, "_ref")]]) &&
+            input[[paste0(nm, "_ref")]] != levels(factor(values$sampledata[, nm]))[1]) {
+          values$sampledata[, nm] <- stats::relevel(
+            factor(values$sampledata[, nm]), ref = input[[paste0(nm, "_ref")]]
+          )
+        }
+      }
+    })
+
+    ## --------------------------------------------------------------------- ##
     ## Define input to specify design formula
     ## --------------------------------------------------------------------- ##
     output$choose_design_formula <- renderUI({
@@ -206,16 +243,12 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       if (is.null(values$sampledata) || input$designformula == "") {
         return(list(sampledata = NULL, designformula = NULL))
       } else {
-        ## TODO: Can we send only the relevant parts of input to refLevels? Or,
-        ## rather, we should not send refLevels to visualizeDesign at all, they
-        ## should be set in the app.
         return(visualizeDesign(sampleData = values$sampledata,
                                designFormula = input$designformula,
                                flipCoord = input$flipcoord,
                                textSize = input$textsize,
                                textSizeLabs = input$textsizelabs,
-                               lineWidth = input$linewidth,
-                               refLevels = input))
+                               lineWidth = input$linewidth))
       }
     })
 
@@ -240,6 +273,56 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         NULL
       } else {
         summary(values$sampledata)
+      }
+    })
+
+    ## --------------------------------------------------------------------- ##
+    ## Generate design matrix
+    ## --------------------------------------------------------------------- ##
+    output$design_matrix <- shiny::renderPrint({
+      if (is.null(values$sampledata) || input$designformula == "") {
+        NULL
+      } else {
+        stats::model.matrix(stats::as.formula(input$designformula),
+                            data = values$sampledata)
+      }
+    })
+
+    ## --------------------------------------------------------------------- ##
+    ## Check rank and number of columns of design matrix
+    ## --------------------------------------------------------------------- ##
+    output$design_matrix_rank <- shiny::renderPrint({
+      if (is.null(values$sampledata) || input$designformula == "") {
+        NULL
+      } else {
+        mm <- stats::model.matrix(stats::as.formula(input$designformula),
+                                  data = values$sampledata)
+        qr(mm)$rank
+      }
+    })
+
+    output$design_matrix_ncol <- shiny::renderPrint({
+      if (is.null(values$sampledata) || input$designformula == "") {
+        NULL
+      } else {
+        mm <- stats::model.matrix(stats::as.formula(input$designformula),
+                                  data = values$sampledata)
+        ncol(mm)
+      }
+    })
+
+    output$rank_warning <- shiny::renderUI({
+      if (is.null(values$sampledata) || input$designformula == "") {
+        shiny::tagList(shiny::tags$p(""))
+      } else {
+        mm <- stats::model.matrix(stats::as.formula(input$designformula),
+                                  data = values$sampledata)
+        if (qr(mm)$rank >= ncol(mm)) {
+          shiny::tagList(shiny::tags$p(""))
+        } else {
+          shinydashboard::valueBox("", "The design matrix is not full rank",
+                                   color = "red", icon = NULL, width = 4.5)
+        }
       }
     })
 
