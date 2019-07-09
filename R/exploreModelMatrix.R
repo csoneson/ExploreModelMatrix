@@ -313,12 +313,12 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
     output$rank_warning <- shiny::renderUI({
       if (is.null(values$sampledata) || input$designformula == "") {
-        shiny::tagList(shiny::tags$p(""))
+        NULL
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
                                   data = values$sampledata)
         if (qr(mm)$rank >= ncol(mm)) {
-          shiny::tagList(shiny::tags$p(""))
+          NULL
         } else {
           shinydashboard::valueBox("", "The design matrix is not full rank",
                                    color = "red", icon = NULL, width = 4.5)
