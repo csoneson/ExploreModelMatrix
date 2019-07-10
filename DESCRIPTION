@@ -1,12 +1,12 @@
 Package: exploreModelMatrix
 Type: Package
-Title: Explore Design Matrices
+Title: Graphical Exploration Of Design Matrices
 Version: 0.1.0
 Authors@R: c(person("Charlotte", "Soneson", role = c("aut", "cre"), 
     email = "charlottesoneson@gmail.com", 
     comment = c(ORCID = "0000-0003-3833-2169")))
 Description: Given a sample data table and a design formula, 
-    explore the resulting design matrix. 
+    generate an interactive application to explore the resulting design matrix. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: 

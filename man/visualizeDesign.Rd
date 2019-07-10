@@ -5,7 +5,7 @@
 \title{Visualize design matrix}
 \usage{
 visualizeDesign(sampleData, designFormula, flipCoord = FALSE,
-  textSize = 5, textSizeLabs = 12, lineWidth = 25)
+  textSize = 5, textSizeLabs = 12, lineWidth = 25, dropCols = NULL)
 }
 \arguments{
 \item{sampleData}{A \code{data.frame} with sample information.}
@@ -22,6 +22,9 @@ labels.}
 
 \item{lineWidth}{A \code{numeric} scalar giving the maximal line width in
 the plot.}
+
+\item{dropCols}{A character vector giving columns to drop from the design
+matrix.}
 }
 \value{
 A list with two elements:

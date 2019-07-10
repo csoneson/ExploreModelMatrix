@@ -9,6 +9,8 @@
 #'   labels.
 #' @param lineWidth A \code{numeric} scalar giving the maximal line width in
 #'   the plot.
+#' @param dropCols A character vector giving columns to drop from the design
+#'   matrix.
 #'
 #' @author Charlotte Soneson
 #'

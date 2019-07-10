@@ -152,6 +152,19 @@ vd <- visualizeDesign(sampleData = sampleData,
                       designFormula = ~ 0 + batch + condition)
 ```
 
+## Example 10 (see https://support.bioconductor.org/p/64480/)
+
+```{r}
+sampleData <- data.frame(
+  status = factor(c(0,0,0,0,0,0,0,0,1,1,1,1,1,1)),
+  rep = factor(c(1,1,2,2,3,3,4,4,1,1,2,2,3,3)),
+  time = factor(c(0,1,0,1,0,1,0,1,0,1,0,1,0,1))
+)
+app <- exploreModelMatrix(sampleData = sampleData, 
+                          designFormula = ~status + time + status:rep + status:time)
+```
+
+
 ## Session info
 
 ```{r}

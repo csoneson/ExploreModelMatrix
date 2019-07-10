@@ -24,15 +24,17 @@
 #' }
 #'
 #' @importFrom shinydashboard dashboardPage dashboardHeader dashboardSidebar
-#'   dashboardBody menuItem box
+#'   dashboardBody menuItem box valueBox
 #' @importFrom shiny uiOutput numericInput fluidRow column reactiveValues
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
-#'   shinyApp icon renderPlot tagList selectInput
+#'   shinyApp icon renderPlot tagList selectInput checkboxInput
+#'   verbatimTextOutput textOutput observe renderPrint
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim
 #' @importFrom cowplot plot_grid
 #' @importFrom methods is
 #' @importFrom stats model.matrix as.formula relevel
+#' @importFrom dplyr mutate_if
 #'
 exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
