@@ -80,6 +80,11 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         ),
 
         shinydashboard::menuItem(
+          "Drop columns", icon = shiny::icon("paint-brush"),
+          shiny::uiOutput("dropcols")
+        ),
+
+        shinydashboard::menuItem(
           "Settings", icon = shiny::icon("paint-brush"),
           shiny::numericInput(inputId = "plot_height",
                               label = "Plot height (numeric, in pixels)",
@@ -225,6 +230,22 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     ## --------------------------------------------------------------------- ##
+    ## Define inputs to drop columns in design matrix
+    ## --------------------------------------------------------------------- ##
+    output$dropcols <- renderUI({
+      if (is.null(values$sampledata) || input$designformula == "") {
+        NULL
+      } else {
+        mm <- stats::model.matrix(stats::as.formula(input$designformula),
+                                  data = values$sampledata)
+        shiny::selectInput(inputId = "dropcols",
+                           label = "Columns to drop",
+                           choices = colnames(mm),
+                           selectize = TRUE, multiple = TRUE)
+      }
+    })
+
+    ## --------------------------------------------------------------------- ##
     ## Define input to specify design formula
     ## --------------------------------------------------------------------- ##
     output$choose_design_formula <- renderUI({
@@ -248,7 +269,8 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                flipCoord = input$flipcoord,
                                textSize = input$textsize,
                                textSizeLabs = input$textsizelabs,
-                               lineWidth = input$linewidth))
+                               lineWidth = input$linewidth,
+                               dropCols = input$dropcols))
       }
     })
 
@@ -283,8 +305,9 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       if (is.null(values$sampledata) || input$designformula == "") {
         NULL
       } else {
-        stats::model.matrix(stats::as.formula(input$designformula),
-                            data = values$sampledata)
+        mm <- stats::model.matrix(stats::as.formula(input$designformula),
+                                  data = values$sampledata)
+        mm[, !(colnames(mm) %in% input$dropcols), drop = FALSE]
       }
     })
 
@@ -297,6 +320,7 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
                                   data = values$sampledata)
+        mm <- mm[, !(colnames(mm) %in% input$dropcols), drop = FALSE]
         qr(mm)$rank
       }
     })
@@ -307,6 +331,7 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
                                   data = values$sampledata)
+        mm <- mm[, !(colnames(mm) %in% input$dropcols), drop = FALSE]
         ncol(mm)
       }
     })
@@ -317,6 +342,7 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
                                   data = values$sampledata)
+        mm <- mm[, !(colnames(mm) %in% input$dropcols), drop = FALSE]
         if (qr(mm)$rank >= ncol(mm)) {
           NULL
         } else {

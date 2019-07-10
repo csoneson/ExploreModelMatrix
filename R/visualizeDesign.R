@@ -39,7 +39,7 @@
 visualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
                             textSizeLabs = 12,
-                            lineWidth = 25) {
+                            lineWidth = 25, dropCols = NULL) {
   ## TODO: Allow design of ~1 (currently fails, needs at least 1 term)
 
   ## ----------------------------------------------------------------------- ##
@@ -89,6 +89,7 @@ visualizeDesign <- function(sampleData, designFormula,
   ## Create design matrix
   ## ----------------------------------------------------------------------- ##
   mm <- stats::model.matrix(designFormula, data = sampleData)
+  mm <- mm[, !(colnames(mm) %in% dropCols), drop = FALSE]
 
   ## ----------------------------------------------------------------------- ##
   ## Add modeled value column to sample data
