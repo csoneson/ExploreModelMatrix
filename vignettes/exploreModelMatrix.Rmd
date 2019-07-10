@@ -23,145 +23,136 @@ library(exploreModelMatrix)
 ## Example 1
 
 ```{r, fig.width = 7}
-sampleData <- data.frame(genotype = rep(c("A", "B"), each = 4),
-                         treatment = rep(c("ctrl", "trt"), 4))
+(sampleData <- data.frame(genotype = rep(c("A", "B"), each = 4),
+                          treatment = rep(c("ctrl", "trt"), 4)))
 vd <- visualizeDesign(sampleData = sampleData, 
-                      designFormula = ~ genotype + treatment)
+                      designFormula = ~ genotype + treatment, textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist)
 app <- exploreModelMatrix(sampleData = sampleData,
                           designFormula = ~ genotype + treatment)
 if (interactive()) shiny::runApp(app)
 ```
 
-## Example 2 (see https://support.bioconductor.org/p/122506/)
+## Example 2 (see https://support.bioconductor.org/p/122506/, https://support.bioconductor.org/p/122613/)
 
-```{r, fig.height = 6, fig.width = 5}
-sampleData <- data.frame(group = factor(c(rep(1,6), rep(2,6), rep(3,6), rep(4,6))),
-                         subject = c(1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8),
-                         treatment = factor(c(rep("a",6),rep("b",6),rep("a",6),rep("b",6))),
-                         time = factor(c(rep(c(1,2,3), 4), rep(c(1,4,5), 4))))
+```{r, fig.height = 5, fig.width = 5}
+(sampleData <- data.frame(
+  group = factor(rep(1:4, each = 6)),
+  subject = rep(1:8, each = 3),
+  treatment = factor(rep(c("a", "b", "a", "b"), each = 6)),
+  time = factor(c(rep(1:3, 4), rep(c(1, 4, 5), 4)))))
 vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + time:treatment + treatment)
+                      designFormula = ~ 0 + treatment + time:treatment, 
+                      flipCoord = TRUE, textSize = 4)
+cowplot::plot_grid(plotlist = vd$plotlist)
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ treatment * time, 
+                      flipCoord = TRUE, textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist)
 app <- exploreModelMatrix(sampleData = sampleData,
-                          designFormula = ~ 0 + time:treatment + treatment)
+                          designFormula = ~ 0 + treatment + time:treatment)
 if (interactive()) shiny::runApp(app)
 ```
 
-## Example 3 
+## Example 3 (see https://support.bioconductor.org/p/112947/)
 
-```{r, fig.width = 8}
-sampleData <- data.frame(sample = c("s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"), 
-                         trtm = c("veh", "veh", "drug", "drug", "veh", "veh", "drug", "drug"),
-                         celline = c("A", "A", "A", "A", "B", "B", "B", "B"), 
-                         stringsAsFactors = FALSE)
+```{r, fig.width = 7}
+(sampleData = data.frame(
+  group = factor(rep(c("NR", "NT", "P", "F"), c(11, 26, 14, 4))),
+  batch = factor(c(3, 3, 3, 4, 4, 6, 3, 3, 3, 6, 6, 6, 6, 6, 4, 6, 3, 3, 
+                   3, 3, 3, 4, 4, 4, 4, 6, 6, 6 ,6, 3, 3, 6, 6, 6, 6, 6, 
+                   6, 3, 3, 3, 3, 4, 4, 4, 6, 3, 3, 3, 3, 6, 6, 3, 3, 3, 3))))
 vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ celline + celline:trtm)
-cowplot::plot_grid(plotlist = vd$plotlist)
-app <- exploreModelMatrix(sampleData = sampleData,
-                          designFormula = ~ celline + celline:trtm)
-if (interactive()) shiny::runApp(app)
-```
-
-## Example 4 (see https://support.bioconductor.org/p/112947/)
-
-```{r, fig.width = 8}
-sampleData = data.frame(
-  group = factor(c(rep("NR", 11), rep("NT", 26), rep("P", 14), rep("F", 4))),
-  batch = factor(c(3,3,3,4,4,6,3,3,3,6,6,6,6,6,4,6,3,3,3,3,3,4,4,4,4,6,6,6,6,3,3,6,6,6,6,6,6,3,3,3,3,4,4,4,6,3,3,3,3,6,6,3,3,3,3)))
-vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + batch + group)
+                      designFormula = ~ 0 + batch + group, textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist)
 app <- exploreModelMatrix(sampleData = sampleData,
                           designFormula = ~ 0 + batch + group)
 if (interactive()) shiny::runApp(app)
 
 vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + group + batch)
+                      designFormula = ~ 0 + group + batch, textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist)
 ```
 
-## Example 5 (see https://support.bioconductor.org/p/120850/)
+## Example 4 (see https://support.bioconductor.org/p/120850/)
 
-```{r, fig.width = 8, fig.height = 22}
-sampleData <- data.frame(Response = rep(c("Resistant","Sensitive"),c(12,18)),
-                         Patient = factor(c(1,1,2,2,3,3,4,4,5,5,6,6,8,8,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18)),
-                         Treatment = factor(c("pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post","pre","post"), levels = c("pre", "post")), 
-                         ind.n = factor(c(1,1,2,2,3,3,4,4,5,5,6,6,2,2,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12)))
-
+```{r, fig.width = 7, fig.height = 16}
+(sampleData <- data.frame(
+  Response = rep(c("Resistant", "Sensitive"), c(12, 18)),
+  Patient = factor(rep(c(1:6, 8, 11:18), each = 2)),
+  Treatment = factor(rep(c("pre","post"), 15)), 
+  ind.n = factor(rep(c(1:6, 2, 5:12), each = 2))))
 vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ Response + Response:ind.n + Response:Treatment)
+                      designFormula = ~ Response + Response:ind.n + Response:Treatment,
+                      textSize = 3)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 app <- exploreModelMatrix(sampleData = sampleData,
                           designFormula = ~ Response + Response:ind.n + Response:Treatment)
 if (interactive()) shiny::runApp(app)
 ```
 
-```{r, fig.width = 8}
+```{r, fig.width = 7}
 vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ Treatment + Response)
+                      designFormula = ~ Treatment + Response, textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
-## Example 6 (see https://support.bioconductor.org/p/120591/)
+## Example 5 (see https://support.bioconductor.org/p/120591/)
 
-```{r}
-sampleData <- data.frame(samples = c("Cell1_HA1", "Cell1_HA2", "Cell1_foxcut11", 
-                                     "Cell1_foxcut12", "Cell2_HA1", "Cell2_HA2", 
-                                     "Cell2_foxcut11", "Cell2_foxcut12"), 
-                         type = c("Control", "Control", "FOXCUT", "FOXCUT", 
-                                  "Control", "Control", "FOXCUT", "FOXCUT"), 
-                         replicate = factor(c(1, 2, 1, 2, 3, 4, 3, 4)), 
-                         celline = factor(c(1, 1, 1, 1, 2, 2, 2, 2)))
+```{r, fig.width = 7}
+(sampleData <- data.frame(
+  samples = c("Cell1_HA1", "Cell1_HA2", "Cell1_foxcut11", 
+              "Cell1_foxcut12", "Cell2_HA1", "Cell2_HA2", 
+              "Cell2_foxcut11", "Cell2_foxcut12"), 
+  type = c("Control", "Control", "FOXCUT", "FOXCUT", 
+           "Control", "Control", "FOXCUT", "FOXCUT"), 
+  replicate = factor(c(1, 2, 1, 2, 3, 4, 3, 4)), 
+  celline = factor(c(1, 1, 1, 1, 2, 2, 2, 2))))
 sampleData$group <- paste0(sampleData$type, ".", sampleData$celline)
 vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + group + replicate)
+                      designFormula = ~ 0 + group + replicate, textSize = 3)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
-## Example 7 (see https://support.bioconductor.org/p/122613/)
+## Example 6 (see https://support.bioconductor.org/p/122641/)
 
-```{r}
-sampleData <- data.frame(group = factor(c(rep(1,6), rep(2,6), rep(3,6), rep(4,6))),
-                         subject = factor(c(1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8)),
-                         treat = factor(c(rep("a",6),rep("b",6),rep("a",6),rep("b",6))),
-                         time = factor(c(rep(c(1,2,3), 4), rep(c(1,4,5), 4))))
-vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ treat * time)
+```{r, fig.height = 9, fig.width = 7}
+(sampleData <- data.frame(individual = factor(rep(1:3, each = 4)), 
+                          time = rep(rep(c("before", "after"), each = 2), 3), 
+                          exerc = rep(c("trained", "untrained"), 6)))
+vd <- visualizeDesign(sampleData = sampleData, 
+                      designFormula = ~ individual + time*exerc, textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
-app <- exploreModelMatrix(sampleData = sampleData,
-                          designFormula = ~ treat * time)
-if (interactive()) shiny::runApp(app)
 ```
 
-## Example 8 (see https://support.bioconductor.org/p/122641/)
+## Example 7 (see https://support.bioconductor.org/p/80408/)
 
-```{r}
-sampleData <- data.frame(individual = factor(rep(1:3, each = 4)), 
-                         time = rep(rep(c("before", "after"), each = 2), 3), 
-                         exerc = rep(c("trained", "untrained"), 6))
-```
-
-## Example 9 (see https://support.bioconductor.org/p/80408/)
-
-```{r}
-sampleData = data.frame(
+```{r, fig.height = 5, fig.width = 7}
+(sampleData = data.frame(
   condition = factor(rep(c("ctrl_minus", "ctrl_plus", "ko_minus", "ko_plus"), 3)),
-  batch = factor(rep(1:6, each = 2)))
+  batch = factor(rep(1:6, each = 2))))
 vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + batch + condition)
+                      designFormula = ~ 0 + batch + condition, 
+                      textSize = 4, lineWidth = 20, 
+                      dropCols = "conditionko_minus")
+cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
-## Example 10 (see https://support.bioconductor.org/p/64480/)
+## Example 8 (see https://support.bioconductor.org/p/64480/)
 
-```{r}
-sampleData <- data.frame(
-  status = factor(c(0,0,0,0,0,0,0,0,1,1,1,1,1,1)),
-  rep = factor(c(1,1,2,2,3,3,4,4,1,1,2,2,3,3)),
-  time = factor(c(0,1,0,1,0,1,0,1,0,1,0,1,0,1))
-)
+```{r, fig.width = 7, fig.height = 7}
+(sampleData <- data.frame(
+  status = factor(rep(c(0, 1), c(8, 6))),
+  rep = factor(c(1, 1, 2, 2, 3, 3, 4, 4, 1, 1, 2, 2, 3, 3)),
+  time = factor(rep(c(0, 1), 7))
+))
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ status + time + status:rep + status:time,
+                      textSize = 4)
+cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 app <- exploreModelMatrix(sampleData = sampleData, 
-                          designFormula = ~status + time + status:rep + status:time)
+                          designFormula = ~ status + time + status:rep + status:time)
+if (interactive()) shiny::runApp(app)
 ```
 
 
