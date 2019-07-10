@@ -1,4 +1,4 @@
-Package: exploreModelMatrix
+Package: ExploreModelMatrix
 Type: Package
 Title: Graphical Exploration Of Design Matrices
 Version: 0.1.0

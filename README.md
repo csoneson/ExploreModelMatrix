@@ -29,3 +29,5 @@ exploreModelMatrix(sampleData = sampleData,
                    designFormula = ~ genotype + treatment)
 
 ```
+
+For more examples we refer to the vignette. 
