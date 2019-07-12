@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(exploreModelMatrix)
+library(ExploreModelMatrix)
 ```
 
 ## Example 1
@@ -123,6 +123,10 @@ cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 vd <- visualizeDesign(sampleData = sampleData, 
                       designFormula = ~ individual + time*exerc, textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
+sampleData$group <- paste(sampleData$exerc, sampleData$time, sep = ".")
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ 0 + individual + group, textSize = 4)
+cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
 ## Example 7 (see https://support.bioconductor.org/p/80408/)
@@ -153,6 +157,18 @@ cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 app <- exploreModelMatrix(sampleData = sampleData, 
                           designFormula = ~ status + time + status:rep + status:time)
 if (interactive()) shiny::runApp(app)
+```
+
+## Example 9
+
+```{r}
+set.seed(1)
+(sampleData <- data.frame(
+  age = round(runif(10, min = 12, max = 60))
+))
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ age)
+cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
 

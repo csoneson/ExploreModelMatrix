@@ -223,7 +223,8 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     shiny::observe({
       for (nm in colnames(values$sampledata)) {
         if (!is.null(input[[paste0(nm, "_ref")]]) &&
-            input[[paste0(nm, "_ref")]] != levels(factor(values$sampledata[, nm]))[1]) {
+            input[[paste0(nm, "_ref")]] !=
+            levels(factor(values$sampledata[, nm]))[1]) {
           values$sampledata[, nm] <- stats::relevel(
             factor(values$sampledata[, nm]), ref = input[[paste0(nm, "_ref")]]
           )

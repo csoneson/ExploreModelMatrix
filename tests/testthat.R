@@ -1,4 +1,4 @@
 library(testthat)
-library(exploreModelMatrix)
+library(ExploreModelMatrix)
 
-test_check("exploreModelMatrix")
+test_check("ExploreModelMatrix")

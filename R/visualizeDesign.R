@@ -31,7 +31,7 @@
 #'   designFormula = ~genotype + treatment
 #' )
 #'
-#' @importFrom dplyr select distinct mutate
+#' @importFrom dplyr select distinct mutate mutate_all
 #' @importFrom tidyr unite
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip
@@ -131,6 +131,12 @@ visualizeDesign <- function(sampleData, designFormula,
   plot_data <- sampleData %>%
     dplyr::mutate(value = vapply(value, function(i)
       addNewLine(i, lineWidth), ""))
+
+  ## ----------------------------------------------------------------------- ##
+  ## Convert all columns to factors for plotting
+  ## ----------------------------------------------------------------------- ##
+  plot_data <- plot_data %>%
+    dplyr::mutate_all(as.factor)
 
   ## ----------------------------------------------------------------------- ##
   ## Add value of split terms (to use for plot titles)
