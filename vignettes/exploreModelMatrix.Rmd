@@ -123,6 +123,9 @@ cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 vd <- visualizeDesign(sampleData = sampleData, 
                       designFormula = ~ individual + time*exerc, textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
+```
+
+```{r, fig.height = 4, fig.width = 7}
 sampleData$group <- paste(sampleData$exerc, sampleData$time, sep = ".")
 vd <- visualizeDesign(sampleData = sampleData,
                       designFormula = ~ 0 + individual + group, textSize = 4)
@@ -152,7 +155,8 @@ cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ))
 vd <- visualizeDesign(sampleData = sampleData,
                       designFormula = ~ status + time + status:rep + status:time,
-                      textSize = 4)
+                      textSize = 4, 
+                      dropCols = "status1:rep4")
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 app <- exploreModelMatrix(sampleData = sampleData, 
                           designFormula = ~ status + time + status:rep + status:time)
@@ -161,7 +165,7 @@ if (interactive()) shiny::runApp(app)
 
 ## Example 9
 
-```{r}
+```{r, fig.height = 5}
 set.seed(1)
 (sampleData <- data.frame(
   age = round(runif(10, min = 12, max = 60))
@@ -169,6 +173,24 @@ set.seed(1)
 vd <- visualizeDesign(sampleData = sampleData,
                       designFormula = ~ age)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
+```
+
+## Example 10 (see https://support.bioconductor.org/p/122764/)
+
+```{r, fig.height = 7, fig.width = 7}
+(sampleData <- data.frame(
+  disease = rep(c("healthy", "disease"), c(6, 9)),
+  treatment = rep(c("None", "Drug_A", "Drug_B"), 5),
+  patient = factor(rep(c(1:2, 1:3), each = 3))
+))
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ disease + disease:patient + disease:treatment,
+                      textSize = 3, 
+                      dropCols = "diseasehealthy:patient3")
+cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
+app <- exploreModelMatrix(sampleData = sampleData, 
+                          designFormula = ~ disease + disease:patient + disease:treatment)
+if (interactive()) shiny::runApp(app)
 ```
 
 
