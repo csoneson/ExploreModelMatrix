@@ -77,17 +77,17 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         shiny::uiOutput("choose_design_formula"),
 
         shinydashboard::menuItem(
-          "Choose reference levels", icon = shiny::icon("bookmark"),
+          "Choose reference levels", icon = shiny::icon("anchor"),
           shiny::uiOutput("reflevels")
         ),
 
         shinydashboard::menuItem(
-          "Drop columns", icon = shiny::icon("paint-brush"),
+          "Drop columns", icon = shiny::icon("trash"),
           shiny::uiOutput("dropcols")
         ),
 
         shinydashboard::menuItem(
-          "Settings", icon = shiny::icon("paint-brush"),
+          "Settings", icon = shiny::icon("sliders-h"),
           shiny::numericInput(inputId = "plot_height",
                               label = "Plot height (numeric, in pixels)",
                               value = 400, min = 200, max = 3000, step = 10),
