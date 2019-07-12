@@ -1,6 +1,10 @@
 ---
-title: "exploreModelMatrix"
-output: rmarkdown::html_vignette
+title: "ExploreModelMatrix"
+author: "Charlotte Soneson"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{exploreModelMatrix}
   %\VignetteEncoding{UTF-8}
@@ -16,11 +20,29 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Introduction
+
+`ExploreModelMatrix` is an R package for visualizing design matrices generated
+by the `model.matrix` R function. Provided with a sample information table and a
+design formula, the `exploreModelMatrix()` function launches a shiny app where
+the user can explore the modeled values (in terms of the model coefficients) for
+each combination of predictor values. In addition, the app allows the user to
+interactively change the design formula and the reference levels of factor
+variables as well as drop unwanted columns from the design matrix, in order to
+explore the effect on the modeled values.
+
+In addition to the interactive visualization, `ExploreModelMatrix` also provides
+a function, `visualizeDesign()`, for generating static visualizations.
+
+In this vignette, we show examples of applying the `ExploreModelMatrix`
+functions to various experimental design setups. Most examples are taken from
+questions raised at the Bioconductor support site.
+
 ```{r setup}
 library(ExploreModelMatrix)
 ```
 
-## Example 1
+## Example 1 - two categorical predictors
 
 ```{r, fig.width = 7}
 (sampleData <- data.frame(genotype = rep(c("A", "B"), each = 4),
@@ -33,7 +55,22 @@ app <- exploreModelMatrix(sampleData = sampleData,
 if (interactive()) shiny::runApp(app)
 ```
 
-## Example 2 (see https://support.bioconductor.org/p/122506/, https://support.bioconductor.org/p/122613/)
+## Example 2 - one continuous predictor
+
+```{r, fig.height = 5}
+set.seed(1)
+(sampleData <- data.frame(
+  age = round(runif(10, min = 12, max = 60))
+))
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ age)
+cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
+```
+
+## Example 3
+
+From https://support.bioconductor.org/p/122506/,
+https://support.bioconductor.org/p/122613/
 
 ```{r, fig.height = 5, fig.width = 5}
 (sampleData <- data.frame(
@@ -54,7 +91,8 @@ app <- exploreModelMatrix(sampleData = sampleData,
 if (interactive()) shiny::runApp(app)
 ```
 
-## Example 3 (see https://support.bioconductor.org/p/112947/)
+## Example 4
+From https://support.bioconductor.org/p/112947/
 
 ```{r, fig.width = 7}
 (sampleData = data.frame(
@@ -74,7 +112,8 @@ vd <- visualizeDesign(sampleData = sampleData,
 cowplot::plot_grid(plotlist = vd$plotlist)
 ```
 
-## Example 4 (see https://support.bioconductor.org/p/120850/)
+## Example 5
+From https://support.bioconductor.org/p/120850/
 
 ```{r, fig.width = 7, fig.height = 16}
 (sampleData <- data.frame(
@@ -97,7 +136,8 @@ vd <- visualizeDesign(sampleData = sampleData,
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
-## Example 5 (see https://support.bioconductor.org/p/120591/)
+## Example 6
+From https://support.bioconductor.org/p/120591/
 
 ```{r, fig.width = 7}
 (sampleData <- data.frame(
@@ -114,7 +154,8 @@ vd <- visualizeDesign(sampleData = sampleData,
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
-## Example 6 (see https://support.bioconductor.org/p/122641/)
+## Example 7
+From https://support.bioconductor.org/p/122641/
 
 ```{r, fig.height = 9, fig.width = 7}
 (sampleData <- data.frame(individual = factor(rep(1:3, each = 4)), 
@@ -132,7 +173,8 @@ vd <- visualizeDesign(sampleData = sampleData,
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
-## Example 7 (see https://support.bioconductor.org/p/80408/)
+## Example 8
+From https://support.bioconductor.org/p/80408/
 
 ```{r, fig.height = 5, fig.width = 7}
 (sampleData = data.frame(
@@ -145,7 +187,8 @@ vd <- visualizeDesign(sampleData = sampleData,
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
-## Example 8 (see https://support.bioconductor.org/p/64480/)
+## Example 9
+From https://support.bioconductor.org/p/64480/
 
 ```{r, fig.width = 7, fig.height = 7}
 (sampleData <- data.frame(
@@ -163,19 +206,8 @@ app <- exploreModelMatrix(sampleData = sampleData,
 if (interactive()) shiny::runApp(app)
 ```
 
-## Example 9
-
-```{r, fig.height = 5}
-set.seed(1)
-(sampleData <- data.frame(
-  age = round(runif(10, min = 12, max = 60))
-))
-vd <- visualizeDesign(sampleData = sampleData,
-                      designFormula = ~ age)
-cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
-```
-
-## Example 10 (see https://support.bioconductor.org/p/122764/)
+## Example 10
+From https://support.bioconductor.org/p/122764/
 
 ```{r, fig.height = 7, fig.width = 7}
 (sampleData <- data.frame(
@@ -192,7 +224,6 @@ app <- exploreModelMatrix(sampleData = sampleData,
                           designFormula = ~ disease + disease:patient + disease:treatment)
 if (interactive()) shiny::runApp(app)
 ```
-
 
 ## Session info
 
