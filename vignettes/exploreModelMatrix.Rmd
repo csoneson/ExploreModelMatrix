@@ -223,6 +223,18 @@ cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 app <- exploreModelMatrix(sampleData = sampleData, 
                           designFormula = ~ disease + disease:patient + disease:treatment)
 if (interactive()) shiny::runApp(app)
+
+## Alternative formulation
+sampleData$patient <- factor(rep(1:5, each = 3))
+sampleData
+vd <- visualizeDesign(sampleData = sampleData,
+                      designFormula = ~ 0 + patient + disease:treatment,
+                      textSize = 3, 
+                      dropCols = c("diseasedisease:treatmentNone",
+                                   "diseasehealthy:treatmentNone"))
+app <- exploreModelMatrix(sampleData = sampleData, 
+                          designFormula = ~ 0 + patient + disease:treatment)
+if (interactive()) shiny::runApp(app)
 ```
 
 ## Session info
