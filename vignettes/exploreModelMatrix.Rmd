@@ -42,6 +42,14 @@ questions raised at the Bioconductor support site.
 library(ExploreModelMatrix)
 ```
 
+## Interface
+
+The `exploreModelMatrix()` function opens a graphical interface where the user
+can interactively explore the provided design. This section provides an overview
+of what is shown in the graphical interface.
+
+<img src=`r system.file(package='ExploreModelMatrix', 'www/ExploreModelMatrix.png')` width="600"/>
+
 ## Example 1 - two categorical predictors
 
 ```{r, fig.width = 7}
