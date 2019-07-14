@@ -24,17 +24,18 @@
 #' }
 #'
 #' @importFrom shinydashboard dashboardPage dashboardHeader dashboardSidebar
-#'   dashboardBody menuItem box valueBox
+#'   dashboardBody menuItem box valueBox dropdownMenu notificationItem
 #' @importFrom shiny uiOutput numericInput fluidRow column reactiveValues
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
-#'   verbatimTextOutput textOutput observe renderPrint
+#'   verbatimTextOutput textOutput observe renderPrint actionButton
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim
 #' @importFrom cowplot plot_grid
 #' @importFrom methods is
 #' @importFrom stats model.matrix as.formula relevel
 #' @importFrom dplyr mutate_if
+#' @importFrom rintrojs introjs introjsUI
 #'
 exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
@@ -64,7 +65,21 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ## ------------------------------------------------------------------- ##
       shinydashboard::dashboardHeader(
         title = "Design matrix visualization",
-        titleWidth = 350
+        titleWidth = 350,
+        shinydashboard::dropdownMenu(
+          type = "tasks",
+          icon = shiny::icon("question-circle fa-1g"),
+          badgeStatus = NULL,
+          headerText = "Documentation",
+          shinydashboard::notificationItem(
+            text = shiny::actionButton(
+              "interface_overview", "Overview of the interface",
+              shiny::icon("hand-o-right")
+            ),
+            icon = shiny::icon(""), # tricking it to not have additional icon
+            status = "primary"
+          )
+        )
       ),
 
       ## ------------------------------------------------------------------- ##
@@ -78,16 +93,19 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
         shinydashboard::menuItem(
           "Choose reference levels", icon = shiny::icon("anchor"),
+          startExpanded = TRUE,
           shiny::uiOutput("reflevels")
         ),
 
         shinydashboard::menuItem(
           "Drop columns", icon = shiny::icon("trash"),
+          startExpanded = TRUE,
           shiny::uiOutput("dropcols")
         ),
 
         shinydashboard::menuItem(
           "Settings", icon = shiny::icon("sliders-h"),
+          startExpanded = TRUE,
           shiny::numericInput(inputId = "plot_height",
                               label = "Plot height (numeric, in pixels)",
                               value = 400, min = 200, max = 3000, step = 10),
@@ -110,6 +128,8 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ## Outputs
       ## ------------------------------------------------------------------- ##
       shinydashboard::dashboardBody(
+        rintrojs::introjsUI(),
+
         shiny::fluidRow(
           shiny::column(8, shinydashboard::box(
             width = NULL, status = "primary",
@@ -127,23 +147,23 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         shiny::fluidRow(
           shiny::column(7, shinydashboard::box(
             width = NULL, title = "Full sample table",
-            collapsible = TRUE, collapsed = TRUE,
+            collapsible = TRUE, collapsed = FALSE,
             DT::dataTableOutput("table_full"))),
           shiny::column(5, shinydashboard::box(
             width = NULL, title = "Sample table summary",
-            collapsible = TRUE, collapsed = TRUE,
+            collapsible = TRUE, collapsed = FALSE,
             shiny::verbatimTextOutput("table_summary")))
         ),
 
         shiny::fluidRow(
           shiny::column(7, shinydashboard::box(
             width = NULL, title = "Design matrix",
-            collapsible = TRUE, collapsed = TRUE,
+            collapsible = TRUE, collapsed = FALSE,
             shiny::verbatimTextOutput("design_matrix")
           )),
           shiny::column(5, shinydashboard::box(
             width = NULL, title = "Rank",
-            collapsible = TRUE, collapsed = TRUE,
+            collapsible = TRUE, collapsed = FALSE,
             "Rank of design matrix: ",
             shiny::textOutput("design_matrix_rank"),
             "Number of columns in design matrix: ",
@@ -385,6 +405,18 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                         width = "100%",
                         height = paste0(input$plot_height, "px"))
     })
+
+    ## ----------------------------------------------------------------------- ##
+    ## Tour
+    ## ----------------------------------------------------------------------- ##
+    observeEvent(input$interface_overview, {
+      tour <- read.delim(system.file("extdata", "interface_overview.txt",
+                                     package = "ExploreModelMatrix"),
+                         sep = ";", stringsAsFactors = FALSE,
+                         row.names = NULL, quote = "")
+      rintrojs::introjs(session, options = list(steps = tour))
+    })
+
   }
 
   ## ----------------------------------------------------------------------- ##
