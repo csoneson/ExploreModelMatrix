@@ -4,9 +4,16 @@ Title: Graphical Exploration Of Design Matrices
 Version: 0.1.0
 Authors@R: c(person("Charlotte", "Soneson", role = c("aut", "cre"), 
     email = "charlottesoneson@gmail.com", 
-    comment = c(ORCID = "0000-0003-3833-2169")))
+    comment = c(ORCID = "0000-0003-3833-2169")),
+    person("Federico", "Marini", role = "aut", 
+    email = "marinif@uni-mainz.de",
+    comment = c(ORCID = "0000-0003-3252-7758")),
+    person("Michael", "Love", role = "aut", 
+    email = "michaelisaiahlove@gmail.com",
+    comment = c(ORCID = "0000-0001-8401-0545")))
 Description: Given a sample data table and a design formula, 
-    generate an interactive application to explore the resulting design matrix. 
+    generate an interactive application to explore the resulting 
+    design matrix. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: 
