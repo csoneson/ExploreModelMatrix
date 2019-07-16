@@ -10,28 +10,30 @@ visualizeDesign(sampleData, designFormula, flipCoord = FALSE,
 \arguments{
 \item{sampleData}{A \code{data.frame} with sample information.}
 
-\item{designFormula}{A \code{formula}. All terms must be present as columns
-in \code{sampleData}.}
+\item{designFormula}{A \code{formula}. All components of the terms must be
+present as columns in \code{sampleData}.}
 
-\item{flipCoord}{A \code{logical}, whether to flip the coordinate axes.}
+\item{flipCoord}{A \code{logical}, whether to flip the coordinate axes in the
+plot.}
 
 \item{textSize}{A \code{numeric} scalar giving the text size in the plot.}
 
 \item{textSizeLabs}{A \code{numeric} scalar giving the text size for the axis
-labels.}
+labels in the plot.}
 
-\item{lineWidth}{A \code{numeric} scalar giving the maximal line width in
-the plot.}
+\item{lineWidth}{A \code{numeric} scalar giving the maximal length of a row
+in the plot, before it is split and printed on multiple lines}
 
-\item{dropCols}{A character vector giving columns to drop from the design
-matrix.}
+\item{dropCols}{A character vector with columns to drop from the design
+matrix, or NULL if no columns should be dropped.}
 }
 \value{
 A list with two elements:
 \itemize{
 \item sampledata A \code{data.frame}, expanded from the input
 \code{sampleData}
-\item plotlist Plots
+\item plotlist A list of plots, displaying the fitted values for each
+combination of predictor values, in terms of the model coefficients.
 }
 }
 \description{
@@ -40,8 +42,7 @@ Visualize design matrix
 \examples{
 visualizeDesign(
   sampleData = data.frame(genotype = rep(c("A", "B"), each = 4),
-                          treatment = rep(c("treated", "untreated"), 4),
-                          stringsAsFactors = FALSE),
+                          treatment = rep(c("treated", "untreated"), 4)),
   designFormula = ~genotype + treatment
 )
 

@@ -11,75 +11,119 @@ test_that("visualizeDesign fails with incorrect inputs", {
   expect_error(visualizeDesign(sampleData = 0,
                                designFormula = designFormula,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = as.matrix(sampleData),
                                designFormula = designFormula,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = as.list(sampleData),
                                designFormula = designFormula,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
+
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = genotype,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = "genotype",
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = "~genotyp",
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotyp,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
+  expect_error(visualizeDesign(sampleData = sampleData,
+                               designFormula = ~genotype|treatment,
+                               flipCoord = FALSE, textSize = 5,
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
+
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = 1, textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = "TRUE", textSize = 5,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
+  expect_error(visualizeDesign(sampleData = sampleData,
+                               designFormula = ~genotype,
+                               flipCoord = c(TRUE, FALSE), textSize = 5,
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
+
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = c(1, 2),
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = "1",
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = TRUE,
-                               textSizeLabs = 12, lineWidth = 25))
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = NULL))
+
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = c(1, 2), lineWidth = 25))
+                               textSizeLabs = c(1, 2), lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = "1", lineWidth = 25))
+                               textSizeLabs = "1", lineWidth = 25,
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = TRUE, lineWidth = 25))
+                               textSizeLabs = TRUE, lineWidth = 25,
+                               dropCols = NULL))
+
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = c(1, 2)))
+                               textSizeLabs = 12, lineWidth = c(1, 2),
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = "5"))
+                               textSizeLabs = 12, lineWidth = "5",
+                               dropCols = NULL))
   expect_error(visualizeDesign(sampleData = sampleData,
                                designFormula = ~genotype,
                                flipCoord = FALSE, textSize = 5,
-                               textSizeLabs = 12, lineWidth = TRUE))
+                               textSizeLabs = 12, lineWidth = TRUE,
+                               dropCols = NULL))
+
+  expect_error(visualizeDesign(sampleData = sampleData,
+                               designFormula = ~genotype,
+                               flipCoord = FALSE, textSize = 5,
+                               textSizeLabs = 12, lineWidth = 25,
+                               dropCols = 1))
+  expect_warning(visualizeDesign(sampleData = sampleData,
+                                 designFormula = ~genotype,
+                                 flipCoord = FALSE, textSize = 5,
+                                 textSizeLabs = 12, lineWidth = 25,
+                                 dropCols = "nonexistent"))
 })
 
 test_that("visualizeDesign works", {
@@ -109,5 +153,12 @@ test_that("visualizeDesign works", {
   expect_equal(res$value[res$genotype == "B" & res$treatment == "ctrl"],
                "(Intercept) + genotypeB")
 
-
+  ## Check that dropCols = NULL and dropCols = c() give the same results
+  res1 <- visualizeDesign(sampleData = sampleData,
+                          designFormula = ~genotype + treatment,
+                          dropCols = NULL)
+  res2 <- visualizeDesign(sampleData = sampleData,
+                          designFormula = ~genotype + treatment,
+                          dropCols = c())
+  expect_equal(res1, res2)
 })

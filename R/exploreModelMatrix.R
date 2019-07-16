@@ -4,8 +4,8 @@
 #' matrix graphically in a shiny app.
 #'
 #' @param sampleData A \code{data.frame} with sample information.
-#' @param designFormula A \code{formula}. All terms must be present as columns
-#'   in \code{sampleData}.
+#' @param designFormula A \code{formula}. All components of the terms must be
+#'   present as columns in \code{sampleData}.
 #'
 #' @author Charlotte Soneson
 #'
@@ -14,21 +14,19 @@
 #' @return A Shiny app object
 #'
 #' @examples
-#' \dontrun{
-#' exploreModelMatrix(
+#' app <- exploreModelMatrix(
 #'   sampleData = data.frame(genotype = rep(c("A", "B"), each = 4),
-#'                           treatment = rep(c("treated", "untreated"), 4),
-#'                           stringsAsFactors = FALSE),
+#'                           treatment = rep(c("treated", "untreated"), 4)),
 #'   designFormula = ~genotype + treatment
 #' )
-#' }
+#' if (interactive()) shiny::runApp(app)
 #'
 #' @importFrom shinydashboard dashboardPage dashboardHeader dashboardSidebar
 #'   dashboardBody menuItem box valueBox dropdownMenu notificationItem
 #' @importFrom shiny uiOutput numericInput fluidRow column reactiveValues
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
-#'   verbatimTextOutput textOutput observe renderPrint actionButton
+#'   verbatimTextOutput textOutput observe renderPrint actionButton div
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim
 #' @importFrom cowplot plot_grid
@@ -131,45 +129,79 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         rintrojs::introjsUI(),
 
         shiny::fluidRow(
-          shiny::column(8, shinydashboard::box(
-            width = NULL, status = "primary",
-            collapsible = TRUE, collapsed = FALSE,
-            title = "Fitted values",
-            shiny::uiOutput("plot_design"))
+          shiny::column(
+            8, shiny::div(
+              id = "fitted_values_plot_box",
+              shinydashboard::box(
+                width = NULL, status = "primary",
+                collapsible = TRUE, collapsed = FALSE,
+                title = "Fitted values",
+                shiny::uiOutput("plot_design")
+              )
+            )
           ),
-          shiny::column(4, shinydashboard::box(
-            width = NULL, status = "warning",
-            collapsible = TRUE, collapsed = FALSE,
-            title = "Fitted values",
-            DT::dataTableOutput("table_sampledata")))
+          shiny::column(
+            4, shiny::div(
+              id = "fitted_values_table_box",
+              shinydashboard::box(
+                width = NULL, status = "warning",
+                collapsible = TRUE, collapsed = FALSE,
+                title = "Fitted values",
+                DT::dataTableOutput("table_sampledata")
+              )
+            )
+          )
         ),
 
         shiny::fluidRow(
-          shiny::column(7, shinydashboard::box(
-            width = NULL, title = "Full sample table",
-            collapsible = TRUE, collapsed = FALSE,
-            DT::dataTableOutput("table_full"))),
-          shiny::column(5, shinydashboard::box(
-            width = NULL, title = "Sample table summary",
-            collapsible = TRUE, collapsed = FALSE,
-            shiny::verbatimTextOutput("table_summary")))
+          shiny::column(
+            7, shiny::div(
+              id = "sample_table_box",
+              shinydashboard::box(
+                width = NULL, title = "Full sample table",
+                collapsible = TRUE, collapsed = TRUE,
+                DT::dataTableOutput("table_full")
+              )
+            )
+          ),
+          shiny::column(
+            5, shiny::div(
+              id = "sample_table_summary_box",
+              shinydashboard::box(
+                width = NULL, title = "Sample table summary",
+                collapsible = TRUE, collapsed = TRUE,
+                shiny::verbatimTextOutput("table_summary")
+              )
+            )
+          )
         ),
 
         shiny::fluidRow(
-          shiny::column(7, shinydashboard::box(
-            width = NULL, title = "Design matrix",
-            collapsible = TRUE, collapsed = FALSE,
-            shiny::verbatimTextOutput("design_matrix")
-          )),
-          shiny::column(5, shinydashboard::box(
-            width = NULL, title = "Rank",
-            collapsible = TRUE, collapsed = FALSE,
-            "Rank of design matrix: ",
-            shiny::textOutput("design_matrix_rank"),
-            "Number of columns in design matrix: ",
-            shiny::textOutput("design_matrix_ncol"),
-            shiny::uiOutput("rank_warning")
-          ))
+          shiny::column(
+            7, shiny::div(
+              id = "design_matrix_box",
+              shinydashboard::box(
+                width = NULL, title = "Design matrix",
+                collapsible = TRUE, collapsed = FALSE,
+                shiny::verbatimTextOutput("design_matrix")
+              )
+            )
+          ),
+          shiny::column(
+            5, shiny::div(
+              id = "design_matrix_rank_box",
+              shinydashboard::box(
+                width = NULL, title = "Rank",
+                collapsible = TRUE, collapsed = FALSE,
+                "Rank of design matrix: ",
+                shiny::textOutput("design_matrix_rank"),
+                "Number of columns in design matrix: ",
+                shiny::textOutput("design_matrix_ncol"),
+                shiny::uiOutput("rank_warning")
+              )
+            )
+          )
+
         )
       )
     )
@@ -406,9 +438,9 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                         height = paste0(input$plot_height, "px"))
     })
 
-    ## ----------------------------------------------------------------------- ##
+    ## --------------------------------------------------------------------- ##
     ## Tour
-    ## ----------------------------------------------------------------------- ##
+    ## --------------------------------------------------------------------- ##
     observeEvent(input$interface_overview, {
       tour <- read.delim(system.file("extdata", "interface_overview.txt",
                                      package = "ExploreModelMatrix"),

@@ -9,8 +9,8 @@ exploreModelMatrix(sampleData = NULL, designFormula = NULL)
 \arguments{
 \item{sampleData}{A \code{data.frame} with sample information.}
 
-\item{designFormula}{A \code{formula}. All terms must be present as columns
-in \code{sampleData}.}
+\item{designFormula}{A \code{formula}. All components of the terms must be
+present as columns in \code{sampleData}.}
 }
 \value{
 A Shiny app object
@@ -20,14 +20,12 @@ Given a sample table and a design formula, explore the resulting design
 matrix graphically in a shiny app.
 }
 \examples{
-\dontrun{
-exploreModelMatrix(
+app <- exploreModelMatrix(
   sampleData = data.frame(genotype = rep(c("A", "B"), each = 4),
-                          treatment = rep(c("treated", "untreated"), 4),
-                          stringsAsFactors = FALSE),
+                          treatment = rep(c("treated", "untreated"), 4)),
   designFormula = ~genotype + treatment
 )
-}
+if (interactive()) shiny::runApp(app)
 
 }
 \author{

@@ -1,16 +1,17 @@
 #' Visualize design matrix
 #'
 #' @param sampleData A \code{data.frame} with sample information.
-#' @param designFormula A \code{formula}. All terms must be present as columns
-#'   in \code{sampleData}.
-#' @param flipCoord A \code{logical}, whether to flip the coordinate axes.
+#' @param designFormula A \code{formula}. All components of the terms must be
+#'   present as columns in \code{sampleData}.
+#' @param flipCoord A \code{logical}, whether to flip the coordinate axes in the
+#'   plot.
 #' @param textSize A \code{numeric} scalar giving the text size in the plot.
 #' @param textSizeLabs A \code{numeric} scalar giving the text size for the axis
-#'   labels.
-#' @param lineWidth A \code{numeric} scalar giving the maximal line width in
-#'   the plot.
-#' @param dropCols A character vector giving columns to drop from the design
-#'   matrix.
+#'   labels in the plot.
+#' @param lineWidth A \code{numeric} scalar giving the maximal length of a row
+#'   in the plot, before it is split and printed on multiple lines
+#' @param dropCols A character vector with columns to drop from the design
+#'   matrix, or NULL if no columns should be dropped.
 #'
 #' @author Charlotte Soneson
 #'
@@ -20,14 +21,14 @@
 #' \itemize{
 #' \item sampledata A \code{data.frame}, expanded from the input
 #' \code{sampleData}
-#' \item plotlist Plots
+#' \item plotlist A list of plots, displaying the fitted values for each
+#' combination of predictor values, in terms of the model coefficients.
 #' }
 #'
 #' @examples
 #' visualizeDesign(
 #'   sampleData = data.frame(genotype = rep(c("A", "B"), each = 4),
-#'                           treatment = rep(c("treated", "untreated"), 4),
-#'                           stringsAsFactors = FALSE),
+#'                           treatment = rep(c("treated", "untreated"), 4)),
 #'   designFormula = ~genotype + treatment
 #' )
 #'
@@ -40,8 +41,8 @@
 #'
 visualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
-                            textSizeLabs = 12,
-                            lineWidth = 25, dropCols = NULL) {
+                            textSizeLabs = 12, lineWidth = 25,
+                            dropCols = NULL) {
   ## TODO: Allow design of ~1 (currently fails, needs at least 1 term)
 
   ## ----------------------------------------------------------------------- ##
@@ -73,13 +74,17 @@ visualizeDesign <- function(sampleData, designFormula,
     stop("'textSize', 'textSizeLabs' and 'lineWidth' must be numeric scalars")
   }
 
+  if (length(dropCols) > 0 && !methods::is(dropCols, "character")) {
+    stop("'dropCols' must be NULL or a character vector")
+  }
+
   ## ----------------------------------------------------------------------- ##
   ## Extract terms from the design formula
   ## ----------------------------------------------------------------------- ##
   designFormula <- stats::as.formula(designFormula)
   terms <- strsplit(gsub(" ", "", as.character(designFormula)[2]),
                     "\\~|\\+|\\:|\\*|\\^|\\-")[[1]]
-  terms <- setdiff(terms, c("0", "1"))
+  terms <- setdiff(terms, c("0", "1", ""))
   terms <- unique(terms)
   if (!all(terms %in% colnames(sampleData))) {
     stop("Not all terms in the design matrix can be generated from ",
@@ -91,6 +96,11 @@ visualizeDesign <- function(sampleData, designFormula,
   ## Create design matrix
   ## ----------------------------------------------------------------------- ##
   mm <- stats::model.matrix(designFormula, data = sampleData)
+  if (!all(dropCols %in% colnames(mm))) {
+    warning("Not all values in 'dropCols' are present in the design matrix. ",
+            "Missing: ", paste(dropCols[!(dropCols %in% colnames(mm))],
+                               collapse = ", "))
+  }
   mm <- mm[, !(colnames(mm) %in% dropCols), drop = FALSE]
 
   ## ----------------------------------------------------------------------- ##
@@ -114,7 +124,7 @@ visualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Define terms to include in the plot, and terms used for splitting plots
   ## ----------------------------------------------------------------------- ##
-  if (length(terms) == 1) {
+  if (length(terms) <= 1) {
     plot_terms <- terms
   } else {
     plot_terms <- terms[(length(terms) - 1):length(terms)]
@@ -145,7 +155,7 @@ visualizeDesign <- function(sampleData, designFormula,
     for (st in split_terms) {
       plot_data[[st]] <- paste0(st, " = ", plot_data[[st]])
     }
-    plot_data <- plot_data  %>%
+    plot_data <- plot_data %>%
       tidyr::unite("groupby", split_terms, sep = ", ")
   } else {
     plot_data$groupby <- ""
