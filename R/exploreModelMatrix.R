@@ -118,7 +118,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                               value = 12, min = 1, max = 25, step = 1),
           shiny::numericInput(inputId = "linewidth",
                               label = "Maximal row length",
-                              value = 25, min = 1, max = 100, step = 1)
+                              value = 25, min = 1, max = 100, step = 1),
+          shiny::checkboxInput(inputId = "colorterms",
+                               label = "Color terms",
+                               value = TRUE)
         )
       ),
 
@@ -325,7 +328,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                textSize = input$textsize,
                                textSizeLabs = input$textsizelabs,
                                lineWidth = input$linewidth,
-                               dropCols = input$dropcols))
+                               dropCols = input$dropcols,
+                               addColor = input$colorterms))
       }
     })
 

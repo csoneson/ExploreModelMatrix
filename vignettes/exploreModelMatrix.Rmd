@@ -101,7 +101,7 @@ set.seed(1)
   age = round(runif(10, min = 12, max = 60))
 ))
 vd <- VisualizeDesign(sampleData = sampleData,
-                      designFormula = ~ age)
+                      designFormula = ~ age, textSize = 3)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 app <- ExploreModelMatrix(sampleData = sampleData,
                           designFormula = ~ age)
