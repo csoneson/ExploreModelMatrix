@@ -83,7 +83,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   designFormula <- stats::as.formula(designFormula)
   terms <- strsplit(gsub(" ", "", as.character(designFormula)[2]),
-                    "\\~|\\+|\\:|\\*|\\^|\\-")[[1]]
+                    "\\~|\\+|\\:|\\*|\\^|\\-|/")[[1]]
   terms <- setdiff(terms, c("0", "1", ""))
   terms <- unique(terms)
   if (!all(terms %in% colnames(sampleData))) {
