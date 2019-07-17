@@ -14,7 +14,7 @@
 #' @return A Shiny app object
 #'
 #' @examples
-#' app <- exploreModelMatrix(
+#' app <- ExploreModelMatrix(
 #'   sampleData = data.frame(genotype = rep(c("A", "B"), each = 4),
 #'                           treatment = rep(c("treated", "untreated"), 4)),
 #'   designFormula = ~genotype + treatment
@@ -35,7 +35,7 @@
 #' @importFrom dplyr mutate_if
 #' @importFrom rintrojs introjs introjsUI
 #'
-exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
+ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
   ## Check input arguments
   ## ----------------------------------------------------------------------- ##
@@ -319,7 +319,7 @@ exploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       if (is.null(values$sampledata) || input$designformula == "") {
         return(list(sampledata = NULL, designformula = NULL))
       } else {
-        return(visualizeDesign(sampleData = values$sampledata,
+        return(VisualizeDesign(sampleData = values$sampledata,
                                designFormula = input$designformula,
                                flipCoord = input$flipcoord,
                                textSize = input$textsize,

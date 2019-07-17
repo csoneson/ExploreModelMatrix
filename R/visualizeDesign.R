@@ -26,7 +26,7 @@
 #' }
 #'
 #' @examples
-#' visualizeDesign(
+#' VisualizeDesign(
 #'   sampleData = data.frame(genotype = rep(c("A", "B"), each = 4),
 #'                           treatment = rep(c("treated", "untreated"), 4)),
 #'   designFormula = ~genotype + treatment
@@ -39,7 +39,7 @@
 #' @importFrom stats model.matrix as.formula
 #' @importFrom methods is
 #'
-visualizeDesign <- function(sampleData, designFormula,
+VisualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
                             textSizeLabs = 12, lineWidth = 25,
                             dropCols = NULL) {

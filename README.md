@@ -30,13 +30,13 @@ install.packages("remotes")
 ## Usage
 
 The main function in the `ExploreModelMatrix` package is called
-`exploreModelMatrix`. When calling `exploreModelMatrix`, simply provide a
+`ExploreModelMatrix`. When calling `ExploreModelMatrix`, simply provide a
 _data.frame_ with sample information and a design formula:
 
 ```
 sampleData <- data.frame(genotype = rep(c("A", "B"), each = 4),
                          treatment = rep(c("ctrl", "trt"), 4))
-exploreModelMatrix(sampleData = sampleData,
+ExploreModelMatrix(sampleData = sampleData,
                    designFormula = ~ genotype + treatment)
 
 ```
