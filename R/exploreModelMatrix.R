@@ -34,6 +34,7 @@
 #' @importFrom stats model.matrix as.formula relevel
 #' @importFrom dplyr mutate_if
 #' @importFrom rintrojs introjs introjsUI
+#' @importFrom scales hue_pal
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
@@ -329,7 +330,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                textSizeLabs = input$textsizelabs,
                                lineWidth = input$linewidth,
                                dropCols = input$dropcols,
-                               addColor = input$colorterms))
+                               addColor = input$colorterms,
+                               colorPalette = scales::hue_pal()))
       }
     })
 

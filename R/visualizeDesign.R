@@ -14,6 +14,7 @@
 #'   matrix, or NULL if no columns should be dropped.
 #' @param addColor A \code{logical} scalar indicating whether the terms in the
 #'   fitted values plot should be shown in different colors.
+#' @param colorPalette A \code{function} returning a color palette.
 #'
 #' @author Charlotte Soneson
 #'
@@ -41,12 +42,12 @@
 #'   scale_color_manual
 #' @importFrom stats model.matrix as.formula
 #' @importFrom methods is
-#' @importFrom scales hue_pal
 #'
 VisualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
                             textSizeLabs = 12, lineWidth = 25,
-                            dropCols = NULL, addColor = TRUE) {
+                            dropCols = NULL, addColor = TRUE,
+                            colorPalette = scales::hue_pal()) {
   ## TODO: Allow design of ~1 (currently fails, needs at least 1 term)
 
   ## ----------------------------------------------------------------------- ##
@@ -186,7 +187,7 @@ VisualizeDesign <- function(sampleData, designFormula,
       dplyr::mutate(colorby = gsub("[ ]*\\+[ ]*", "",
                                    gsub("(\\(-)*[0-9]*\\)*[ ]*\\*[ ]*", "",
                                         value)))
-    colors <- structure(scales::hue_pal()(length(unique(plot_data$colorby))),
+    colors <- structure(colorPalette(length(unique(plot_data$colorby))),
                         names = unique(plot_data$colorby))
   }
 

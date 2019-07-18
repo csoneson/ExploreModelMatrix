@@ -151,7 +151,7 @@ app <- ExploreModelMatrix(sampleData = sampleData,
 if (interactive()) shiny::runApp(app)
 vd <- VisualizeDesign(sampleData = sampleData,
                       designFormula = ~ 0 + group + batch, 
-                      textSize = 4)
+                      textSize = 4, colorPalette = scales::viridis_pal())
 cowplot::plot_grid(plotlist = vd$plotlist)
 ```
 
@@ -221,7 +221,7 @@ if (interactive()) shiny::runApp(app)
 ```{r, fig.height = 4, fig.width = 7}
 sampleData$group <- paste(sampleData$exerc, sampleData$time, sep = ".")
 vd <- VisualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + individual + group, textSize = 4)
+                      designFormula = ~ 0 + individual + group, textSize = 3)
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
