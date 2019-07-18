@@ -4,10 +4,11 @@ element;intro
 #reflevels;Here you can set the reference level for each of the factor variables in the supplied sample data table.
 #dropcols;This box lets you specify columns to drop from the design matrix. This can be useful, e.g., to obtain a design matrix with full rank.
 #plot_height; This sets the height of the plot window for the visualization of the fitted values.
-#flipcoord;By clicking this box, the x and y axes in the visualization of the fitted values are swapped. It can be useful, for example, if one factor has many more levels than the other.
+#flipcoord;By checking this box, the x and y axes in the visualization of the fitted values are swapped. It can be useful, for example, if one factor has many more levels than the other.
 #textsize;This variable changes the font size of the matrix entries in the visualization of the fitted values.
 #textsizelabs;This variable changes the font size of the axis labels in the visualization of the fitted values.
 #linewidth;This variable sets the maximal width of a line of text in the matrix visualizing the fitted values. Longer lines will be split (splits will only be done between different terms).
+#colorterms;By checking this box, the terms in the visualization of the fitted values will be show in different colors.
 #fitted_values_plot_box;This plot shows the fitted values (in terms of the model coefficients) for each combination of predictor values.
 #fitted_values_table_box;This panel contains the same information as the fitted value plot, but in table format.
 #sample_table_box;This panel shows the full provided sample information table.

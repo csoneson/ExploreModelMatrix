@@ -227,6 +227,10 @@ VisualizeDesign <- function(sampleData, designFormula,
           ggplot2::geom_vline(xintercept = 0.5 +
                                 seq_len(length(unique(
                                   sampleData[, plot_terms[2]])) - 1))
+      } else {
+        gg <- gg + theme(axis.text.x = element_blank(),
+                         axis.title.x = element_blank(),
+                         axis.ticks.x = element_blank())
       }
       gg <- gg + ggplot2::ggtitle(w$groupby[1])
       if (flipCoord) {
