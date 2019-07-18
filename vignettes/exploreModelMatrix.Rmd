@@ -143,13 +143,15 @@ From https://support.bioconductor.org/p/112947/
                    3, 3, 3, 4, 4, 4, 4, 6, 6, 6 ,6, 3, 3, 6, 6, 6, 6, 6, 
                    6, 3, 3, 3, 3, 4, 4, 4, 6, 3, 3, 3, 3, 6, 6, 3, 3, 3, 3))))
 vd <- VisualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + batch + group, textSize = 4)
+                      designFormula = ~ 0 + batch + group, 
+                      textSize = 4, addColor = FALSE)
 cowplot::plot_grid(plotlist = vd$plotlist)
 app <- ExploreModelMatrix(sampleData = sampleData,
                           designFormula = ~ 0 + batch + group)
 if (interactive()) shiny::runApp(app)
 vd <- VisualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + group + batch, textSize = 4)
+                      designFormula = ~ 0 + group + batch, 
+                      textSize = 4)
 cowplot::plot_grid(plotlist = vd$plotlist)
 ```
 

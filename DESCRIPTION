@@ -28,7 +28,8 @@ Imports:
     ggplot2,
     stats,
     methods,
-    rintrojs
+    rintrojs,
+    scales
 RoxygenNote: 6.1.1
 Suggests: 
     testthat (>= 2.1.0),

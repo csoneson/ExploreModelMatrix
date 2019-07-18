@@ -38,8 +38,10 @@
 #' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip aes
+#'   scale_color_manual
 #' @importFrom stats model.matrix as.formula
 #' @importFrom methods is
+#' @importFrom scales hue_pal
 #'
 VisualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
@@ -177,6 +179,18 @@ VisualizeDesign <- function(sampleData, designFormula,
                                    (dplyr::n() - 1)/2) + 0.5)
 
   ## ----------------------------------------------------------------------- ##
+  ## Pre-define colors
+  ## ----------------------------------------------------------------------- ##
+  if (addColor) {
+    plot_data <- plot_data %>%
+      dplyr::mutate(colorby = gsub("[ ]*\\+[ ]*", "",
+                                   gsub("(\\(-)*[0-9]*\\)*[ ]*\\*[ ]*", "",
+                                        value)))
+    colors <- structure(scales::hue_pal()(length(unique(plot_data$colorby))),
+                        names = unique(plot_data$colorby))
+  }
+
+  ## ----------------------------------------------------------------------- ##
   ## Create plot(s)
   ## ----------------------------------------------------------------------- ##
   ggp <- lapply(split(
@@ -191,8 +205,8 @@ VisualizeDesign <- function(sampleData, designFormula,
         gg <- gg +
           ggplot2::geom_text(size = textSize,
                              ggplot2::aes(vjust = vjust,
-                                          color = gsub("[ ]*\\+[ ]*", "",
-                                                       gsub("(\\(-)*[0-9]*\\)*[ ]*\\*[ ]*", "", value))))
+                                          color = colorby)) +
+          ggplot2::scale_color_manual(values = colors)
       } else {
         gg <- gg +
           ggplot2::geom_text(size = textSize,
