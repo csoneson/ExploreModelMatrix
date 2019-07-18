@@ -191,7 +191,8 @@ VisualizeDesign <- function(sampleData, designFormula,
         gg <- gg +
           ggplot2::geom_text(size = textSize,
                              ggplot2::aes(vjust = vjust,
-                                          color = gsub("[ ]*\\+[ ]*", "", value)))
+                                          color = gsub("[ ]*\\+[ ]*", "",
+                                                       gsub("(\\(-)*[0-9]*\\)*[ ]*\\*[ ]*", "", value))))
       } else {
         gg <- gg +
           ggplot2::geom_text(size = textSize,
