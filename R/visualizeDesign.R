@@ -39,7 +39,7 @@
 #' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip aes
-#'   scale_color_manual
+#'   scale_color_manual scale_x_discrete scale_y_discrete expand_scale
 #' @importFrom stats model.matrix as.formula
 #' @importFrom methods is
 #'
@@ -201,7 +201,9 @@ VisualizeDesign <- function(sampleData, designFormula,
                    ggplot2::aes_string(
                      x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
                      y = plot_terms[1],
-                     label = "value"))
+                     label = "value")) +
+        ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5)) +
+        ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5))
       if (addColor) {
         gg <- gg +
           ggplot2::geom_text(size = textSize,
@@ -243,7 +245,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Return
   ## ----------------------------------------------------------------------- ##
-  list(sampledata = sampleData, plotlist = ggp)
+  list(sampledata = sampleData, plotlist = ggp, designmatrix = mm)
 }
 
 ## Add \n if a string is longer than lineWidth

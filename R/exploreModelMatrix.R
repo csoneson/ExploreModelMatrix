@@ -105,7 +105,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         shinydashboard::menuItem(
           "Settings", icon = shiny::icon("sliders-h"),
           startExpanded = TRUE,
-          shiny::numericInput(inputId = "plot_height",
+          shiny::numericInput(inputId = "plotheight",
                               label = "Plot height (numeric, in pixels)",
                               value = 400, min = 200, max = 3000, step = 10),
           shiny::checkboxInput(inputId = "flipcoord",
@@ -140,7 +140,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                 width = NULL, status = "primary",
                 collapsible = TRUE, collapsed = FALSE,
                 title = "Fitted values",
-                shiny::uiOutput("plot_design")
+                shiny::uiOutput("fitted_values_plot")
               )
             )
           ),
@@ -151,7 +151,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                 width = NULL, status = "warning",
                 collapsible = TRUE, collapsed = FALSE,
                 title = "Fitted values",
-                DT::dataTableOutput("table_sampledata")
+                DT::dataTableOutput("fitted_values_table")
               )
             )
           )
@@ -164,7 +164,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               shinydashboard::box(
                 width = NULL, title = "Full sample table",
                 collapsible = TRUE, collapsed = TRUE,
-                DT::dataTableOutput("table_full")
+                DT::dataTableOutput("sample_table")
               )
             )
           ),
@@ -174,7 +174,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               shinydashboard::box(
                 width = NULL, title = "Sample table summary",
                 collapsible = TRUE, collapsed = TRUE,
-                shiny::verbatimTextOutput("table_summary")
+                shiny::verbatimTextOutput("sample_table_summary")
               )
             )
           )
@@ -289,10 +289,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     ## --------------------------------------------------------------------- ##
-    ## Define inputs to drop columns in design matrix
+    ## Define input to drop columns in design matrix
     ## --------------------------------------------------------------------- ##
     output$dropcols <- renderUI({
-      if (is.null(values$sampledata) || input$designformula == "") {
+      if (is.null(values$sampledata) || is.null(input$designformula) ||
+          input$designformula == "") {
         NULL
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
@@ -320,8 +321,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate output
     ## --------------------------------------------------------------------- ##
     generated_output <- shiny::reactive({
-      if (is.null(values$sampledata) || input$designformula == "") {
-        return(list(sampledata = NULL, designformula = NULL))
+      if (is.null(values$sampledata) || is.null(input$designformula) ||
+          input$designformula == "") {
+        return(list(sampledata = NULL, designformula = NULL,
+                    designmatrix = NULL))
       } else {
         return(VisualizeDesign(sampleData = values$sampledata,
                                designFormula = input$designformula,
@@ -338,7 +341,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     ## Generate sample data table
     ## --------------------------------------------------------------------- ##
-    output$table_sampledata <- DT::renderDataTable({
+    output$fitted_values_table <- DT::renderDataTable({
       if (is.null(generated_output()$sampledata)) {
         NULL
       } else {
@@ -351,7 +354,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     ## Generate sample data table summary
     ## --------------------------------------------------------------------- ##
-    output$table_summary <- shiny::renderPrint({
+    output$sample_table_summary <- shiny::renderPrint({
       if (is.null(values$sampledata)) {
         NULL
       } else {
@@ -363,48 +366,34 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate design matrix
     ## --------------------------------------------------------------------- ##
     output$design_matrix <- shiny::renderPrint({
-      if (is.null(values$sampledata) || input$designformula == "") {
-        NULL
-      } else {
-        mm <- stats::model.matrix(stats::as.formula(input$designformula),
-                                  data = values$sampledata)
-        mm[, !(colnames(mm) %in% input$dropcols), drop = FALSE]
-      }
+      generated_output()$designmatrix
     })
 
     ## --------------------------------------------------------------------- ##
     ## Check rank and number of columns of design matrix
     ## --------------------------------------------------------------------- ##
     output$design_matrix_rank <- shiny::renderPrint({
-      if (is.null(values$sampledata) || input$designformula == "") {
+      if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
-        mm <- stats::model.matrix(stats::as.formula(input$designformula),
-                                  data = values$sampledata)
-        mm <- mm[, !(colnames(mm) %in% input$dropcols), drop = FALSE]
-        qr(mm)$rank
+        qr(generated_output()$designmatrix)$rank
       }
     })
 
     output$design_matrix_ncol <- shiny::renderPrint({
-      if (is.null(values$sampledata) || input$designformula == "") {
+      if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
-        mm <- stats::model.matrix(stats::as.formula(input$designformula),
-                                  data = values$sampledata)
-        mm <- mm[, !(colnames(mm) %in% input$dropcols), drop = FALSE]
-        ncol(mm)
+        ncol(generated_output()$designmatrix)
       }
     })
 
     output$rank_warning <- shiny::renderUI({
-      if (is.null(values$sampledata) || input$designformula == "") {
+      if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
-        mm <- stats::model.matrix(stats::as.formula(input$designformula),
-                                  data = values$sampledata)
-        mm <- mm[, !(colnames(mm) %in% input$dropcols), drop = FALSE]
-        if (qr(mm)$rank >= ncol(mm)) {
+        if (qr(generated_output()$designmatrix)$rank >=
+            ncol(generated_output()$designmatrix)) {
           NULL
         } else {
           shinydashboard::valueBox("", "The design matrix is not full rank",
@@ -416,7 +405,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     ## Generate full sample data table
     ## --------------------------------------------------------------------- ##
-    output$table_full <- DT::renderDataTable({
+    output$sample_table <- DT::renderDataTable({
       if (is.null(values$sampledata)) {
         NULL
       } else {
@@ -429,7 +418,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     ## Generate design matrix plot
     ## --------------------------------------------------------------------- ##
-    output$plot_design_plot <- shiny::renderPlot({
+    output$fitted_values_plot_plot <- shiny::renderPlot({
       if (is.null(generated_output()$plotlist)) {
         NULL
       } else {
@@ -438,10 +427,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    output$plot_design <- shiny::renderUI({
-      shiny::plotOutput("plot_design_plot",
+    output$fitted_values_plot <- shiny::renderUI({
+      shiny::plotOutput("fitted_values_plot_plot",
                         width = "100%",
-                        height = paste0(input$plot_height, "px"))
+                        height = paste0(input$plotheight, "px"))
     })
 
     ## --------------------------------------------------------------------- ##
