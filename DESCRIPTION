@@ -35,5 +35,6 @@ Suggests:
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
-    htmltools
+    htmltools,
+    icon
 VignetteBuilder: knitr

@@ -18,7 +18,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+# stopifnot(requireNamespace("htmltools"))
+# htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 ```
 
 ## Introduction
@@ -48,7 +49,7 @@ library(ExploreModelMatrix)
 The `ExploreModelMatrix()` function opens a graphical interface where the user
 can interactively explore the provided design. This section provides an overview
 of what is shown in the graphical interface. A step-by-step tour is also
-available by clicking on the <i class="fa question-circle fa-1g"></i> icon in
+available by clicking on the `r icon::fa("question-circle")` icon in
 the top right of the application.
 
 <img src=`r system.file(package='ExploreModelMatrix', 'www/ExploreModelMatrix.png')` width="600"/>
