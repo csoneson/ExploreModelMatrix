@@ -1,13 +1,16 @@
 # ExploreModelMatrix
+[![Travis CI build status](https://travis-ci.com/csoneson/ExploreModelMatrix.svg?branch=master)](https://travis-ci.com/csoneson/ExploreModelMatrix)
+[![Codecov.io coverage status](https://codecov.io/github/csoneson/ExploreModelMatrix/coverage.svg?branch=master)](https://codecov.io/github/csoneson/ExploreModelMatrix)
+
 
 `ExploreModelMatrix` is a small R package that lets the user interactively
 explore a design matrix. In particular, given a table with sample information
-and a design formula, `ExploreModelMatrix` will illustrate the fitted values for
-each combination of input variables, simplifying understanding and generation of
-contrasts.
+and a design formula, `ExploreModelMatrix` will illustrate the fitted values
+(or, more generally, the value of the linear predictor) for each combination of
+input variables, simplifying understanding and generation of contrasts.
 
-`ExploreModelMatrix` is still under development, please open an issue if you
-encounter unexpected behaviour.
+`ExploreModelMatrix` is still under development and we welcome feedback, please
+open an issue if you encounter unexpected behaviour.
 
 ![](inst/www/ExploreModelMatrix.png)
 

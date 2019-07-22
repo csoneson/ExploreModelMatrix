@@ -9,7 +9,7 @@ element;intro
 #textsizelabs;This variable changes the font size of the axis labels in the visualization of the fitted values.
 #colorterms;By checking this box, the terms in the visualization of the fitted values will be show in different colors.
 #linewidth;This variable sets the maximal width of a line of text in the matrix visualizing the fitted values. Longer lines will be split (splits will only be done between different terms). If the terms are colored, there will always be one term per line (corresponding to setting the maximal line width to 1).
-#fitted_values_plot_box;This plot shows the fitted values (in terms of the model coefficients) for each combination of predictor values.
+#fitted_values_plot_box;This plot shows the fitted values, in terms of the model coefficients (or more generally, the value of the linear predictor for a generalized linear model) for each combination of predictor values.
 #fitted_values_table_box;This panel contains the same information as the fitted value plot, but in table format.
 #sample_table_box;This panel shows the full provided sample information table.
 #sample_table_summary_box;This shows the summary of the provided sample information table. Character variables are converted to factors when loaded into the application.
