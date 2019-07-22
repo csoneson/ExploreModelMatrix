@@ -44,7 +44,8 @@ ExploreModelMatrix(sampleData = sampleData,
 
 ```
 
-This will open up a shiny application where you can explore the specified design
-matrix and the fitted values for each combination of predictor values.
+This will open up an [R/Shiny](https://shiny.rstudio.com/) application where you
+can explore the specified design matrix and the fitted values for each
+combination of predictor values.
 
 For more examples of designs, please see the vignette. 
