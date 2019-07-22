@@ -215,6 +215,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
   ## Define server function
   ## ----------------------------------------------------------------------- ##
+  #nocov start
   server_function <- function(input, output, session) {
 
     ## --------------------------------------------------------------------- ##
@@ -445,6 +446,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
   }
+  #nocov end
 
   ## ----------------------------------------------------------------------- ##
   ## Generate app
