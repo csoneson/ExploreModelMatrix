@@ -5,7 +5,8 @@
 \title{Visualize design matrix}
 \usage{
 VisualizeDesign(sampleData, designFormula, flipCoord = FALSE,
-  textSize = 5, textSizeLabs = 12, lineWidth = 25, dropCols = NULL)
+  textSize = 5, textSizeLabs = 12, lineWidth = 25, dropCols = NULL,
+  addColor = TRUE, colorPalette = scales::hue_pal())
 }
 \arguments{
 \item{sampleData}{A \code{data.frame} with sample information.}
@@ -26,6 +27,11 @@ in the plot, before it is split and printed on multiple lines}
 
 \item{dropCols}{A character vector with columns to drop from the design
 matrix, or NULL if no columns should be dropped.}
+
+\item{addColor}{A \code{logical} scalar indicating whether the terms in the
+fitted values plot should be shown in different colors.}
+
+\item{colorPalette}{A \code{function} returning a color palette.}
 }
 \value{
 A list with two elements:

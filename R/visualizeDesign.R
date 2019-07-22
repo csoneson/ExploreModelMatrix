@@ -12,6 +12,9 @@
 #'   in the plot, before it is split and printed on multiple lines
 #' @param dropCols A character vector with columns to drop from the design
 #'   matrix, or NULL if no columns should be dropped.
+#' @param addColor A \code{logical} scalar indicating whether the terms in the
+#'   fitted values plot should be shown in different colors.
+#' @param colorPalette A \code{function} returning a color palette.
 #'
 #' @author Charlotte Soneson
 #'
@@ -32,17 +35,19 @@
 #'   designFormula = ~genotype + treatment
 #' )
 #'
-#' @importFrom dplyr select distinct mutate mutate_all
-#' @importFrom tidyr unite
+#' @importFrom dplyr select distinct mutate mutate_all n group_by_at
+#' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
-#'   theme_bw geom_text aes_string element_blank coord_flip
+#'   theme_bw geom_text aes_string element_blank coord_flip aes
+#'   scale_color_manual scale_x_discrete scale_y_discrete expand_scale
 #' @importFrom stats model.matrix as.formula
 #' @importFrom methods is
 #'
 VisualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
                             textSizeLabs = 12, lineWidth = 25,
-                            dropCols = NULL) {
+                            dropCols = NULL, addColor = TRUE,
+                            colorPalette = scales::hue_pal()) {
   ## TODO: Allow design of ~1 (currently fails, needs at least 1 term)
 
   ## ----------------------------------------------------------------------- ##
@@ -72,6 +77,9 @@ VisualizeDesign <- function(sampleData, designFormula,
       (!is.numeric(textSizeLabs) | length(textSizeLabs) != 1) ||
       (!is.numeric(lineWidth) | length(lineWidth) != 1)) {
     stop("'textSize', 'textSizeLabs' and 'lineWidth' must be numeric scalars")
+  }
+  if (addColor) {
+    lineWidth <- 1
   }
 
   if (length(dropCols) > 0 && !methods::is(dropCols, "character")) {
@@ -162,6 +170,28 @@ VisualizeDesign <- function(sampleData, designFormula,
   }
 
   ## ----------------------------------------------------------------------- ##
+  ## Split terms into individual rows
+  ## ----------------------------------------------------------------------- ##
+  plot_data <- plot_data %>%
+    tidyr::separate_rows(value, sep = "\\\n") %>%
+    dplyr::mutate(value = gsub("^ ", "", value)) %>%
+    dplyr::group_by_at(c(plot_terms, "groupby")) %>%
+    dplyr::mutate(vjust = 1.5 * (seq(0, dplyr::n() - 1, by = 1) -
+                                   (dplyr::n() - 1)/2) + 0.5)
+
+  ## ----------------------------------------------------------------------- ##
+  ## Pre-define colors
+  ## ----------------------------------------------------------------------- ##
+  if (addColor) {
+    plot_data <- plot_data %>%
+      dplyr::mutate(colorby = gsub("[ ]*\\+[ ]*", "",
+                                   gsub("(\\(-)*[0-9]*\\)*[ ]*\\*[ ]*", "",
+                                        value)))
+    colors <- structure(colorPalette(length(unique(plot_data$colorby))),
+                        names = unique(plot_data$colorby))
+  }
+
+  ## ----------------------------------------------------------------------- ##
   ## Create plot(s)
   ## ----------------------------------------------------------------------- ##
   ggp <- lapply(split(
@@ -172,7 +202,20 @@ VisualizeDesign <- function(sampleData, designFormula,
                      x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
                      y = plot_terms[1],
                      label = "value")) +
-        ggplot2::geom_text(size = 0) +
+        ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5)) +
+        ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5))
+      if (addColor) {
+        gg <- gg +
+          ggplot2::geom_text(size = textSize,
+                             ggplot2::aes(vjust = vjust,
+                                          color = colorby)) +
+          ggplot2::scale_color_manual(values = colors)
+      } else {
+        gg <- gg +
+          ggplot2::geom_text(size = textSize,
+                             ggplot2::aes(vjust = vjust))
+      }
+      gg <- gg +
         ggplot2::theme_bw() +
         ggplot2::geom_hline(yintercept = 0.5 +
                               seq_len(length(unique(
@@ -180,21 +223,17 @@ VisualizeDesign <- function(sampleData, designFormula,
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                        panel.grid.minor = ggplot2::element_blank(),
                        axis.text = ggplot2::element_text(size = textSizeLabs),
-                       axis.title = ggplot2::element_text(size = textSizeLabs))
+                       axis.title = ggplot2::element_text(size = textSizeLabs),
+                       legend.position = "none")
       if (length(plot_terms) > 1) {
         gg <- gg +
           ggplot2::geom_vline(xintercept = 0.5 +
                                 seq_len(length(unique(
                                   sampleData[, plot_terms[2]])) - 1))
-      }
-      for (i in seq_len(nrow(w))) {
-        gg <- gg +
-          ggplot2::annotate(
-            "text",
-            x = ifelse(length(plot_terms) == 1, 1, w[i, plot_terms[2]]),
-            y = w[i, plot_terms[1]],
-            label = w[i, "value"],
-            size = textSize, parse = FALSE)
+      } else {
+        gg <- gg + theme(axis.text.x = element_blank(),
+                         axis.title.x = element_blank(),
+                         axis.ticks.x = element_blank())
       }
       gg <- gg + ggplot2::ggtitle(w$groupby[1])
       if (flipCoord) {
@@ -206,7 +245,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Return
   ## ----------------------------------------------------------------------- ##
-  list(sampledata = sampleData, plotlist = ggp)
+  list(sampledata = sampleData, plotlist = ggp, designmatrix = mm)
 }
 
 ## Add \n if a string is longer than lineWidth
