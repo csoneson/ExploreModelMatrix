@@ -112,6 +112,13 @@ VisualizeDesign <- function(sampleData, designFormula,
   mm <- mm[, !(colnames(mm) %in% dropCols), drop = FALSE]
 
   ## ----------------------------------------------------------------------- ##
+  ## Calculate pseudoinverse of design matrix
+  ## ----------------------------------------------------------------------- ##
+  psinverse <- MASS::ginv(mm)
+  rownames(psinverse) <- colnames(mm)
+  colnames(psinverse) <- rownames(mm)
+
+  ## ----------------------------------------------------------------------- ##
   ## Add modeled value column to sample data
   ## ----------------------------------------------------------------------- ##
   sampleData$value <- ""
@@ -245,7 +252,8 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Return
   ## ----------------------------------------------------------------------- ##
-  list(sampledata = sampleData, plotlist = ggp, designmatrix = mm)
+  list(sampledata = sampleData, plotlist = ggp, designmatrix = mm,
+       pseudoinverse = psinverse)
 }
 
 ## Add \n if a string is longer than lineWidth

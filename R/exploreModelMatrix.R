@@ -35,6 +35,7 @@
 #' @importFrom dplyr mutate_if
 #' @importFrom rintrojs introjs introjsUI
 #' @importFrom scales hue_pal
+#' @importFrom pheatmap pheatmap
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
@@ -205,8 +206,21 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               )
             )
           )
+        ),
 
+        shiny::fluidRow(
+          shiny::column(
+            12, shiny::div(
+              id = "pinv_design_matrix_box",
+              shinydashboard::box(
+                width = NULL, title = "Pseudoinverse of design matrix",
+                collapsible = TRUE, collapsed = FALSE,
+                shiny::plotOutput("pinv_design_matrix")
+              )
+            )
+          )
         )
+
       )
     )
 
@@ -368,6 +382,16 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     output$design_matrix <- shiny::renderPrint({
       generated_output()$designmatrix
+    })
+
+    ## --------------------------------------------------------------------- ##
+    ## Generate design matrix pseudoinverse
+    ## --------------------------------------------------------------------- ##
+    output$pinv_design_matrix <- shiny::renderPlot({
+      pheatmap::pheatmap(generated_output()$pseudoinverse,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         display_numbers = TRUE)
     })
 
     ## --------------------------------------------------------------------- ##
