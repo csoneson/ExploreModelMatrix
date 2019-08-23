@@ -27,6 +27,7 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
+#'   need validate
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim
 #' @importFrom cowplot plot_grid
@@ -457,7 +458,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     output$fitted_values_plot_plot <- shiny::renderPlot({
       shiny::validate(
-        need(
+        shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
           "Please provide a formula where factors are all appearing in the experimental metadata"
         )
