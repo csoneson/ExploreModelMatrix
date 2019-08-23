@@ -499,6 +499,17 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 }
 
 
+#' Is the formula valid?
+#' 
+#' Checks whether the object is indeed a formula, and whether all specified 
+#' factors are present in the experimental metadata provided
+#'iSEE
+#' @param design The specified formula
+#' @param expdata The experimental metadata data.frame
+#'
+#' @return Logical value
+#' 
+#' @rdname INTERNAL_is.valid.formula
 is.valid.formula <- function(design, expdata) {
   isFormula <- inherits(design,"formula")
   
