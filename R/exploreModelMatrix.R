@@ -370,6 +370,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate sample data table
     ## --------------------------------------------------------------------- ##
     output$fitted_values_table <- DT::renderDataTable({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$sampledata)) {
         NULL
       } else {
@@ -394,6 +400,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate design matrix
     ## --------------------------------------------------------------------- ##
     output$design_matrix <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       generated_output()$designmatrix
     })
 
@@ -401,6 +413,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate design matrix pseudoinverse
     ## --------------------------------------------------------------------- ##
     output$pinv_design_matrix <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       pheatmap::pheatmap(generated_output()$pseudoinverse,
                          cluster_rows = FALSE,
                          cluster_cols = FALSE,
@@ -411,6 +429,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Check rank and number of columns of design matrix
     ## --------------------------------------------------------------------- ##
     output$design_matrix_rank <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
@@ -419,6 +443,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$design_matrix_ncol <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
@@ -427,6 +457,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$rank_warning <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
