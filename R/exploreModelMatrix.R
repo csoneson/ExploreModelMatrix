@@ -321,7 +321,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     output$dropcols <- renderUI({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
-          input$designformula == "") {
+          input$designformula == "" || 
+          !(is.valid.formula(as.formula(input$designformula), values$sampledata))) {
         NULL
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
