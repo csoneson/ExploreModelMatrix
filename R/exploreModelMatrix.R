@@ -132,6 +132,18 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ## ------------------------------------------------------------------- ##
       shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
+        
+        ## Define output size and style of error messages
+        tags$head(
+          tags$style(
+            HTML(".shiny-output-error-validation {
+                 font-size: 15px;
+                 color: forestgreen;
+                 text-align: center;
+                 }
+                 ")
+          )
+        ),
 
         shiny::fluidRow(
           shiny::column(
@@ -444,6 +456,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate design matrix plot
     ## --------------------------------------------------------------------- ##
     output$fitted_values_plot_plot <- shiny::renderPlot({
+      shiny::validate(
+        need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
+      
       if (is.null(generated_output()$plotlist)) {
         NULL
       } else {
@@ -477,3 +496,14 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
   shiny::shinyApp(ui = p_layout, server = server_function)
 }
+
+
+is.valid.formula <- function(design, expdata) {
+  isFormula <- inherits(design,"formula")
+  
+  expVars <- all.vars(design)
+  allVarsThere <- all(expVars %in% colnames(expdata))
+  
+  return(isFormula & allVarsThere)
+}
+
