@@ -42,6 +42,7 @@
 #'   scale_color_manual scale_x_discrete scale_y_discrete expand_scale
 #' @importFrom stats model.matrix as.formula
 #' @importFrom methods is
+#' @importFrom MASS ginv
 #'
 VisualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
