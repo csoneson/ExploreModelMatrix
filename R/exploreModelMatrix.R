@@ -134,9 +134,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         rintrojs::introjsUI(),
         
         ## Define output size and style of error messages
-        tags$head(
-          tags$style(
-            HTML(".shiny-output-error-validation {
+        shiny::tags$head(
+          shiny::tags$style(
+            shiny::HTML(".shiny-output-error-validation {
                  font-size: 15px;
                  color: forestgreen;
                  text-align: center;
