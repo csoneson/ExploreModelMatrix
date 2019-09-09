@@ -40,8 +40,9 @@
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip aes
 #'   scale_color_manual scale_x_discrete scale_y_discrete expand_scale
-#' @importFrom stats model.matrix as.formula
+#' @importFrom stats model.matrix as.formula cor var
 #' @importFrom methods is
+#' @importFrom MASS ginv
 #'
 VisualizeDesign <- function(sampleData, designFormula,
                             flipCoord = FALSE, textSize = 5,
@@ -114,9 +115,21 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Calculate pseudoinverse of design matrix
   ## ----------------------------------------------------------------------- ##
-  psinverse <- MASS::ginv(mm)
+  psinverse <- round(MASS::ginv(mm), digits = 4)
   rownames(psinverse) <- colnames(mm)
   colnames(psinverse) <- rownames(mm)
+
+  ## ----------------------------------------------------------------------- ##
+  ## Calculate variance inflation factors
+  ## ----------------------------------------------------------------------- ##
+  cm <- stats::cor(mm[, apply(mm, 2, stats::var) > 0, drop = FALSE])
+  if (qr(cm)$rank == ncol(cm)) {
+    vifs <- data.frame(
+      vif = diag(solve(cm))
+    ) %>% tibble::rownames_to_column("coefficient")
+  } else {
+    vifs <- NULL
+  }
 
   ## ----------------------------------------------------------------------- ##
   ## Add modeled value column to sample data
@@ -253,7 +266,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## Return
   ## ----------------------------------------------------------------------- ##
   list(sampledata = sampleData, plotlist = ggp, designmatrix = mm,
-       pseudoinverse = psinverse)
+       pseudoinverse = psinverse, vifs = vifs, colors = colors)
 }
 
 ## Add \n if a string is longer than lineWidth

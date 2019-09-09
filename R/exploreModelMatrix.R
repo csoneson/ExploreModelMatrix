@@ -32,10 +32,15 @@
 #' @importFrom cowplot plot_grid
 #' @importFrom methods is
 #' @importFrom stats model.matrix as.formula relevel
-#' @importFrom dplyr mutate_if
+#' @importFrom dplyr mutate_if mutate
 #' @importFrom rintrojs introjs introjsUI
 #' @importFrom scales hue_pal
 #' @importFrom pheatmap pheatmap
+#' @importFrom ggplot2 ggplot aes geom_raster theme_bw theme labs
+#'   scale_fill_gradient2 geom_text scale_x_discrete scale_y_discrete geom_bar
+#'   coord_flip scale_fill_manual
+#' @importFrom tidyr gather
+#' @importFrom tibble rownames_to_column
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
@@ -210,12 +215,23 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
         shiny::fluidRow(
           shiny::column(
-            12, shiny::div(
+            8, shiny::div(
               id = "pinv_design_matrix_box",
               shinydashboard::box(
                 width = NULL, title = "Pseudoinverse of design matrix",
                 collapsible = TRUE, collapsed = FALSE,
                 shiny::plotOutput("pinv_design_matrix")
+              )
+            )
+          ),
+          shiny::column(
+            4, shiny::div(
+              id = "vifs_box",
+              shinydashboard::box(
+                width = NULL, title = "Variance inflation factors",
+                collapsible = TRUE, collapsed = FALSE,
+                shiny::plotOutput("vifs"),
+                shiny::uiOutput("rank_warning_2")
               )
             )
           )
@@ -385,13 +401,62 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     ## --------------------------------------------------------------------- ##
-    ## Generate design matrix pseudoinverse
+    ## Plot design matrix pseudoinverse
     ## --------------------------------------------------------------------- ##
     output$pinv_design_matrix <- shiny::renderPlot({
-      pheatmap::pheatmap(generated_output()$pseudoinverse,
-                         cluster_rows = FALSE,
-                         cluster_cols = FALSE,
-                         display_numbers = TRUE)
+      if (is.null(generated_output()$pseudoinverse)) {
+        NULL
+      } else {
+        as.data.frame(generated_output()$pseudoinverse) %>%
+          tibble::rownames_to_column("coefficient") %>%
+          tidyr::gather(key = "Sample", value = "value",
+                        -coefficient) %>%
+          dplyr::mutate(Sample = factor(Sample, levels = colnames(
+            generated_output()$pseudoinverse))) %>%
+          ggplot2::ggplot(ggplot2::aes(x = Sample,
+                                       y = coefficient,
+                                       fill = value,
+                                       label = value)) +
+          ggplot2::geom_tile(color = "black") + ggplot2::theme_bw() +
+          ggplot2::theme(rect = element_blank()) +
+          ggplot2::scale_fill_gradient2(low = "red", high = "blue",
+                                        mid = "white", midpoint = 0,
+                                        name = "") +
+          ggplot2::geom_text() +
+          ggplot2::scale_x_discrete(expand = c(0, 0)) +
+          ggplot2::scale_y_discrete(expand = c(0, 0)) +
+          ggplot2::labs(y = "Model coefficient", x = "Sample")
+      }
+    })
+
+    ## --------------------------------------------------------------------- ##
+    ## Plot variance inflation factors
+    ## --------------------------------------------------------------------- ##
+    output$vifs <- shiny::renderPlot({
+      if (!is.null(generated_output()$vifs)) {
+        ggplot2::ggplot(generated_output()$vifs,
+                        ggplot2::aes(x = coefficient,
+                                     y = vif,
+                                     fill = coefficient)) +
+          ggplot2::geom_bar(stat = "identity") +
+          ggplot2::labs(x = "Model coefficient", y = "VIF") +
+          ggplot2::theme_bw() +
+          ggplot2::coord_flip() +
+          ggplot2::scale_y_continuous(expand = c(0, 0, 0.05, 0)) +
+          ggplot2::scale_fill_manual(values = generated_output()$colors) +
+          ggplot2::theme(legend.position = "none")
+      } else {
+        NULL
+      }
+    })
+
+    output$rank_warning_2 <- shiny::renderUI({
+      if (is.null(generated_output()$vifs)) {
+        shinydashboard::valueBox("", "VIFs could not be calculated",
+                                 color = "blue", icon = NULL, width = 4.5)
+      } else {
+        NULL
+      }
     })
 
     ## --------------------------------------------------------------------- ##
