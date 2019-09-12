@@ -219,7 +219,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               id = "pinv_design_matrix_box",
               shinydashboard::box(
                 width = NULL, title = "Pseudoinverse of design matrix",
-                collapsible = TRUE, collapsed = FALSE,
+                collapsible = TRUE, collapsed = TRUE,
                 shiny::plotOutput("pinv_design_matrix")
               )
             )
@@ -229,7 +229,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               id = "vifs_box",
               shinydashboard::box(
                 width = NULL, title = "Variance inflation factors",
-                collapsible = TRUE, collapsed = FALSE,
+                collapsible = TRUE, collapsed = TRUE,
                 shiny::plotOutput("vifs"),
                 shiny::uiOutput("rank_warning_2")
               )
