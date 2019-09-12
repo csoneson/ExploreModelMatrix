@@ -122,14 +122,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Calculate variance inflation factors
   ## ----------------------------------------------------------------------- ##
-  cm <- stats::cor(mm[, apply(mm, 2, stats::var) > 0, drop = FALSE])
-  if (qr(cm)$rank == ncol(cm)) {
-    vifs <- data.frame(
-      vif = diag(solve(cm))
-    ) %>% tibble::rownames_to_column("coefficient")
-  } else {
-    vifs <- NULL
-  }
+  vifs <- calculateVIFsLM(mm)
 
   ## ----------------------------------------------------------------------- ##
   ## Add modeled value column to sample data
