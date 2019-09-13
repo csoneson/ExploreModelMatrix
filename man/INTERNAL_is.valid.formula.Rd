@@ -2,7 +2,7 @@
 % Please edit documentation in R/exploreModelMatrix.R
 \name{is.valid.formula}
 \alias{is.valid.formula}
-\title{Is the formula valid?}
+\title{Check whether a design formula is valid}
 \usage{
 is.valid.formula(design, expdata)
 }
@@ -15,7 +15,6 @@ is.valid.formula(design, expdata)
 Logical value
 }
 \description{
-Checks whether the object is indeed a formula, and whether all specified 
+Checks whether the object is indeed a formula, and whether all specified
 factors are present in the experimental metadata provided
-iSEE
 }

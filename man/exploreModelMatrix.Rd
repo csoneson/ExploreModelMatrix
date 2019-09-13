@@ -29,5 +29,5 @@ if (interactive()) shiny::runApp(app)
 
 }
 \author{
-Charlotte Soneson
+Charlotte Soneson, Federico Marini
 }

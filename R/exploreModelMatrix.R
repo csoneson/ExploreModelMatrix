@@ -7,7 +7,7 @@
 #' @param designFormula A \code{formula}. All components of the terms must be
 #'   present as columns in \code{sampleData}.
 #'
-#' @author Charlotte Soneson
+#' @author Charlotte Soneson, Federico Marini
 #'
 #' @export
 #'
@@ -351,7 +351,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$dropcols <- renderUI({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
           input$designformula == "" ||
-          !(is.valid.formula(as.formula(input$designformula), values$sampledata))) {
+          !(is.valid.formula(as.formula(input$designformula),
+                             values$sampledata))) {
         NULL
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
@@ -403,7 +404,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
-          "Please provide a formula where factors are all appearing in the experimental metadata"
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
         )
       )
       if (is.null(generated_output()$sampledata)) {
@@ -433,7 +435,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
-          "Please provide a formula where factors are all appearing in the experimental metadata"
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
         )
       )
       generated_output()$designmatrix
@@ -446,7 +449,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
-          "Please provide a formula where factors are all appearing in the experimental metadata"
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
         )
       )
       if (is.null(generated_output()$pseudoinverse)) {
@@ -478,6 +482,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Plot variance inflation factors
     ## --------------------------------------------------------------------- ##
     output$vifs <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
       if (!is.null(generated_output()$vifs)) {
         ggplot2::ggplot(generated_output()$vifs,
                         ggplot2::aes(x = coefficient,
@@ -496,6 +507,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$rank_warning_2 <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
       if (is.null(generated_output()$vifs)) {
         shinydashboard::valueBox("", "VIFs could not be calculated",
                                  color = "blue", icon = NULL, width = 4.5)
@@ -511,7 +529,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
-          "Please provide a formula where factors are all appearing in the experimental metadata"
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
         )
       )
       if (is.null(generated_output()$designmatrix)) {
@@ -525,7 +544,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
-          "Please provide a formula where factors are all appearing in the experimental metadata"
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
         )
       )
       if (is.null(generated_output()$designmatrix)) {
@@ -539,7 +559,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
-          "Please provide a formula where factors are all appearing in the experimental metadata"
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
         )
       )
       if (is.null(generated_output()$designmatrix)) {
@@ -575,10 +596,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
-          "Please provide a formula where factors are all appearing in the experimental metadata"
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
         )
       )
-
       if (is.null(generated_output()$plotlist)) {
         NULL
       } else {
@@ -597,6 +618,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Plot cooccurrence matrix
     ## --------------------------------------------------------------------- ##
     output$cooccurrence_matrix_plot <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
       if (is.null(generated_output()$cooccurrenceplots)) {
         NULL
       } else {
@@ -633,11 +661,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 }
 
 
-#' Is the formula valid?
+#' Check whether a design formula is valid
 #'
 #' Checks whether the object is indeed a formula, and whether all specified
 #' factors are present in the experimental metadata provided
-#'iSEE
+#'
 #' @param design The specified formula
 #' @param expdata The experimental metadata data.frame
 #'
