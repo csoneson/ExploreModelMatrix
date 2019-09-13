@@ -36,7 +36,6 @@
 #' @importFrom dplyr mutate_if mutate
 #' @importFrom rintrojs introjs introjsUI
 #' @importFrom scales hue_pal
-#' @importFrom pheatmap pheatmap
 #' @importFrom ggplot2 ggplot aes geom_raster theme_bw theme labs
 #'   scale_fill_gradient2 geom_text scale_x_discrete scale_y_discrete geom_bar
 #'   coord_flip scale_fill_manual
