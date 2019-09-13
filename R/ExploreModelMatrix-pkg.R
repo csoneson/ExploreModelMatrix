@@ -8,4 +8,5 @@
 #' @docType package
 NULL
 
-globalVariables(c("colorby", "value", "vjust"))
+globalVariables(c("colorby", "value", "vjust", "coefficient",
+                  "Sample", "vif", "nSamples"))
