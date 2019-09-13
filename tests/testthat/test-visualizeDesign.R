@@ -139,7 +139,7 @@ test_that("VisualizeDesign works", {
   expect_equal(res$value[res$genotype == "A"], "(Intercept)")
   expect_equal(res$value[res$genotype == "B"], "(Intercept) + genotypeB")
   expect_equal(nrow(res), 2L)
-  expect_equal(colnames(res), c("genotype", "value"))
+  expect_equal(colnames(res), c("genotype", "value", "nSamples"))
 
   res <- VisualizeDesign(sampleData = sampleData,
                          designFormula = ~genotype + treatment)$sampledata

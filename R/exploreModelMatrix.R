@@ -235,6 +235,19 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               )
             )
           )
+        ),
+
+        shiny::fluidRow(
+          shiny::column(
+            8, shiny::div(
+              id = "cooccurrence_matrix_box",
+              shinydashboard::box(
+                width = NULL, title = "Co-occurrence plot",
+                collapsible = TRUE, collapsed = TRUE,
+                shiny::uiOutput("cooccurrence_matrix")
+              )
+            )
+          )
         )
 
       )
@@ -522,6 +535,25 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                         width = "100%",
                         height = paste0(input$plotheight, "px"))
     })
+
+    ## --------------------------------------------------------------------- ##
+    ## Plot cooccurrence matrix
+    ## --------------------------------------------------------------------- ##
+    output$cooccurrence_matrix_plot <- shiny::renderPlot({
+      if (is.null(generated_output()$cooccurrenceplots)) {
+        NULL
+      } else {
+        cowplot::plot_grid(plotlist = generated_output()$cooccurrenceplots,
+                           ncol = 1)
+      }
+    })
+
+    output$cooccurrence_matrix <- shiny::renderUI({
+      shiny::plotOutput("cooccurrence_matrix_plot",
+                        width = "100%",
+                        height = paste0(input$plotheight, "px"))
+    })
+
 
     ## --------------------------------------------------------------------- ##
     ## Tour

@@ -140,7 +140,9 @@ VisualizeDesign <- function(sampleData, designFormula,
     v <- paste(v, collapse = " + ")
     sampleData$value[i] <- v
   }
-  sampleData <- sampleData %>% dplyr::distinct()
+  sampleData <- sampleData %>% dplyr::group_by(value) %>%
+    dplyr::mutate(nSamples = length(value)) %>% dplyr::ungroup() %>%
+    dplyr::distinct() %>% as.data.frame()
 
   ## ----------------------------------------------------------------------- ##
   ## Define terms to include in the plot, and terms used for splitting plots
@@ -167,7 +169,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## Convert all columns to factors for plotting
   ## ----------------------------------------------------------------------- ##
   plot_data <- plot_data %>%
-    dplyr::mutate_all(as.factor)
+    dplyr::mutate_at(dplyr::vars(-nSamples), as.factor)
 
   ## ----------------------------------------------------------------------- ##
   ## Add value of split terms (to use for plot titles)
@@ -190,7 +192,8 @@ VisualizeDesign <- function(sampleData, designFormula,
     dplyr::mutate(value = gsub("^ ", "", value)) %>%
     dplyr::group_by_at(c(plot_terms, "groupby")) %>%
     dplyr::mutate(vjust = 1.5 * (seq(0, dplyr::n() - 1, by = 1) -
-                                   (dplyr::n() - 1)/2) + 0.5)
+                                   (dplyr::n() - 1)/2) + 0.5) %>%
+    dplyr::ungroup()
 
   ## ----------------------------------------------------------------------- ##
   ## Pre-define colors
@@ -210,11 +213,12 @@ VisualizeDesign <- function(sampleData, designFormula,
   ggp <- lapply(split(
     plot_data, f = plot_data$groupby),
     function(w) {
-      gg <- ggplot2::ggplot(w,
-                   ggplot2::aes_string(
-                     x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
-                     y = plot_terms[1],
-                     label = "value")) +
+      gg <- ggplot2::ggplot(
+        w,
+        ggplot2::aes_string(
+          x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
+          y = plot_terms[1],
+          label = "value")) +
         ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5)) +
         ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5))
       if (addColor) {
@@ -232,7 +236,7 @@ VisualizeDesign <- function(sampleData, designFormula,
         ggplot2::theme_bw() +
         ggplot2::geom_hline(yintercept = 0.5 +
                               seq_len(length(unique(
-                                sampleData[, plot_terms[1]])) - 1)) +
+                                sampleData[[plot_terms[1]]])) - 1)) +
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                        panel.grid.minor = ggplot2::element_blank(),
                        axis.text = ggplot2::element_text(size = textSizeLabs),
@@ -242,7 +246,7 @@ VisualizeDesign <- function(sampleData, designFormula,
         gg <- gg +
           ggplot2::geom_vline(xintercept = 0.5 +
                                 seq_len(length(unique(
-                                  sampleData[, plot_terms[2]])) - 1))
+                                  sampleData[[plot_terms[2]]])) - 1))
       } else {
         gg <- gg + theme(axis.text.x = element_blank(),
                          axis.title.x = element_blank(),
@@ -256,10 +260,53 @@ VisualizeDesign <- function(sampleData, designFormula,
     })
 
   ## ----------------------------------------------------------------------- ##
+  ## Create co-occurrence plot
+  ## ----------------------------------------------------------------------- ##
+  keepcols <- setdiff(colnames(plot_data), c("value", "vjust", "colorby"))
+  maxN <- max(plot_data$nSamples)
+  ggcoocc <- lapply(split(
+    plot_data, f = plot_data$groupby),
+    function(w) {
+      w <- w %>% dplyr::select(keepcols) %>% dplyr::distinct()
+      gp <- ggplot2::ggplot(
+        w,
+        ggplot2::aes_string(
+          x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
+          y = plot_terms[1],
+          fill = "nSamples",
+          label = "nSamples"
+        )) +
+        ggplot2::geom_tile(color = "black") +
+        ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0)) +
+        ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0)) +
+        ggplot2::theme_bw() +
+        ggplot2::geom_text(size = textSize) +
+        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+                       panel.grid.minor = ggplot2::element_blank(),
+                       axis.text = ggplot2::element_text(size = textSizeLabs),
+                       axis.title = ggplot2::element_text(size = textSizeLabs)) +
+        ggplot2::scale_fill_gradient(
+          low = "white", high = "blue",
+          name = "Number of\nobservations",
+          limits = c(0, maxN)) +
+        ggplot2::ggtitle(w$groupby[1])
+      if (length(plot_terms) == 1) {
+        gp <- gp + theme(axis.text.x = element_blank(),
+                         axis.title.x = element_blank(),
+                         axis.ticks.x = element_blank())
+      }
+      if (flipCoord) {
+        gp <- gp + ggplot2::coord_flip()
+      }
+      gp
+    })
+
+  ## ----------------------------------------------------------------------- ##
   ## Return
   ## ----------------------------------------------------------------------- ##
   list(sampledata = sampleData, plotlist = ggp, designmatrix = mm,
-       pseudoinverse = psinverse, vifs = vifs, colors = colors)
+       pseudoinverse = psinverse, vifs = vifs, colors = colors,
+       cooccurrenceplots = ggcoocc)
 }
 
 ## Add \n if a string is longer than lineWidth

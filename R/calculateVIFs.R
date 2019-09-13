@@ -20,6 +20,8 @@
 #'
 #' @keywords internal
 #'
+#' @importFrom stats lm
+#'
 calculateVIFsLM <- function(mm) {
   ## Remove intercept from mm, if present
   if ("(Intercept)" %in% colnames(mm)) {
@@ -44,7 +46,7 @@ calculateVIFsLM <- function(mm) {
         suppressWarnings({
           data.frame(vif = vapply(cols, function(i) {
             1/(1 - summary(
-              lm(mm0[, i] ~ 0 + ., data = data.frame(mm0[, -i, drop = FALSE]))
+              stats::lm(mm0[, i] ~ 0 + ., data = data.frame(mm0[, -i, drop = FALSE]))
             )$r.squared)
           }, NA_real_)) %>% tibble::rownames_to_column("coefficient")
         })
@@ -52,7 +54,7 @@ calculateVIFsLM <- function(mm) {
         suppressWarnings({
           data.frame(vif = vapply(cols, function(i) {
             1/(1 - summary(
-              lm(mm0[, i] ~ ., data = data.frame(mm0[, -i, drop = FALSE]))
+              stats::lm(mm0[, i] ~ ., data = data.frame(mm0[, -i, drop = FALSE]))
             )$r.squared)
           }, NA_real_)) %>% tibble::rownames_to_column("coefficient")
         })
@@ -84,10 +86,12 @@ calculateVIFsLM <- function(mm) {
 #'
 #' @keywords internal
 #'
+#' @importFrom stats rnorm lm vcov
+#'
 calculateVIFsVCOV <- function(designFormula, sampleData, removeCols = "") {
-  y <- rnorm(nrow(sampleData))
-  fit <- lm(as.formula(paste("y", paste(designFormula, collapse = " "))), sampleData)
-  v <- vcov(fit)
+  y <- stats::rnorm(nrow(sampleData))
+  fit <- stats::lm(as.formula(paste("y", paste(designFormula, collapse = " "))), sampleData)
+  v <- stats::vcov(fit)
   nam <- dimnames(v)[[1]]
   keep <- setdiff(nam, c("(Intercept)", removeCols))
   v <- v[keep, keep, drop = FALSE]
