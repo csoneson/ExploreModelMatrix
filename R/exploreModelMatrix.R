@@ -27,6 +27,7 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
+#'   need validate
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim
 #' @importFrom cowplot plot_grid
@@ -137,6 +138,18 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ## ------------------------------------------------------------------- ##
       shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
+
+        ## Define output size and style of error messages
+        shiny::tags$head(
+          shiny::tags$style(
+            shiny::HTML(".shiny-output-error-validation {
+                 font-size: 15px;
+                 color: forestgreen;
+                 text-align: center;
+                 }
+                 ")
+          )
+        ),
 
         shiny::fluidRow(
           shiny::column(
@@ -337,7 +350,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     output$dropcols <- renderUI({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
-          input$designformula == "") {
+          input$designformula == "" ||
+          !(is.valid.formula(as.formula(input$designformula), values$sampledata))) {
         NULL
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
@@ -386,6 +400,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate sample data table
     ## --------------------------------------------------------------------- ##
     output$fitted_values_table <- DT::renderDataTable({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$sampledata)) {
         NULL
       } else {
@@ -410,6 +430,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate design matrix
     ## --------------------------------------------------------------------- ##
     output$design_matrix <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       generated_output()$designmatrix
     })
 
@@ -417,6 +443,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Plot design matrix pseudoinverse
     ## --------------------------------------------------------------------- ##
     output$pinv_design_matrix <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$pseudoinverse)) {
         NULL
       } else {
@@ -476,6 +508,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Check rank and number of columns of design matrix
     ## --------------------------------------------------------------------- ##
     output$design_matrix_rank <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
@@ -484,6 +522,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$design_matrix_ncol <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
@@ -492,6 +536,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$rank_warning <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
@@ -522,6 +572,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## Generate design matrix plot
     ## --------------------------------------------------------------------- ##
     output$fitted_values_plot_plot <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          is.valid.formula(as.formula(input$designformula), values$sampledata),
+          "Please provide a formula where factors are all appearing in the experimental metadata"
+        )
+      )
+
       if (is.null(generated_output()$plotlist)) {
         NULL
       } else {
@@ -574,3 +631,25 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
   shiny::shinyApp(ui = p_layout, server = server_function)
 }
+
+
+#' Is the formula valid?
+#'
+#' Checks whether the object is indeed a formula, and whether all specified
+#' factors are present in the experimental metadata provided
+#'iSEE
+#' @param design The specified formula
+#' @param expdata The experimental metadata data.frame
+#'
+#' @return Logical value
+#'
+#' @rdname INTERNAL_is.valid.formula
+is.valid.formula <- function(design, expdata) {
+  isFormula <- inherits(design,"formula")
+
+  expVars <- all.vars(design)
+  allVarsThere <- all(expVars %in% colnames(expdata))
+
+  return(isFormula & allVarsThere)
+}
+

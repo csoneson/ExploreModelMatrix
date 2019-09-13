@@ -30,7 +30,6 @@ Imports:
     methods,
     rintrojs,
     scales,
-    pheatmap,
     tibble,
     MASS
 RoxygenNote: 6.1.1
