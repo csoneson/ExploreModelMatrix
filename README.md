@@ -12,7 +12,7 @@ input variables, simplifying understanding and generation of contrasts.
 `ExploreModelMatrix` is still under development and we welcome feedback. Please
 open an issue if you encounter unexpected behaviour.
 
-![](inst/www/ExploreModelMatrix.png)
+![](https://github.com/csoneson/ExploreModelMatrix/blob/master/inst/www/ExploreModelMatrix.png)
 
 ## Installation
 
