@@ -1,6 +1,7 @@
 element;intro
 #Welcome;Welcome to ExploreModelMatrix! This tour gives an overview of the user interface.
 #choose_design_formula; Here you specify the desired (fixed-effect) design formula. The formula must start with the ~ character.
+#Tadaaa;<p>This is just an example.</p>\n\n<p>This would be a formula:</p>\n\n<p>\\[y = x + 2\\]</p>\n\n<p>And this would be inline text, when I would just mention \\(y^2\\) and then go on with my sentence.</p>\n
 #reflevels;Here you can set the reference level for each of the factor variables in the supplied sample data table.
 #dropcols;This box lets you specify columns to drop from the design matrix. This can be useful, e.g., to obtain a design matrix with full rank.
 #plot_height; This sets the height of the plot window for the visualization of the fitted values.
@@ -13,5 +14,5 @@ element;intro
 #fitted_values_table_box;This panel contains the same information as the fitted value plot, but in table format.
 #sample_table_box;This panel shows the full provided sample information table.
 #sample_table_summary_box;This shows the summary of the provided sample information table. Character variables are converted to factors when loaded into the application.
-#design_matrix_box;This panel displays the current design matrix, obtained by the model.matrix() R function, after excluding any columns specified under "Drop columns"
+#design_matrix_box;This panel displays the current design matrix, obtained by the <code>model.matrix()</code> R function, after excluding any columns specified under "Drop columns"
 #design_matrix_rank_box;Here, the rank of the current design matrix, as well as the number of columns, are displayed. If the rank is lower than the number of columns (i.e., the design matrix is not full rank), a warning will be displayed.
