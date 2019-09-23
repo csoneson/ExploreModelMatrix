@@ -27,6 +27,7 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
+#'   withMathJax includeMarkdown
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim
 #' @importFrom cowplot plot_grid
@@ -131,6 +132,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ## ------------------------------------------------------------------- ##
       shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
+        withMathJax(),
+        includeMarkdown(
+          system.file("extdata","mathjax_example.md",package = "ExploreModelMatrix")
+        ),
 
         shiny::fluidRow(
           shiny::column(
