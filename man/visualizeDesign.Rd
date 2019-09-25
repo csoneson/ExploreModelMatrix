@@ -4,9 +4,11 @@
 \alias{VisualizeDesign}
 \title{Visualize design matrix}
 \usage{
-VisualizeDesign(sampleData, designFormula, flipCoord = FALSE,
-  textSize = 5, textSizeLabs = 12, lineWidth = 25, dropCols = NULL,
-  addColor = TRUE, colorPalette = scales::hue_pal())
+VisualizeDesign(sampleData, designFormula, flipCoordFitted = FALSE,
+  flipCoordCoocc = FALSE, textSizeFitted = 5, textSizeCoocc = 5,
+  textSizeLabsFitted = 12, textSizeLabsCoocc = 12,
+  lineWidthFitted = 25, addColorFitted = TRUE, dropCols = NULL,
+  colorPalette = scales::hue_pal())
 }
 \arguments{
 \item{sampleData}{A \code{data.frame} with sample information.}
@@ -14,22 +16,22 @@ VisualizeDesign(sampleData, designFormula, flipCoord = FALSE,
 \item{designFormula}{A \code{formula}. All components of the terms must be
 present as columns in \code{sampleData}.}
 
-\item{flipCoord}{A \code{logical}, whether to flip the coordinate axes in the
-plot.}
+\item{flipCoordFitted, flipCoordCoocc}{A \code{logical}, whether to flip the coordinate axes in the
+fitted values/co-occurrence plot, respectively.}
 
-\item{textSize}{A \code{numeric} scalar giving the text size in the plot.}
+\item{textSizeFitted, textSizeCoocc}{A \code{numeric} scalar giving the text size in the fitted values/co-occurrence plot, respectively.}
 
-\item{textSizeLabs}{A \code{numeric} scalar giving the text size for the axis
-labels in the plot.}
+\item{textSizeLabsFitted, textSizeLabsCoocc}{A \code{numeric} scalar giving the text size for the axis
+labels in the fitted values/co-occurrence plot, respectively.}
 
-\item{lineWidth}{A \code{numeric} scalar giving the maximal length of a row
-in the plot, before it is split and printed on multiple lines}
+\item{lineWidthFitted}{A \code{numeric} scalar giving the maximal length of a row
+in the fitted values plot, before it is split and printed on multiple lines}
+
+\item{addColorFitted}{A \code{logical} scalar indicating whether the terms in the
+fitted values plot should be shown in different colors.}
 
 \item{dropCols}{A character vector with columns to drop from the design
 matrix, or NULL if no columns should be dropped.}
-
-\item{addColor}{A \code{logical} scalar indicating whether the terms in the
-fitted values plot should be shown in different colors.}
 
 \item{colorPalette}{A \code{function} returning a color palette.}
 }

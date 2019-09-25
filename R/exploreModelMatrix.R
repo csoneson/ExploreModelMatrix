@@ -91,7 +91,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ## Inputs
       ## ------------------------------------------------------------------- ##
       shinydashboard::dashboardSidebar(
-        width = 250,
+        width = 300,
 
         shiny::uiOutput("choose_sampledata_file"),
         shiny::uiOutput("choose_design_formula"),
@@ -110,25 +110,55 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
         shinydashboard::menuItem(
           "Settings", icon = shiny::icon("sliders-h"),
-          startExpanded = TRUE,
-          shiny::numericInput(inputId = "plotheight",
-                              label = "Plot height (numeric, in pixels)",
-                              value = 400, min = 200, max = 3000, step = 10),
-          shiny::checkboxInput(inputId = "flipcoord",
-                               label = "Flip coordinates",
-                               value = FALSE),
-          shiny::numericInput(inputId = "textsize",
-                              label = "Text size, matrix entries",
-                              value = 5, min = 1, max = 25, step = 1),
-          shiny::numericInput(inputId = "textsizelabs",
-                              label = "Text size, axis labels",
-                              value = 12, min = 1, max = 25, step = 1),
-          shiny::numericInput(inputId = "linewidth",
-                              label = "Maximal row length",
-                              value = 25, min = 1, max = 100, step = 1),
-          shiny::checkboxInput(inputId = "colorterms",
-                               label = "Color terms",
-                               value = TRUE)
+          startExpanded = TRUE, id = "settings",
+          shinydashboard::menuItem(
+            "Fitted values plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_fitted",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::checkboxInput(inputId = "flipcoord_fitted",
+                                 label = "Flip coordinates",
+                                 value = FALSE),
+            shiny::numericInput(inputId = "textsize_fitted",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_fitted",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::checkboxInput(inputId = "colorterms_fitted",
+                                 label = "Color terms",
+                                 value = TRUE),
+            shiny::numericInput(inputId = "linewidth_fitted",
+                                label = "Maximal row length",
+                                value = 25, min = 1, max = 100, step = 1)
+          ),
+          shinydashboard::menuItem(
+            "Pseudoinverse plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_pinv",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::numericInput(inputId = "textsize_pinv",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_pinv",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1)
+          ),
+          shinydashboard::menuItem(
+            "Co-occurrence plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_coocc",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::checkboxInput(inputId = "flipcoord_coocc",
+                                 label = "Flip coordinates",
+                                 value = FALSE),
+            shiny::numericInput(inputId = "textsize_coocc",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_coocc",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1)
+          )
         )
       ),
 
@@ -232,7 +262,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               shinydashboard::box(
                 width = NULL, title = "Pseudoinverse of design matrix",
                 collapsible = TRUE, collapsed = TRUE,
-                shiny::plotOutput("pinv_design_matrix")
+                shiny::uiOutput("pinv_design_matrix")
               )
             )
           ),
@@ -386,12 +416,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       } else {
         return(VisualizeDesign(sampleData = values$sampledata,
                                designFormula = input$designformula,
-                               flipCoord = input$flipcoord,
-                               textSize = input$textsize,
-                               textSizeLabs = input$textsizelabs,
-                               lineWidth = input$linewidth,
+                               flipCoordFitted = input$flipcoord_fitted,
+                               flipCoordCoocc = input$flipcoord_coocc,
+                               textSizeFitted = input$textsize_fitted,
+                               textSizeCoocc = input$textsize_coocc,
+                               textSizeLabsFitted = input$textsizelabs_fitted,
+                               textSizeLabsCoocc = input$textsizelabs_coocc,
+                               lineWidthFitted = input$linewidth_fitted,
+                               addColorFitted = input$colorterms_fitted,
                                dropCols = input$dropcols,
-                               addColor = input$colorterms,
                                colorPalette = scales::hue_pal()))
       }
     })
@@ -444,7 +477,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     ## Plot design matrix pseudoinverse
     ## --------------------------------------------------------------------- ##
-    output$pinv_design_matrix <- shiny::renderPlot({
+    output$pinv_design_matrix_plot <- shiny::renderPlot({
       shiny::validate(
         shiny::need(
           is.valid.formula(as.formula(input$designformula), values$sampledata),
@@ -466,15 +499,23 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                        fill = value,
                                        label = value)) +
           ggplot2::geom_tile(color = "black") + ggplot2::theme_bw() +
-          ggplot2::theme(rect = element_blank()) +
+          ggplot2::theme(rect = element_blank(),
+                         axis.text = ggplot2::element_text(size = input$textsizelabs_pinv),
+                         axis.title = ggplot2::element_text(size = input$textsizelabs_pinv)) +
           ggplot2::scale_fill_gradient2(low = "red", high = "blue",
                                         mid = "white", midpoint = 0,
                                         name = "") +
-          ggplot2::geom_text() +
+          ggplot2::geom_text(size = input$textsize_pinv) +
           ggplot2::scale_x_discrete(expand = c(0, 0)) +
           ggplot2::scale_y_discrete(expand = c(0, 0)) +
           ggplot2::labs(y = "Model coefficient", x = "Sample")
       }
+    })
+
+    output$pinv_design_matrix <- shiny::renderUI({
+      shiny::plotOutput("pinv_design_matrix_plot",
+                        width = "100%",
+                        height = paste0(input$plotheight_pinv, "px"))
     })
 
     ## --------------------------------------------------------------------- ##
@@ -610,7 +651,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$fitted_values_plot <- shiny::renderUI({
       shiny::plotOutput("fitted_values_plot_plot",
                         width = "100%",
-                        height = paste0(input$plotheight, "px"))
+                        height = paste0(input$plotheight_fitted, "px"))
     })
 
     ## --------------------------------------------------------------------- ##
@@ -635,7 +676,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$cooccurrence_matrix <- shiny::renderUI({
       shiny::plotOutput("cooccurrence_matrix_plot",
                         width = "100%",
-                        height = paste0(input$plotheight, "px"))
+                        height = paste0(input$plotheight_coocc, "px"))
     })
 
 

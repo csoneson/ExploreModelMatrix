@@ -3,17 +3,17 @@
 #' @param sampleData A \code{data.frame} with sample information.
 #' @param designFormula A \code{formula}. All components of the terms must be
 #'   present as columns in \code{sampleData}.
-#' @param flipCoord A \code{logical}, whether to flip the coordinate axes in the
-#'   plot.
-#' @param textSize A \code{numeric} scalar giving the text size in the plot.
-#' @param textSizeLabs A \code{numeric} scalar giving the text size for the axis
-#'   labels in the plot.
-#' @param lineWidth A \code{numeric} scalar giving the maximal length of a row
-#'   in the plot, before it is split and printed on multiple lines
+#' @param flipCoordFitted,flipCoordCoocc A \code{logical}, whether to flip the coordinate axes in the
+#'   fitted values/co-occurrence plot, respectively.
+#' @param textSizeFitted,textSizeCoocc A \code{numeric} scalar giving the text size in the fitted values/co-occurrence plot, respectively.
+#' @param textSizeLabsFitted,textSizeLabsCoocc A \code{numeric} scalar giving the text size for the axis
+#'   labels in the fitted values/co-occurrence plot, respectively.
+#' @param lineWidthFitted A \code{numeric} scalar giving the maximal length of a row
+#'   in the fitted values plot, before it is split and printed on multiple lines
+#' @param addColorFitted A \code{logical} scalar indicating whether the terms in the
+#'   fitted values plot should be shown in different colors.
 #' @param dropCols A character vector with columns to drop from the design
 #'   matrix, or NULL if no columns should be dropped.
-#' @param addColor A \code{logical} scalar indicating whether the terms in the
-#'   fitted values plot should be shown in different colors.
 #' @param colorPalette A \code{function} returning a color palette.
 #'
 #' @author Charlotte Soneson
@@ -45,10 +45,11 @@
 #' @importFrom MASS ginv
 #'
 VisualizeDesign <- function(sampleData, designFormula,
-                            flipCoord = FALSE, textSize = 5,
-                            textSizeLabs = 12, lineWidth = 25,
-                            dropCols = NULL, addColor = TRUE,
-                            colorPalette = scales::hue_pal()) {
+                            flipCoordFitted = FALSE, flipCoordCoocc = FALSE,
+                            textSizeFitted = 5, textSizeCoocc = 5,
+                            textSizeLabsFitted = 12, textSizeLabsCoocc = 12,
+                            lineWidthFitted = 25, addColorFitted = TRUE,
+                            dropCols = NULL, colorPalette = scales::hue_pal()) {
   ## TODO: Allow design of ~1 (currently fails, needs at least 1 term)
 
   ## ----------------------------------------------------------------------- ##
@@ -70,17 +71,23 @@ VisualizeDesign <- function(sampleData, designFormula,
     stop("'designFormula' can't contain |")
   }
 
-  if (!methods::is(flipCoord, "logical") | length(flipCoord) != 1) {
-    stop("'flipCoord' must be a logical scalar")
+  if (!methods::is(flipCoordFitted, "logical") | length(flipCoordFitted) != 1) {
+    stop("'flipCoordFitted' must be a logical scalar")
+  }
+  if (!methods::is(flipCoordCoocc, "logical") | length(flipCoordCoocc) != 1) {
+    stop("'flipCoordCoocc' must be a logical scalar")
   }
 
-  if ((!is.numeric(textSize) | length(textSize) != 1) ||
-      (!is.numeric(textSizeLabs) | length(textSizeLabs) != 1) ||
-      (!is.numeric(lineWidth) | length(lineWidth) != 1)) {
-    stop("'textSize', 'textSizeLabs' and 'lineWidth' must be numeric scalars")
+  if ((!is.numeric(textSizeFitted) | length(textSizeFitted) != 1) ||
+      (!is.numeric(textSizeLabsFitted) | length(textSizeLabsFitted) != 1) ||
+      (!is.numeric(lineWidthFitted) | length(lineWidthFitted) != 1) ||
+      (!is.numeric(textSizeCoocc) | length(textSizeCoocc) != 1) ||
+      (!is.numeric(textSizeLabsCoocc) | length(textSizeLabsCoocc) != 1)) {
+    stop("'textSizeFitted', 'textSizeCoocc', 'textSizeLabs',",
+         "'textSizeLabsCoocc' and 'lineWidthFitted' must be numeric scalars")
   }
-  if (addColor) {
-    lineWidth <- 1
+  if (addColorFitted) {
+    lineWidthFitted <- 1
   }
 
   if (length(dropCols) > 0 && !methods::is(dropCols, "character")) {
@@ -163,7 +170,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   plot_data <- sampleData %>%
     dplyr::mutate(value = vapply(value, function(i)
-      addNewLine(i, lineWidth), ""))
+      addNewLine(i, lineWidthFitted), ""))
 
   ## ----------------------------------------------------------------------- ##
   ## Convert all columns to factors for plotting
@@ -198,7 +205,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Pre-define colors
   ## ----------------------------------------------------------------------- ##
-  if (addColor) {
+  if (addColorFitted) {
     plot_data <- plot_data %>%
       dplyr::mutate(colorby = gsub("[ ]*\\+[ ]*", "",
                                    gsub("(\\(-)*[0-9]*\\)*[ ]*\\*[ ]*", "",
@@ -221,15 +228,15 @@ VisualizeDesign <- function(sampleData, designFormula,
           label = "value")) +
         ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5)) +
         ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5))
-      if (addColor) {
+      if (addColorFitted) {
         gg <- gg +
-          ggplot2::geom_text(size = textSize,
+          ggplot2::geom_text(size = textSizeFitted,
                              ggplot2::aes(vjust = vjust,
                                           color = colorby)) +
           ggplot2::scale_color_manual(values = colors)
       } else {
         gg <- gg +
-          ggplot2::geom_text(size = textSize,
+          ggplot2::geom_text(size = textSizeFitted,
                              ggplot2::aes(vjust = vjust))
       }
       gg <- gg +
@@ -239,8 +246,8 @@ VisualizeDesign <- function(sampleData, designFormula,
                                 sampleData[[plot_terms[1]]])) - 1)) +
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                        panel.grid.minor = ggplot2::element_blank(),
-                       axis.text = ggplot2::element_text(size = textSizeLabs),
-                       axis.title = ggplot2::element_text(size = textSizeLabs),
+                       axis.text = ggplot2::element_text(size = textSizeLabsFitted),
+                       axis.title = ggplot2::element_text(size = textSizeLabsFitted),
                        legend.position = "none")
       if (length(plot_terms) > 1) {
         gg <- gg +
@@ -253,7 +260,7 @@ VisualizeDesign <- function(sampleData, designFormula,
                          axis.ticks.x = element_blank())
       }
       gg <- gg + ggplot2::ggtitle(w$groupby[1])
-      if (flipCoord) {
+      if (flipCoordFitted) {
         gg <- gg + ggplot2::coord_flip()
       }
       gg
@@ -280,13 +287,13 @@ VisualizeDesign <- function(sampleData, designFormula,
         ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0)) +
         ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0)) +
         ggplot2::theme_bw() +
-        ggplot2::geom_text(size = textSize) +
+        ggplot2::geom_text(size = textSizeCoocc) +
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                        panel.grid.minor = ggplot2::element_blank(),
-                       axis.text = ggplot2::element_text(size = textSizeLabs),
-                       axis.title = ggplot2::element_text(size = textSizeLabs)) +
+                       axis.text = ggplot2::element_text(size = textSizeLabsCoocc),
+                       axis.title = ggplot2::element_text(size = textSizeLabsCoocc)) +
         ggplot2::scale_fill_gradient(
-          low = "white", high = "blue",
+          low = "white", high = "deepskyblue3",
           name = "Number of\nobservations",
           limits = c(0, maxN)) +
         ggplot2::ggtitle(w$groupby[1])
@@ -295,7 +302,7 @@ VisualizeDesign <- function(sampleData, designFormula,
                          axis.title.x = element_blank(),
                          axis.ticks.x = element_blank())
       }
-      if (flipCoord) {
+      if (flipCoordCoocc) {
         gp <- gp + ggplot2::coord_flip()
       }
       gp
@@ -309,12 +316,12 @@ VisualizeDesign <- function(sampleData, designFormula,
        cooccurrenceplots = ggcoocc)
 }
 
-## Add \n if a string is longer than lineWidth
-addNewLine <- function(st, lineWidth) {
-  if (nchar(st) > lineWidth) {
+## Add \n if a string is longer than lineWidthFitted
+addNewLine <- function(st, lineWidthFitted) {
+  if (nchar(st) > lineWidthFitted) {
     st0 <- strsplit(st, "\\+")[[1]]
     cs <- cumsum(vapply(st0, nchar, 0))
-    csgr <- cs %/% lineWidth
+    csgr <- cs %/% lineWidthFitted
     st1 <- vapply(split(st0, csgr),
                   function(x) paste(x, collapse = "+"), "")
     st <- paste(st1, collapse = "+\n")
