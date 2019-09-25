@@ -9,10 +9,10 @@ and a design formula, `ExploreModelMatrix` will illustrate the fitted values
 (or, more generally, the value of the linear predictor) for each combination of
 input variables, simplifying understanding and generation of contrasts.
 
-`ExploreModelMatrix` is still under development and we welcome feedback, please
+`ExploreModelMatrix` is still under development and we welcome feedback. Please
 open an issue if you encounter unexpected behaviour.
 
-![](inst/www/ExploreModelMatrix.png)
+![](https://github.com/csoneson/ExploreModelMatrix/blob/master/inst/www/ExploreModelMatrix.png?raw=true)
 
 ## Installation
 
