@@ -38,5 +38,3 @@ Suggests:
     htmltools,
     icon
 VignetteBuilder: knitr
-Remotes: ropenscilabs/icon
-
