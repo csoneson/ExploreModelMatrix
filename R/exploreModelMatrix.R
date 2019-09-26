@@ -316,7 +316,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     if (is.null(sampleData)) {
       output$choose_sampledata_file <- shiny::renderUI({
         shiny::fileInput(inputId = "sampledatasel",
-                         label = "Load sample data file",
+                         label = "Load sample data file (tab-separated)",
                          accept = c("text/tab-separated-values", "text/plain",
                                     ".tsv", ".tab", ".txt"),
                          multiple = FALSE)
@@ -412,8 +412,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     generated_output <- shiny::reactive({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
           input$designformula == "") {
-        return(list(sampledata = NULL, designformula = NULL,
-                    designmatrix = NULL))
+        return(list())
       } else {
         return(VisualizeDesign(sampleData = values$sampledata,
                                designFormula = input$designformula,
@@ -491,8 +490,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       } else {
         as.data.frame(generated_output()$pseudoinverse) %>%
           tibble::rownames_to_column("coefficient") %>%
-          tidyr::gather(key = "Sample", value = "value",
-                        -coefficient) %>%
+          tidyr::gather(key = "Sample", value = "value", -coefficient) %>%
           dplyr::mutate(Sample = factor(Sample, levels = colnames(
             generated_output()$pseudoinverse))) %>%
           ggplot2::ggplot(ggplot2::aes(x = Sample,
@@ -530,7 +528,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                  "the sample data")
         )
       )
-      if (!is.null(generated_output()$vifs)) {
+      if (is.null(generated_output()$vifs)) {
+        NULL
+      } else {
         ggplot2::ggplot(generated_output()$vifs,
                         ggplot2::aes(x = coefficient,
                                      y = vif,
@@ -542,8 +542,6 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
           ggplot2::scale_y_continuous(expand = c(0, 0, 0.05, 0)) +
           ggplot2::scale_fill_manual(values = generated_output()$colors) +
           ggplot2::theme(legend.position = "none")
-      } else {
-        NULL
       }
     })
 
@@ -626,7 +624,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       } else {
         DT::datatable(values$sampledata,
                       options = list(scrollX = TRUE),
-                      rownames = FALSE)
+                      rownames = TRUE)
       }
     })
 
@@ -713,8 +711,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 #' @return Logical value
 #'
 #' @rdname INTERNAL_is.valid.formula
+#'
 is.valid.formula <- function(design, expdata) {
-  isFormula <- inherits(design,"formula")
+  isFormula <- inherits(design, "formula")
 
   expVars <- all.vars(design)
   allVarsThere <- all(expVars %in% colnames(expdata))
