@@ -1,7 +1,7 @@
 #' Explore model matrix
 #'
 #' Given a sample table and a design formula, explore the resulting design
-#' matrix graphically in a shiny app.
+#' matrix graphically in an interactive application.
 #'
 #' @param sampleData A \code{data.frame} with sample information.
 #' @param designFormula A \code{formula}. All components of the terms must be
@@ -69,8 +69,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ## Header
       ## ------------------------------------------------------------------- ##
       shinydashboard::dashboardHeader(
-        title = "Design matrix visualization",
-        titleWidth = 350,
+        title = paste0("Design matrix visualization (ExploreModelMatrix v",
+                       packageVersion("ExploreModelMatrix"), ")"),
+        titleWidth = 600,
         shinydashboard::dropdownMenu(
           type = "tasks",
           icon = shiny::icon("question-circle fa-1g"),
