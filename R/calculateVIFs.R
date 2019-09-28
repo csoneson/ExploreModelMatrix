@@ -87,6 +87,7 @@ calculateVIFsLM <- function(mm) {
 #' @keywords internal
 #'
 #' @importFrom stats rnorm lm vcov
+#' @importFrom magrittr %>%
 #'
 calculateVIFsVCOV <- function(designFormula, sampleData, removeCols = "") {
   y <- stats::rnorm(nrow(sampleData))

@@ -41,6 +41,7 @@
 #'   coord_flip scale_fill_manual
 #' @importFrom tidyr gather
 #' @importFrom tibble rownames_to_column
+#' @importFrom magrittr %>%
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##

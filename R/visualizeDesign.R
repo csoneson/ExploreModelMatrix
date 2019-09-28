@@ -54,6 +54,7 @@
 #' @importFrom stats model.matrix as.formula cor var
 #' @importFrom methods is
 #' @importFrom MASS ginv
+#' @importFrom magrittr %>%
 #'
 VisualizeDesign <- function(sampleData, designFormula,
                             flipCoordFitted = FALSE, flipCoordCoocc = FALSE,
