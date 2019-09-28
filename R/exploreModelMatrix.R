@@ -29,7 +29,7 @@
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
 #'   need validate
 #' @importFrom DT dataTableOutput renderDataTable datatable
-#' @importFrom utils read.delim
+#' @importFrom utils read.delim packageVersion
 #' @importFrom cowplot plot_grid
 #' @importFrom methods is
 #' @importFrom stats model.matrix as.formula relevel
@@ -70,7 +70,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       ## ------------------------------------------------------------------- ##
       shinydashboard::dashboardHeader(
         title = paste0("Design matrix visualization (ExploreModelMatrix v",
-                       packageVersion("ExploreModelMatrix"), ")"),
+                       utils::packageVersion("ExploreModelMatrix"), ")"),
         titleWidth = 600,
         shinydashboard::dropdownMenu(
           type = "tasks",
@@ -425,7 +425,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                lineWidthFitted = input$linewidth_fitted,
                                addColorFitted = input$colorterms_fitted,
                                dropCols = input$dropcols,
-                               colorPalette = scales::hue_pal()))
+                               colorPaletteFitted = scales::hue_pal()))
       }
     })
 

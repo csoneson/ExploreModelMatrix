@@ -41,7 +41,6 @@ sampleData <- data.frame(genotype = rep(c("A", "B"), each = 4),
                          treatment = rep(c("ctrl", "trt"), 4))
 ExploreModelMatrix(sampleData = sampleData,
                    designFormula = ~ genotype + treatment)
-
 ```
 
 This will open up an [R/Shiny](https://shiny.rstudio.com/) application where you

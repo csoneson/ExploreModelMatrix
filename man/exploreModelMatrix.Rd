@@ -17,7 +17,7 @@ A Shiny app object
 }
 \description{
 Given a sample table and a design formula, explore the resulting design
-matrix graphically in a shiny app.
+matrix graphically in an interactive application.
 }
 \examples{
 app <- ExploreModelMatrix(

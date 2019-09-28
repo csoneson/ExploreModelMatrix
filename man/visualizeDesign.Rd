@@ -7,8 +7,8 @@
 VisualizeDesign(sampleData, designFormula, flipCoordFitted = FALSE,
   flipCoordCoocc = FALSE, textSizeFitted = 5, textSizeCoocc = 5,
   textSizeLabsFitted = 12, textSizeLabsCoocc = 12,
-  lineWidthFitted = 25, addColorFitted = TRUE, dropCols = NULL,
-  colorPalette = scales::hue_pal())
+  lineWidthFitted = 25, addColorFitted = TRUE,
+  colorPaletteFitted = scales::hue_pal(), dropCols = NULL)
 }
 \arguments{
 \item{sampleData}{A \code{data.frame} with sample information.}
@@ -16,13 +16,15 @@ VisualizeDesign(sampleData, designFormula, flipCoordFitted = FALSE,
 \item{designFormula}{A \code{formula}. All components of the terms must be
 present as columns in \code{sampleData}.}
 
-\item{flipCoordFitted, flipCoordCoocc}{A \code{logical}, whether to flip the coordinate axes in the
-fitted values/co-occurrence plot, respectively.}
+\item{flipCoordFitted, flipCoordCoocc}{A \code{logical}, whether to flip the
+coordinate axes in the fitted values/co-occurrence plot, respectively.}
 
-\item{textSizeFitted, textSizeCoocc}{A \code{numeric} scalar giving the text size in the fitted values/co-occurrence plot, respectively.}
+\item{textSizeFitted, textSizeCoocc}{A \code{numeric} scalar giving the text
+size in the fitted values/co-occurrence plot, respectively.}
 
-\item{textSizeLabsFitted, textSizeLabsCoocc}{A \code{numeric} scalar giving the text size for the axis
-labels in the fitted values/co-occurrence plot, respectively.}
+\item{textSizeLabsFitted, textSizeLabsCoocc}{A \code{numeric} scalar giving
+the text size for the axis labels in the fitted values/co-occurrence plot,
+respectively.}
 
 \item{lineWidthFitted}{A \code{numeric} scalar giving the maximal length of a row
 in the fitted values plot, before it is split and printed on multiple lines}
@@ -30,18 +32,27 @@ in the fitted values plot, before it is split and printed on multiple lines}
 \item{addColorFitted}{A \code{logical} scalar indicating whether the terms in the
 fitted values plot should be shown in different colors.}
 
+\item{colorPaletteFitted}{A \code{function} returning a color palette to use
+for coloring the model coefficients in the fitted values plot.}
+
 \item{dropCols}{A character vector with columns to drop from the design
 matrix, or NULL if no columns should be dropped.}
-
-\item{colorPalette}{A \code{function} returning a color palette.}
 }
 \value{
-A list with two elements:
+A list with the following elements:
 \itemize{
 \item sampledata A \code{data.frame}, expanded from the input
 \code{sampleData}
 \item plotlist A list of plots, displaying the fitted values for each
 combination of predictor values, in terms of the model coefficients.
+\item designmatrix The design matrix, after removing and columns in
+\code{dropCols}
+\item pseudoinverse The pseudoinverse of the design matrix
+\item vifs A \code{data.frame} with calculated variance inflation factors
+\item colors A vector with colors to use for different model coefficients
+\item cooccurrenceplots A list of plots, displaying the co-occurrence pattern
+for the predictors (i.e., the number of observations for each combination of
+predictor values)
 }
 }
 \description{
