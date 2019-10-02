@@ -70,35 +70,3 @@ calculateVIFsLM <- function(mm) {
 
   vifs
 }
-
-#' Calculate variance inflation factors from the overall lm fit
-#'
-#' A generalization of the implementation in rms::vif(), allowing for specified
-#' columns to be removed from the variance/covariance matrix.
-#'
-#' @param designFormula A formula
-#' @param sampleData A data.frame with sample information
-#' @param removeCols A character vector of columns to remove from the vcov matrix
-#'
-#' @return A data.frame with estimated VIFs for each coefficient.
-#'
-#' @author Charlotte Soneson
-#'
-#' @keywords internal
-#'
-#' @importFrom stats rnorm lm vcov
-#' @importFrom magrittr %>%
-#'
-calculateVIFsVCOV <- function(designFormula, sampleData, removeCols = "") {
-  y <- stats::rnorm(nrow(sampleData))
-  fit <- stats::lm(as.formula(paste("y", paste(designFormula, collapse = " "))), sampleData)
-  v <- stats::vcov(fit)
-  nam <- dimnames(v)[[1]]
-  keep <- setdiff(nam, c("(Intercept)", removeCols))
-  v <- v[keep, keep, drop = FALSE]
-  nam <- keep
-  d <- diag(v)^0.5
-  v <- diag(solve(v/(d %o% d)))
-  names(v) <- nam
-  data.frame(vif = v) %>% tibble::rownames_to_column("coefficient")
-}

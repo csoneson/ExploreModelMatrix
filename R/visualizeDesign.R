@@ -330,12 +330,12 @@ VisualizeDesign <- function(sampleData, designFormula,
        cooccurrenceplots = ggcoocc)
 }
 
-## Add \n if a string is longer than lineWidthFitted
-addNewLine <- function(st, lineWidthFitted) {
-  if (nchar(st) > lineWidthFitted) {
+## Add \n if a string is longer than lineWidth
+addNewLine <- function(st, lineWidth) {
+  if (nchar(st) > lineWidth) {
     st0 <- strsplit(st, "\\+")[[1]]
     cs <- cumsum(vapply(st0, nchar, 0))
-    csgr <- cs %/% lineWidthFitted
+    csgr <- cs %/% lineWidth
     st1 <- vapply(split(st0, csgr),
                   function(x) paste(x, collapse = "+"), "")
     st <- paste(st1, collapse = "+\n")
