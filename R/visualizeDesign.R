@@ -143,7 +143,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Calculate variance inflation factors
   ## ----------------------------------------------------------------------- ##
-  vifs <- calculateVIFsLM(mm)
+  vifs <- .calculateVIFsLM(mm)
 
   ## ----------------------------------------------------------------------- ##
   ## Add modeled value column to sample data
@@ -184,7 +184,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   plot_data <- sampleData %>%
     dplyr::mutate(value = vapply(value, function(i)
-      addNewLine(i, lineWidthFitted), ""))
+      .addNewLine(i, lineWidthFitted), ""))
 
   ## ----------------------------------------------------------------------- ##
   ## Convert all columns to factors for plotting
@@ -330,8 +330,18 @@ VisualizeDesign <- function(sampleData, designFormula,
        cooccurrenceplots = ggcoocc)
 }
 
-## Add \n if a string is longer than lineWidth
-addNewLine <- function(st, lineWidth) {
+#' Split a string into multiple lines if it's longer than a certain length
+#'
+#' @param st A string
+#' @param lineWidth The maximum length of a line
+#'
+#' @return A string
+#'
+#' @keywords internal
+#'
+#' @rdname INTERNAL_.addNewLine
+#'
+.addNewLine <- function(st, lineWidth) {
   if (nchar(st) > lineWidth) {
     st0 <- strsplit(st, "\\+")[[1]]
     cs <- cumsum(vapply(st0, nchar, 0))

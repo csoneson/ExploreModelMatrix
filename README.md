@@ -20,14 +20,8 @@ You can install `ExploreModelMatrix` with the `remotes` (or `devtools`) package,
 like so:
 
 ```
-remotes::install_github("csoneson/ExploreModelMatrix", build_vignettes = TRUE, dependencies = TRUE)
-```
-
-For this to work, you need to have the `remotes` R package installed. If you
-don't already have it, you can install it like this:
-
-```
 install.packages("remotes")
+remotes::install_github("csoneson/ExploreModelMatrix", build_vignettes = TRUE, dependencies = TRUE)
 ```
 
 ## Usage
