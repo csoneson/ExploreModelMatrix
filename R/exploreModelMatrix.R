@@ -362,7 +362,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                          label = "Use example design",
                          choices = c("---", "One factor, paired samples",
                                      "Two crossed factors",
-                                     "Two crossed, one blocking factor"),
+                                     "Two crossed, one blocking factor",
+                                     "Two crossed, one nested factor",
+                                     "Two crossed, one nested factor, dummy coded"),
                          selectize = TRUE, multiple = FALSE)
     })
 
@@ -372,28 +374,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     observeEvent(input$exampledesign, {
       if (input$exampledesign == "---") {
         values$sampledata <- values$sampledata_ext
-      } else if (input$exampledesign == "One factor, paired samples") {
-        values$sampledata <- data.frame(
-          treatment = rep(c("control", "drug1", "drug2"), 3),
-          subject = factor(rep(1:3, each = 3))
-        )
-        shiny::updateTextInput(session, "designformula",
-                               value = "~ subject + treatment")
-      } else if (input$exampledesign == "Two crossed factors") {
-        values$sampledata <- data.frame(
-          treatment = rep(c("placebo", "drug"), 3),
-          time = rep(c("0h", "1h", "2h"), each = 2)
-        )
-        shiny::updateTextInput(session, "designformula",
-                               value = "~ time * treatment")
-      } else if (input$exampledesign == "Two crossed, one blocking factor") {
-        values$sampledata <- data.frame(
-          treatment = rep(c("placebo", "drug"), 6),
-          time = rep(rep(c("0h", "1h", "2h"), each = 2), 2),
-          batch = rep(c("day1", "day2"), each = 6)
-        )
-        shiny::updateTextInput(session, "designformula",
-                               value = "~ time * treatment + batch")
+      } else {
+        ed <- .ExampleDesigns(exampleID = input$exampledesign)
+        values$sampledata <- ed$sampledata
+        shiny::updateTextInput(session, "designformula", value = ed$design)
       }
     })
 
