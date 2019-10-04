@@ -1,8 +1,9 @@
 #' Define example designs
 #'
-#' @param exampleID The name of the example design. One of "One factor, paired
-#'   samples", "Two crossed factors", "Two crossed, one blocking factor",
-#'   "Two crossed, one nested factor"
+#' @param exampleID The name of the example design. One of "One factor, unpaired
+#'   samples", "One factor, paired samples", "Two crossed factors", "Two
+#'   crossed, one blocking factor", "Two crossed, one nested factor", "Two
+#'   crossed, one nested factor, dummy coded"
 #'
 #' @author Charlotte Soneson
 #'
