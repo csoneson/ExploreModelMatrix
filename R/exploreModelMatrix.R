@@ -424,17 +424,19 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     ## Set reference levels of factors
     ## --------------------------------------------------------------------- ##
-    # shiny::observe({
-    #   for (nm in colnames(values$sampledata)) {
-    #     if (!is.null(input[[paste0(nm, "_ref")]]) &&
-    #         input[[paste0(nm, "_ref")]] !=
-    #         levels(factor(values$sampledata[, nm]))[1]) {
-    #       values$sampledata[, nm] <- stats::relevel(
-    #         factor(values$sampledata[, nm]), ref = input[[paste0(nm, "_ref")]]
-    #       )
-    #     }
-    #   }
-    # })
+    shiny::observe({
+      for (nm in colnames(values$sampledata)) {
+        if (!is.null(input[[paste0(nm, "_ref")]]) &&
+            input[[paste0(nm, "_ref")]] %in%
+            levels(factor(values$sampledata[, nm])) &&
+            input[[paste0(nm, "_ref")]] !=
+            levels(factor(values$sampledata[, nm]))[1]) {
+          values$sampledata[, nm] <- stats::relevel(
+            factor(values$sampledata[, nm]), ref = input[[paste0(nm, "_ref")]]
+          )
+        }
+      }
+    })
 
     ## --------------------------------------------------------------------- ##
     ## Define input to drop columns in design matrix
