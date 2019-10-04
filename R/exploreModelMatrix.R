@@ -97,6 +97,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
         shiny::uiOutput("choose_sampledata_file"),
         shiny::uiOutput("choose_design_formula"),
+        shiny::uiOutput("use_example_design"),
 
         shinydashboard::menuItem(
           "Choose reference levels", icon = shiny::icon("anchor"),
@@ -310,6 +311,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     ## --------------------------------------------------------------------- ##
     values <- shiny::reactiveValues()
     values$sampledata <- NULL
+    values$sampledata_ext <- NULL
 
     ## --------------------------------------------------------------------- ##
     ## Define sample data file if sampleData is not provided
@@ -325,6 +327,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     } else {
       values$sampledata <- sampleData %>%
         dplyr::mutate_if(is.character, factor)
+      values$sampledata_ext <- sampleData %>%
+        dplyr::mutate_if(is.character, factor)
     }
 
     ## --------------------------------------------------------------------- ##
@@ -335,6 +339,62 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                as.is = FALSE, sep = "\t", quote = "",
                                check.names = FALSE)
       values$sampledata <- cdt
+      values$sampledata_ext <- cdt
+    })
+
+    ## --------------------------------------------------------------------- ##
+    ## Define input to specify design formula
+    ## --------------------------------------------------------------------- ##
+    output$choose_design_formula <- renderUI({
+      if (!is.null(designFormula)) {
+        shiny::textInput("designformula", "Design formula",
+                         paste(as.character(designFormula), collapse = ""))
+      } else {
+        shiny::textInput("designformula", "Design formula", "")
+      }
+    })
+
+    ## --------------------------------------------------------------------- ##
+    ## Define input to choose example design
+    ## --------------------------------------------------------------------- ##
+    output$use_example_design <- renderUI({
+      shiny::selectInput(inputId = "exampledesign",
+                         label = "Use example design",
+                         choices = c("---", "One factor, paired samples",
+                                     "Two crossed factors",
+                                     "Two crossed, one blocking factor"),
+                         selectize = TRUE, multiple = FALSE)
+    })
+
+    ## --------------------------------------------------------------------- ##
+    ## Populate variables if example design is used
+    ## --------------------------------------------------------------------- ##
+    observeEvent(input$exampledesign, {
+      if (input$exampledesign == "---") {
+        values$sampledata <- values$sampledata_ext
+      } else if (input$exampledesign == "One factor, paired samples") {
+        values$sampledata <- data.frame(
+          treatment = rep(c("control", "drug1", "drug2"), 3),
+          subject = factor(rep(1:3, each = 3))
+        )
+        shiny::updateTextInput(session, "designformula",
+                               value = "~ subject + treatment")
+      } else if (input$exampledesign == "Two crossed factors") {
+        values$sampledata <- data.frame(
+          treatment = rep(c("placebo", "drug"), 3),
+          time = rep(c("0h", "1h", "2h"), each = 2)
+        )
+        shiny::updateTextInput(session, "designformula",
+                               value = "~ time * treatment")
+      } else if (input$exampledesign == "Two crossed, one blocking factor") {
+        values$sampledata <- data.frame(
+          treatment = rep(c("placebo", "drug"), 6),
+          time = rep(rep(c("0h", "1h", "2h"), each = 2), 2),
+          batch = rep(c("day1", "day2"), each = 6)
+        )
+        shiny::updateTextInput(session, "designformula",
+                               value = "~ time * treatment + batch")
+      }
     })
 
     ## --------------------------------------------------------------------- ##
@@ -396,18 +456,6 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     ## --------------------------------------------------------------------- ##
-    ## Define input to specify design formula
-    ## --------------------------------------------------------------------- ##
-    output$choose_design_formula <- renderUI({
-      if (!is.null(designFormula)) {
-        shiny::textInput("designformula", "Design formula",
-                         paste(as.character(designFormula), collapse = ""))
-      } else {
-        shiny::textInput("designformula", "Design formula", "")
-      }
-    })
-
-    ## --------------------------------------------------------------------- ##
     ## Generate output
     ## --------------------------------------------------------------------- ##
     generated_output <- shiny::reactive({
@@ -436,7 +484,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$fitted_values_table <- DT::renderDataTable({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -467,7 +516,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$design_matrix <- shiny::renderPrint({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -481,7 +531,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$pinv_design_matrix_plot <- shiny::renderPlot({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -524,7 +575,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$vifs <- shiny::renderPlot({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -549,7 +601,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$rank_warning_2 <- shiny::renderUI({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -568,7 +621,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$design_matrix_rank <- shiny::renderPrint({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -583,7 +637,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$design_matrix_ncol <- shiny::renderPrint({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -598,7 +653,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$rank_warning <- shiny::renderUI({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -635,7 +691,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$fitted_values_plot_plot <- shiny::renderPlot({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -660,7 +717,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$cooccurrence_matrix_plot <- shiny::renderPlot({
       shiny::validate(
         shiny::need(
-          .isValidFormula(as.formula(input$designformula), values$sampledata),
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
