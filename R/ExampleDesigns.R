@@ -14,7 +14,13 @@
 #' @rdname INTERNAL_.ExampleDesigns
 #'
 .ExampleDesigns <- function(exampleID) {
-  if (exampleID == "One factor, paired samples") {
+  if (exampleID == "One factor, unpaired samples") {
+    sampledata <- data.frame(
+      treatment = rep(c("control", "drug1", "drug2"), 3),
+      subject = factor(1:9)
+    )
+    design <- "~ treatment"
+  } else if (exampleID == "One factor, paired samples") {
     sampledata <- data.frame(
       treatment = rep(c("control", "drug1", "drug2"), 3),
       subject = factor(rep(1:3, each = 3))

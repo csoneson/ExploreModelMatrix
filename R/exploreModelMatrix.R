@@ -360,7 +360,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$use_example_design <- renderUI({
       shiny::selectInput(inputId = "exampledesign",
                          label = "Use example design",
-                         choices = c("---", "One factor, paired samples",
+                         choices = c("---", "One factor, unpaired samples",
+                                     "One factor, paired samples",
                                      "Two crossed factors",
                                      "Two crossed, one blocking factor",
                                      "Two crossed, one nested factor",
