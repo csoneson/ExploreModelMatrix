@@ -37,9 +37,8 @@
 #' @importFrom scales hue_pal
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
-  ## ----------------------------------------------------------------------- ##
-  ## Check input arguments
-  ## ----------------------------------------------------------------------- ##
+
+  # Check input arguments ---------------------------------------------------
   if (!is.null(sampleData) && !methods::is(sampleData, "data.frame")) {
     stop("'sampleData' must be a data.frame")
   }
@@ -52,17 +51,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     stop("'sampleData' can not contain NA values")
   }
 
-  ## ----------------------------------------------------------------------- ##
-  ## Define layout
-  ## ----------------------------------------------------------------------- ##
+  # UI definition -----------------------------------------------------------
   p_layout <-
     shinydashboard::dashboardPage(
       skin = "purple",
 
-      ## ------------------------------------------------------------------- ##
-      ## Header
-      ## ------------------------------------------------------------------- ##
-      shinydashboard::dashboardHeader(
+      # header definition ------------------------------------------------------
+      header = shinydashboard::dashboardHeader(
         title = "Design matrix visualization",
         titleWidth = 350,
         shinydashboard::dropdownMenu(
@@ -81,10 +76,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         )
       ),
 
-      ## ------------------------------------------------------------------- ##
-      ## Inputs
-      ## ------------------------------------------------------------------- ##
-      shinydashboard::dashboardSidebar(
+      # sidebar definition ------------------------------------------------------
+      sidebar = shinydashboard::dashboardSidebar(
         width = 250,
 
         shiny::uiOutput("choose_sampledata_file"),
@@ -126,10 +119,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         )
       ),
 
-      ## ------------------------------------------------------------------- ##
-      ## Outputs
-      ## ------------------------------------------------------------------- ##
-      shinydashboard::dashboardBody(
+      # body definition --------------------------------------------------------
+      body = shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
 
         shiny::fluidRow(
@@ -212,21 +203,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
   options(shiny.maxRequestSize = 15*1024^2)
 
-  ## ----------------------------------------------------------------------- ##
-  ## Define server function
-  ## ----------------------------------------------------------------------- ##
+  # server definition ---------------------------------------------------------
   #nocov start
   server_function <- function(input, output, session) {
 
-    ## --------------------------------------------------------------------- ##
-    ## Initialize data storage
-    ## --------------------------------------------------------------------- ##
+    # Initialize data storage -------------------------------------------------
     values <- shiny::reactiveValues()
     values$sampledata <- NULL
 
-    ## --------------------------------------------------------------------- ##
-    ## Define sample data file if sampleData is not provided
-    ## --------------------------------------------------------------------- ##
+    # Define sample data file if sampleData is not provided -------------------
     if (is.null(sampleData)) {
       output$choose_sampledata_file <- shiny::renderUI({
         shiny::fileInput(inputId = "sampledatasel",
@@ -240,9 +225,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         dplyr::mutate_if(is.character, factor)
     }
 
-    ## --------------------------------------------------------------------- ##
-    ## Load sample data file
-    ## --------------------------------------------------------------------- ##
+    # Load sample data file ---------------------------------------------------
     shiny::observeEvent(input$sampledatasel, {
       cdt <- utils::read.delim(input$sampledatasel$datapath, header = TRUE,
                                as.is = FALSE, sep = "\t", quote = "",
@@ -250,9 +233,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       values$sampledata <- cdt
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Define inputs to choose reference levels
-    ## --------------------------------------------------------------------- ##
+    # Define inputs to choose reference levels --------------------------------
     output$reflevels <- renderUI({
       if (is.null(values$sampledata)) {
         NULL
@@ -274,9 +255,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Set reference levels of factors
-    ## --------------------------------------------------------------------- ##
+    # Set reference levels of factors -----------------------------------------
     shiny::observe({
       for (nm in colnames(values$sampledata)) {
         if (!is.null(input[[paste0(nm, "_ref")]]) &&
@@ -289,9 +268,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Define input to drop columns in design matrix
-    ## --------------------------------------------------------------------- ##
+    # Define input to drop columns in design matrix ---------------------------
     output$dropcols <- renderUI({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
           input$designformula == "") {
@@ -306,9 +283,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Define input to specify design formula
-    ## --------------------------------------------------------------------- ##
+    # Define input to specify design formula ----------------------------------
     output$choose_design_formula <- renderUI({
       if (!is.null(designFormula)) {
         shiny::textInput("designformula", "Design formula",
@@ -318,9 +293,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate output
-    ## --------------------------------------------------------------------- ##
+    # Generate output ---------------------------------------------------------
     generated_output <- shiny::reactive({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
           input$designformula == "") {
@@ -339,9 +312,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate sample data table
-    ## --------------------------------------------------------------------- ##
+    # Generate sample data table ----------------------------------------------
     output$fitted_values_table <- DT::renderDataTable({
       if (is.null(generated_output()$sampledata)) {
         NULL
@@ -352,9 +323,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate sample data table summary
-    ## --------------------------------------------------------------------- ##
+    # Generate sample data table summary --------------------------------------
     output$sample_table_summary <- shiny::renderPrint({
       if (is.null(values$sampledata)) {
         NULL
@@ -363,16 +332,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate design matrix
-    ## --------------------------------------------------------------------- ##
+    # Generate design matrix --------------------------------------------------
     output$design_matrix <- shiny::renderPrint({
       generated_output()$designmatrix
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Check rank and number of columns of design matrix
-    ## --------------------------------------------------------------------- ##
+    # Check rank and number of columns of design matrix ----------------------
     output$design_matrix_rank <- shiny::renderPrint({
       if (is.null(generated_output()$designmatrix)) {
         NULL
@@ -403,9 +368,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate full sample data table
-    ## --------------------------------------------------------------------- ##
+    # Generate full sample data table -----------------------------------------
     output$sample_table <- DT::renderDataTable({
       if (is.null(values$sampledata)) {
         NULL
@@ -416,9 +379,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate design matrix plot
-    ## --------------------------------------------------------------------- ##
+    # Generate design matrix plot ---------------------------------------------
     output$fitted_values_plot_plot <- shiny::renderPlot({
       if (is.null(generated_output()$plotlist)) {
         NULL
@@ -434,9 +395,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                         height = paste0(input$plotheight, "px"))
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Tour
-    ## --------------------------------------------------------------------- ##
+    # Tour --------------------------------------------------------------------
     observeEvent(input$interface_overview, {
       tour <- read.delim(system.file("extdata", "interface_overview.txt",
                                      package = "ExploreModelMatrix"),
@@ -448,8 +407,6 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   }
   #nocov end
 
-  ## ----------------------------------------------------------------------- ##
-  ## Generate app
-  ## ----------------------------------------------------------------------- ##
+  # Generate app --------------------------------------------------------------
   shiny::shinyApp(ui = p_layout, server = server_function)
 }
