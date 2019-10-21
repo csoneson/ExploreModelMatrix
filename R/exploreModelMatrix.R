@@ -185,6 +185,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
         shiny::fluidRow(
           shiny::column(
+            12, shiny::uiOutput("rank_warning")
+          )
+        ),
+
+        shiny::fluidRow(
+          shiny::column(
             8, shiny::div(
               id = "fitted_values_plot_box",
               shinydashboard::box(
@@ -251,8 +257,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                 "Rank of design matrix: ",
                 shiny::textOutput("design_matrix_rank"),
                 "Number of columns in design matrix: ",
-                shiny::textOutput("design_matrix_ncol"),
-                shiny::uiOutput("rank_warning")
+                shiny::textOutput("design_matrix_ncol")
               )
             )
           )
@@ -642,8 +647,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         shiny::need(
           input$designformula != "" &&
             .isValidFormula(as.formula(input$designformula), values$sampledata),
-          paste0("Please provide a formula where all terms appear in ",
-                 "the sample data")
+          ""
         )
       )
       if (is.null(generated_output()$designmatrix)) {
@@ -653,7 +657,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             ncol(generated_output()$designmatrix)) {
           NULL
         } else {
-          shinydashboard::valueBox("", "The design matrix is not full rank",
+          nonestim <- limma::nonEstimable(generated_output()$designmatrix)
+          msg <- paste0("The design matrix is not full rank. ",
+                        "Non-estimable parameters: ",
+                        paste(nonestim, collapse = ", "))
+          shinydashboard::valueBox("", msg,
                                    color = "red", icon = NULL, width = 4.5)
         }
       }
