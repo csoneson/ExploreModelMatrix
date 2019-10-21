@@ -136,7 +136,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Calculate pseudoinverse of design matrix
   ## ----------------------------------------------------------------------- ##
-  psinverse <- round(MASS::ginv(mm), digits = 4)
+  psinverse <- MASS::ginv(mm)
   rownames(psinverse) <- colnames(mm)
   colnames(psinverse) <- rownames(mm)
 

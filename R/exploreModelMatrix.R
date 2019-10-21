@@ -43,6 +43,7 @@
 #' @importFrom tibble rownames_to_column
 #' @importFrom magrittr %>%
 #' @importFrom limma nonEstimable
+#' @importFrom MASS fractions
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
@@ -146,7 +147,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                 value = 5, min = 1, max = 25, step = 1),
             shiny::numericInput(inputId = "textsizelabs_pinv",
                                 label = "Text size, axis labels",
-                                value = 12, min = 1, max = 25, step = 1)
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::checkboxInput(inputId = "asfractions_pinv",
+                                 label = "Show numbers as fractions",
+                                 value = FALSE)
           ),
           shinydashboard::menuItem(
             "Co-occurrence plot", startExpanded = FALSE,
@@ -533,15 +537,20 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       if (is.null(generated_output()$pseudoinverse)) {
         NULL
       } else {
-        as.data.frame(generated_output()$pseudoinverse) %>%
+        tmp <- as.data.frame(generated_output()$pseudoinverse) %>%
           tibble::rownames_to_column("coefficient") %>%
           tidyr::gather(key = "Sample", value = "value", -coefficient) %>%
           dplyr::mutate(Sample = factor(Sample, levels = colnames(
-            generated_output()$pseudoinverse))) %>%
-          ggplot2::ggplot(ggplot2::aes(x = Sample,
-                                       y = coefficient,
-                                       fill = value,
-                                       label = value)) +
+            generated_output()$pseudoinverse)))
+        if (input$asfractions_pinv) {
+          tmp$value <- MASS::fractions(tmp$value)
+        } else {
+          tmp$value <- round(tmp$value, digits = 4)
+        }
+        ggplot2::ggplot(tmp, ggplot2::aes(x = Sample,
+                                          y = coefficient,
+                                          fill = value,
+                                          label = value)) +
           ggplot2::geom_tile(color = "black") + ggplot2::theme_bw() +
           ggplot2::theme(rect = element_blank(),
                          axis.text = ggplot2::element_text(size = input$textsizelabs_pinv),
