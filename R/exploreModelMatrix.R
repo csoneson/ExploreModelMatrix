@@ -42,6 +42,7 @@
 #' @importFrom tidyr gather
 #' @importFrom tibble rownames_to_column
 #' @importFrom magrittr %>%
+#' @importFrom limma nonEstimable
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   ## ----------------------------------------------------------------------- ##
