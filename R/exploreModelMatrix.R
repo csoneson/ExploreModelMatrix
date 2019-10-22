@@ -32,7 +32,7 @@
 #' @importFrom utils read.delim packageVersion
 #' @importFrom cowplot plot_grid
 #' @importFrom methods is
-#' @importFrom stats model.matrix as.formula relevel
+#' @importFrom stats model.matrix as.formula relevel cov2cor
 #' @importFrom dplyr mutate_if mutate
 #' @importFrom rintrojs introjs introjsUI
 #' @importFrom scales hue_pal
@@ -42,7 +42,7 @@
 #' @importFrom tidyr gather
 #' @importFrom tibble rownames_to_column
 #' @importFrom magrittr %>%
-#' @importFrom limma nonEstimable
+#' @importFrom limma nonEstimable is.fullrank
 #' @importFrom MASS fractions
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
@@ -164,6 +164,18 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                 label = "Text size, matrix entries",
                                 value = 5, min = 1, max = 25, step = 1),
             shiny::numericInput(inputId = "textsizelabs_coocc",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1)
+          ),
+          shinydashboard::menuItem(
+            "Correlation plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_corr",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::numericInput(inputId = "textsize_corr",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_corr",
                                 label = "Text size, axis labels",
                                 value = 12, min = 1, max = 25, step = 1)
           )
@@ -294,12 +306,22 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
         shiny::fluidRow(
           shiny::column(
-            8, shiny::div(
+            6, shiny::div(
               id = "cooccurrence_matrix_box",
               shinydashboard::box(
                 width = NULL, title = "Co-occurrence plot",
                 collapsible = TRUE, collapsed = TRUE,
                 shiny::uiOutput("cooccurrence_matrix")
+              )
+            )
+          ),
+          shiny::column(
+            6, shiny::div(
+              id = "correlation_matrix_box",
+              shinydashboard::box(
+                width = NULL, title = "Correlation plot",
+                collapsible = TRUE, collapsed = TRUE,
+                shiny::uiOutput("correlation_matrix")
               )
             )
           )
@@ -541,7 +563,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
           tibble::rownames_to_column("coefficient") %>%
           tidyr::gather(key = "Sample", value = "value", -coefficient) %>%
           dplyr::mutate(Sample = factor(Sample, levels = colnames(
-            generated_output()$pseudoinverse)))
+            generated_output()$pseudoinverse)),
+            coefficient = factor(coefficient, levels = rev(rownames(
+              generated_output()$pseudoinverse)))
+          )
         if (input$asfractions_pinv) {
           tmp$value <- MASS::fractions(tmp$value)
         } else {
@@ -569,6 +594,63 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::plotOutput("pinv_design_matrix_plot",
                         width = "100%",
                         height = paste0(input$plotheight_pinv, "px"))
+    })
+
+    ## --------------------------------------------------------------------- ##
+    ## Plot correlation among coefficients
+    ## --------------------------------------------------------------------- ##
+    output$correlation_matrix_plot <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
+      if (is.null(generated_output()$designmatrix)) {
+        NULL
+      } else {
+        tmp <- generated_output()$designmatrix
+        coeffs_to_keep <- colnames(tmp)
+        tmp <- t(tmp) %*% tmp
+        if (!limma::is.fullrank(tmp)) {
+          NULL
+        } else {
+          as.data.frame(stats::cov2cor(solve(tmp))) %>%
+            tibble::rownames_to_column("rows") %>%
+            tidyr::gather(key = "cols", value = "correlation", -rows) %>%
+            dplyr::mutate(cols = factor(cols, levels = coeffs_to_keep),
+                          rows = factor(rows, levels = rev(coeffs_to_keep))) %>%
+            dplyr::mutate(correlation = round(correlation, digits = 3)) %>%
+            ggplot2::ggplot(ggplot2::aes(x = cols, y = rows, fill = correlation,
+                                         label = correlation)) +
+            ggplot2::geom_tile(color = "black") + ggplot2::theme_bw() +
+            ggplot2::theme(
+              rect = element_blank(),
+              axis.text.x = ggplot2::element_text(
+                size = input$textsizelabs_corr,
+                angle = 90,
+                hjust = 1, vjust = 0.5
+              ),
+              axis.text.y = ggplot2::element_text(size = input$textsizelabs_corr),
+              axis.title = ggplot2::element_text(size = input$textsizelabs_corr)
+            ) +
+            ggplot2::scale_fill_gradient2(low = "red", high = "blue",
+                                          mid = "white", midpoint = 0,
+                                          name = "") +
+            ggplot2::geom_text(size = input$textsize_corr) +
+            ggplot2::scale_x_discrete(expand = c(0, 0)) +
+            ggplot2::scale_y_discrete(expand = c(0, 0)) +
+            ggplot2::labs(y = "Model coefficient", x = "Model coefficient")
+        }
+      }
+    })
+
+    output$correlation_matrix <- shiny::renderUI({
+      shiny::plotOutput("correlation_matrix_plot",
+                        width = "100%",
+                        height = paste0(input$plotheight_corr, "px"))
     })
 
     ## --------------------------------------------------------------------- ##
