@@ -148,9 +148,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             shiny::numericInput(inputId = "textsizelabs_pinv",
                                 label = "Text size, axis labels",
                                 value = 12, min = 1, max = 25, step = 1),
-            shiny::checkboxInput(inputId = "asfractions_pinv",
-                                 label = "Show numbers as fractions",
-                                 value = FALSE)
+            shiny::radioButtons(inputId = "shownumbers_pinv",
+                                label = "Display numbers",
+                                choices = c("Do not show numbers",
+                                            "Show numbers as decimal",
+                                            "Show numbers as fractions"),
+                                selected = "Show numbers as decimal")
           ),
           shinydashboard::menuItem(
             "Co-occurrence plot", startExpanded = FALSE,
@@ -177,7 +180,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                 value = 5, min = 1, max = 25, step = 1),
             shiny::numericInput(inputId = "textsizelabs_corr",
                                 label = "Text size, axis labels",
-                                value = 12, min = 1, max = 25, step = 1)
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::radioButtons(inputId = "shownumbers_corr",
+                                label = "Display numbers",
+                                choices = c("Do not show numbers",
+                                            "Show numbers as decimal"),
+                                selected = "Show numbers as decimal")
           )
         )
       ),
@@ -567,26 +575,31 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             coefficient = factor(coefficient, levels = rev(rownames(
               generated_output()$pseudoinverse)))
           )
-        if (input$asfractions_pinv) {
+        if (input$shownumbers_pinv == "Show numbers as fractions") {
           tmp$value <- MASS::fractions(tmp$value)
         } else {
           tmp$value <- round(tmp$value, digits = 4)
         }
-        ggplot2::ggplot(tmp, ggplot2::aes(x = Sample,
+        gg <- ggplot2::ggplot(tmp, ggplot2::aes(x = Sample,
                                           y = coefficient,
                                           fill = value,
                                           label = value)) +
           ggplot2::geom_tile(color = "black") + ggplot2::theme_bw() +
           ggplot2::theme(rect = element_blank(),
-                         axis.text = ggplot2::element_text(size = input$textsizelabs_pinv),
-                         axis.title = ggplot2::element_text(size = input$textsizelabs_pinv)) +
+                         axis.text = ggplot2::element_text(
+                           size = input$textsizelabs_pinv),
+                         axis.title = ggplot2::element_text(
+                           size = input$textsizelabs_pinv)) +
           ggplot2::scale_fill_gradient2(low = "red", high = "blue",
                                         mid = "white", midpoint = 0,
                                         name = "") +
-          ggplot2::geom_text(size = input$textsize_pinv) +
           ggplot2::scale_x_discrete(expand = c(0, 0)) +
           ggplot2::scale_y_discrete(expand = c(0, 0)) +
           ggplot2::labs(y = "Model coefficient", x = "Sample")
+        if (input$shownumbers_pinv != "Do not show numbers") {
+          gg <- gg + ggplot2::geom_text(size = input$textsize_pinv)
+        }
+        gg
       }
     })
 
@@ -617,7 +630,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         if (!limma::is.fullrank(tmp)) {
           NULL
         } else {
-          as.data.frame(stats::cov2cor(solve(tmp))) %>%
+          gg <- as.data.frame(stats::cov2cor(solve(tmp))) %>%
             tibble::rownames_to_column("rows") %>%
             tidyr::gather(key = "cols", value = "correlation", -rows) %>%
             dplyr::mutate(cols = factor(cols, levels = coeffs_to_keep),
@@ -639,10 +652,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             ggplot2::scale_fill_gradient2(low = "red", high = "blue",
                                           mid = "white", midpoint = 0,
                                           name = "") +
-            ggplot2::geom_text(size = input$textsize_corr) +
             ggplot2::scale_x_discrete(expand = c(0, 0)) +
             ggplot2::scale_y_discrete(expand = c(0, 0)) +
             ggplot2::labs(y = "Model coefficient", x = "Model coefficient")
+          if (input$shownumbers_corr == "Show numbers as decimal") {
+            gg <- gg + ggplot2::geom_text(size = input$textsize_corr)
+          }
+          gg
         }
       }
     })
