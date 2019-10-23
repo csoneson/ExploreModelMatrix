@@ -7,7 +7,9 @@
 explore a design matrix. In particular, given a table with sample information
 and a design formula, `ExploreModelMatrix` will illustrate the fitted values
 (or, more generally, the value of the linear predictor) for each combination of
-input variables, simplifying understanding and generation of contrasts.
+input variables, simplifying understanding and generation of contrasts. A 
+number of other visualizations are also included in the interactive interface, 
+particularly simplifying the interpretation of linear models. 
 
 `ExploreModelMatrix` is still under development and we welcome feedback. Please
 open an issue if you encounter unexpected behaviour.
@@ -20,14 +22,9 @@ You can install `ExploreModelMatrix` with the `remotes` (or `devtools`) package,
 like so:
 
 ```
-remotes::install_github("csoneson/ExploreModelMatrix", build_vignettes = TRUE, dependencies = TRUE)
-```
-
-For this to work, you need to have the `remotes` R package installed. If you
-don't already have it, you can install it like this:
-
-```
 install.packages("remotes")
+remotes::install_github("csoneson/ExploreModelMatrix", 
+                        build_vignettes = TRUE, dependencies = TRUE)
 ```
 
 ## Usage
@@ -41,11 +38,10 @@ sampleData <- data.frame(genotype = rep(c("A", "B"), each = 4),
                          treatment = rep(c("ctrl", "trt"), 4))
 ExploreModelMatrix(sampleData = sampleData,
                    designFormula = ~ genotype + treatment)
-
 ```
 
 This will open up an [R/Shiny](https://shiny.rstudio.com/) application where you
 can explore the specified design matrix and the fitted values for each
 combination of predictor values.
 
-For more examples of designs, please see the vignette. 
+For more examples of designs, we refer to the package vignette. 

@@ -1,13 +1,13 @@
 #' Explore model matrix
 #'
 #' Given a sample table and a design formula, explore the resulting design
-#' matrix graphically in a shiny app.
+#' matrix graphically in an interactive application.
 #'
 #' @param sampleData A \code{data.frame} with sample information.
 #' @param designFormula A \code{formula}. All components of the terms must be
 #'   present as columns in \code{sampleData}.
 #'
-#' @author Charlotte Soneson
+#' @author Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier
 #'
 #' @export
 #'
@@ -27,19 +27,26 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
+#'   need validate
 #' @importFrom DT dataTableOutput renderDataTable datatable
-#' @importFrom utils read.delim
+#' @importFrom utils read.delim packageVersion
 #' @importFrom cowplot plot_grid
 #' @importFrom methods is
-#' @importFrom stats model.matrix as.formula relevel
-#' @importFrom dplyr mutate_if
+#' @importFrom stats model.matrix as.formula relevel cov2cor
+#' @importFrom dplyr mutate_if mutate
 #' @importFrom rintrojs introjs introjsUI
 #' @importFrom scales hue_pal
+#' @importFrom ggplot2 ggplot aes geom_raster theme_bw theme labs
+#'   scale_fill_gradient2 geom_text scale_x_discrete scale_y_discrete geom_bar
+#'   coord_flip scale_fill_manual
+#' @importFrom tidyr gather
+#' @importFrom magrittr %>%
+#' @importFrom limma nonEstimable is.fullrank
+#' @importFrom MASS fractions
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
-  ## ----------------------------------------------------------------------- ##
-  ## Check input arguments
-  ## ----------------------------------------------------------------------- ##
+
+  # Check input arguments ---------------------------------------------------
   if (!is.null(sampleData) && !methods::is(sampleData, "data.frame")) {
     stop("'sampleData' must be a data.frame")
   }
@@ -52,19 +59,16 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     stop("'sampleData' can not contain NA values")
   }
 
-  ## ----------------------------------------------------------------------- ##
-  ## Define layout
-  ## ----------------------------------------------------------------------- ##
+  # UI definition -----------------------------------------------------------
   p_layout <-
     shinydashboard::dashboardPage(
       skin = "purple",
 
-      ## ------------------------------------------------------------------- ##
-      ## Header
-      ## ------------------------------------------------------------------- ##
-      shinydashboard::dashboardHeader(
-        title = "Design matrix visualization",
-        titleWidth = 350,
+      # Header definition ------------------------------------------------------
+      header = shinydashboard::dashboardHeader(
+        title = paste0("Design matrix visualization (ExploreModelMatrix v",
+                       utils::packageVersion("ExploreModelMatrix"), ")"),
+        titleWidth = 600,
         shinydashboard::dropdownMenu(
           type = "tasks",
           icon = shiny::icon("question-circle fa-1g"),
@@ -81,14 +85,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         )
       ),
 
-      ## ------------------------------------------------------------------- ##
-      ## Inputs
-      ## ------------------------------------------------------------------- ##
-      shinydashboard::dashboardSidebar(
-        width = 250,
+      # Sidebar definition ------------------------------------------------------
+      sidebar = shinydashboard::dashboardSidebar(
+        width = 300,
 
         shiny::uiOutput("choose_sampledata_file"),
         shiny::uiOutput("choose_design_formula"),
+        shiny::uiOutput("use_example_design"),
 
         shinydashboard::menuItem(
           "Choose reference levels", icon = shiny::icon("anchor"),
@@ -104,33 +107,102 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
         shinydashboard::menuItem(
           "Settings", icon = shiny::icon("sliders-h"),
-          startExpanded = TRUE,
-          shiny::numericInput(inputId = "plotheight",
-                              label = "Plot height (numeric, in pixels)",
-                              value = 400, min = 200, max = 3000, step = 10),
-          shiny::checkboxInput(inputId = "flipcoord",
-                               label = "Flip coordinates",
-                               value = FALSE),
-          shiny::numericInput(inputId = "textsize",
-                              label = "Text size, matrix entries",
-                              value = 5, min = 1, max = 25, step = 1),
-          shiny::numericInput(inputId = "textsizelabs",
-                              label = "Text size, axis labels",
-                              value = 12, min = 1, max = 25, step = 1),
-          shiny::numericInput(inputId = "linewidth",
-                              label = "Maximal row length",
-                              value = 25, min = 1, max = 100, step = 1),
-          shiny::checkboxInput(inputId = "colorterms",
-                               label = "Color terms",
-                               value = TRUE)
+          startExpanded = TRUE, id = "settings",
+          shinydashboard::menuItem(
+            "Fitted values plot", startExpanded = TRUE,
+            shiny::numericInput(inputId = "plotheight_fitted",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::checkboxInput(inputId = "flipcoord_fitted",
+                                 label = "Flip coordinates",
+                                 value = FALSE),
+            shiny::numericInput(inputId = "textsize_fitted",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_fitted",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::checkboxInput(inputId = "colorterms_fitted",
+                                 label = "Color terms",
+                                 value = TRUE),
+            shiny::numericInput(inputId = "linewidth_fitted",
+                                label = "Maximal row length",
+                                value = 25, min = 1, max = 100, step = 1)
+          ),
+          shinydashboard::menuItem(
+            "Pseudoinverse plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_pinv",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::numericInput(inputId = "textsize_pinv",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_pinv",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::radioButtons(inputId = "shownumbers_pinv",
+                                label = "Display numbers",
+                                choices = c("Do not show numbers",
+                                            "Show numbers as decimal",
+                                            "Show numbers as fractions"),
+                                selected = "Show numbers as decimal")
+          ),
+          shinydashboard::menuItem(
+            "Co-occurrence plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_coocc",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::checkboxInput(inputId = "flipcoord_coocc",
+                                 label = "Flip coordinates",
+                                 value = FALSE),
+            shiny::numericInput(inputId = "textsize_coocc",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_coocc",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1)
+          ),
+          shinydashboard::menuItem(
+            "Correlation plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_corr",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::numericInput(inputId = "textsize_corr",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_corr",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::radioButtons(inputId = "shownumbers_corr",
+                                label = "Display numbers",
+                                choices = c("Do not show numbers",
+                                            "Show numbers as decimal"),
+                                selected = "Show numbers as decimal")
+          )
         )
       ),
 
-      ## ------------------------------------------------------------------- ##
-      ## Outputs
-      ## ------------------------------------------------------------------- ##
-      shinydashboard::dashboardBody(
+      # Body definition --------------------------------------------------------
+      body = shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
+
+        ## Define output size and style of error messages
+        shiny::tags$head(
+          shiny::tags$style(
+            shiny::HTML(".shiny-output-error-validation {
+                 font-size: 15px;
+                 color: forestgreen;
+                 text-align: center;
+                 }
+                 ")
+          )
+        ),
+
+        shiny::fluidRow(
+          shiny::column(
+            12, shiny::uiOutput("rank_warning")
+          )
+        ),
 
         shiny::fluidRow(
           shiny::column(
@@ -200,37 +272,78 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                 "Rank of design matrix: ",
                 shiny::textOutput("design_matrix_rank"),
                 "Number of columns in design matrix: ",
-                shiny::textOutput("design_matrix_ncol"),
-                shiny::uiOutput("rank_warning")
+                shiny::textOutput("design_matrix_ncol")
               )
             )
           )
+        ),
 
+        shiny::fluidRow(
+          shiny::column(
+            8, shiny::div(
+              id = "pinv_design_matrix_box",
+              shinydashboard::box(
+                width = NULL, title = "Pseudoinverse of design matrix",
+                collapsible = TRUE, collapsed = TRUE,
+                shiny::uiOutput("pinv_design_matrix")
+              )
+            )
+          ),
+          shiny::column(
+            4, shiny::div(
+              id = "vifs_box",
+              shinydashboard::box(
+                width = NULL, title = "Variance inflation factors",
+                collapsible = TRUE, collapsed = TRUE,
+                shiny::plotOutput("vifs"),
+                shiny::uiOutput("rank_warning_2")
+              )
+            )
+          )
+        ),
+
+        shiny::fluidRow(
+          shiny::column(
+            6, shiny::div(
+              id = "cooccurrence_matrix_box",
+              shinydashboard::box(
+                width = NULL, title = "Co-occurrence plot",
+                collapsible = TRUE, collapsed = TRUE,
+                shiny::uiOutput("cooccurrence_matrix")
+              )
+            )
+          ),
+          shiny::column(
+            6, shiny::div(
+              id = "correlation_matrix_box",
+              shinydashboard::box(
+                width = NULL, title = "Correlation plot",
+                collapsible = TRUE, collapsed = TRUE,
+                shiny::uiOutput("correlation_matrix")
+              )
+            )
+          )
         )
+
       )
     )
 
   options(shiny.maxRequestSize = 15*1024^2)
 
-  ## ----------------------------------------------------------------------- ##
-  ## Define server function
-  ## ----------------------------------------------------------------------- ##
+  # Server definition ---------------------------------------------------------
   #nocov start
   server_function <- function(input, output, session) {
 
-    ## --------------------------------------------------------------------- ##
-    ## Initialize data storage
-    ## --------------------------------------------------------------------- ##
+    # Initialize data storage -------------------------------------------------
     values <- shiny::reactiveValues()
     values$sampledata <- NULL
+    values$sampledata_ext <- NULL
 
-    ## --------------------------------------------------------------------- ##
-    ## Define sample data file if sampleData is not provided
-    ## --------------------------------------------------------------------- ##
+    # Define sample data file if sampleData is not provided -------------------
     if (is.null(sampleData)) {
       output$choose_sampledata_file <- shiny::renderUI({
         shiny::fileInput(inputId = "sampledatasel",
-                         label = "Load sample data file",
+                         label = "Load sample data file (tab-separated)",
                          accept = c("text/tab-separated-values", "text/plain",
                                     ".tsv", ".tab", ".txt"),
                          multiple = FALSE)
@@ -238,21 +351,54 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     } else {
       values$sampledata <- sampleData %>%
         dplyr::mutate_if(is.character, factor)
+      values$sampledata_ext <- sampleData %>%
+        dplyr::mutate_if(is.character, factor)
     }
 
-    ## --------------------------------------------------------------------- ##
-    ## Load sample data file
-    ## --------------------------------------------------------------------- ##
+    # Load sample data file ---------------------------------------------------
     shiny::observeEvent(input$sampledatasel, {
       cdt <- utils::read.delim(input$sampledatasel$datapath, header = TRUE,
                                as.is = FALSE, sep = "\t", quote = "",
                                check.names = FALSE)
       values$sampledata <- cdt
+      values$sampledata_ext <- cdt
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Define inputs to choose reference levels
-    ## --------------------------------------------------------------------- ##
+    # Define input to specify design formula ----------------------------------
+    output$choose_design_formula <- renderUI({
+      if (!is.null(designFormula)) {
+        shiny::textInput("designformula", "Design formula",
+                         paste(as.character(designFormula), collapse = ""))
+      } else {
+        shiny::textInput("designformula", "Design formula", "")
+      }
+    })
+
+    # Define input to choose example design -----------------------------------
+    output$use_example_design <- renderUI({
+      shiny::selectInput(inputId = "exampledesign",
+                         label = "Use example design",
+                         choices = c("---", "One factor, unpaired samples",
+                                     "One factor, paired samples",
+                                     "Two crossed factors",
+                                     "Two crossed, one blocking factor",
+                                     "Two crossed, one nested factor",
+                                     "Two crossed, one nested factor, dummy coded"),
+                         selectize = TRUE, multiple = FALSE)
+    })
+
+    # Populate variables if example design is used ----------------------------
+    observeEvent(input$exampledesign, {
+      if (input$exampledesign == "---") {
+        values$sampledata <- values$sampledata_ext
+      } else {
+        ed <- .ExampleDesigns(exampleID = input$exampledesign)
+        values$sampledata <- ed$sampledata
+        shiny::updateTextInput(session, "designformula", value = ed$design)
+      }
+    })
+
+    # Define inputs to choose reference levels --------------------------------
     output$reflevels <- renderUI({
       if (is.null(values$sampledata)) {
         NULL
@@ -274,12 +420,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Set reference levels of factors
-    ## --------------------------------------------------------------------- ##
+    # Set reference levels of factors -----------------------------------------
     shiny::observe({
       for (nm in colnames(values$sampledata)) {
         if (!is.null(input[[paste0(nm, "_ref")]]) &&
+            input[[paste0(nm, "_ref")]] %in%
+            levels(factor(values$sampledata[, nm])) &&
             input[[paste0(nm, "_ref")]] !=
             levels(factor(values$sampledata[, nm]))[1]) {
           values$sampledata[, nm] <- stats::relevel(
@@ -289,12 +435,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Define input to drop columns in design matrix
-    ## --------------------------------------------------------------------- ##
+    # Define input to drop columns in design matrix ---------------------------
     output$dropcols <- renderUI({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
-          input$designformula == "") {
+          input$designformula == "" ||
+          !(.isValidFormula(as.formula(input$designformula),
+                            values$sampledata))) {
         NULL
       } else {
         mm <- stats::model.matrix(stats::as.formula(input$designformula),
@@ -306,43 +452,37 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Define input to specify design formula
-    ## --------------------------------------------------------------------- ##
-    output$choose_design_formula <- renderUI({
-      if (!is.null(designFormula)) {
-        shiny::textInput("designformula", "Design formula",
-                         paste(as.character(designFormula), collapse = ""))
-      } else {
-        shiny::textInput("designformula", "Design formula", "")
-      }
-    })
-
-    ## --------------------------------------------------------------------- ##
-    ## Generate output
-    ## --------------------------------------------------------------------- ##
+    # Generate output ---------------------------------------------------------
     generated_output <- shiny::reactive({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
           input$designformula == "") {
-        return(list(sampledata = NULL, designformula = NULL,
-                    designmatrix = NULL))
+        return(list())
       } else {
         return(VisualizeDesign(sampleData = values$sampledata,
                                designFormula = input$designformula,
-                               flipCoord = input$flipcoord,
-                               textSize = input$textsize,
-                               textSizeLabs = input$textsizelabs,
-                               lineWidth = input$linewidth,
+                               flipCoordFitted = input$flipcoord_fitted,
+                               flipCoordCoocc = input$flipcoord_coocc,
+                               textSizeFitted = input$textsize_fitted,
+                               textSizeCoocc = input$textsize_coocc,
+                               textSizeLabsFitted = input$textsizelabs_fitted,
+                               textSizeLabsCoocc = input$textsizelabs_coocc,
+                               lineWidthFitted = input$linewidth_fitted,
+                               addColorFitted = input$colorterms_fitted,
                                dropCols = input$dropcols,
-                               addColor = input$colorterms,
-                               colorPalette = scales::hue_pal()))
+                               colorPaletteFitted = scales::hue_pal()))
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate sample data table
-    ## --------------------------------------------------------------------- ##
+    # Generate sample data table ----------------------------------------------
     output$fitted_values_table <- DT::renderDataTable({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
       if (is.null(generated_output()$sampledata)) {
         NULL
       } else {
@@ -352,9 +492,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate sample data table summary
-    ## --------------------------------------------------------------------- ##
+    # Generate sample data table summary --------------------------------------
     output$sample_table_summary <- shiny::renderPrint({
       if (is.null(values$sampledata)) {
         NULL
@@ -363,17 +501,191 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate design matrix
-    ## --------------------------------------------------------------------- ##
+    # Generate design matrix --------------------------------------------------
     output$design_matrix <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
       generated_output()$designmatrix
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Check rank and number of columns of design matrix
-    ## --------------------------------------------------------------------- ##
+    # Plot design matrix pseudoinverse ----------------------------------------
+    output$pinv_design_matrix_plot <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
+      if (is.null(generated_output()$pseudoinverse)) {
+        NULL
+      } else {
+        tmp <- as.data.frame(generated_output()$pseudoinverse)
+        tmp$coefficient <- rownames(tmp)
+        tmp <- tmp %>%
+          tidyr::gather(key = "Sample", value = "value", -coefficient) %>%
+          dplyr::mutate(Sample = factor(Sample, levels = colnames(
+            generated_output()$pseudoinverse)),
+            coefficient = factor(coefficient, levels = rev(rownames(
+              generated_output()$pseudoinverse)))
+          )
+        if (input$shownumbers_pinv == "Show numbers as fractions") {
+          tmp$value <- MASS::fractions(tmp$value)
+        } else {
+          tmp$value <- round(tmp$value, digits = 4)
+        }
+        gg <- ggplot2::ggplot(tmp,
+                              ggplot2::aes(x = Sample,
+                                           y = coefficient,
+                                           fill = value,
+                                           label = value)) +
+          ggplot2::geom_tile(color = "black") +
+          ggplot2::theme_bw() +
+          ggplot2::theme(rect = element_blank(),
+                         axis.text = ggplot2::element_text(
+                           size = input$textsizelabs_pinv),
+                         axis.title = ggplot2::element_text(
+                           size = input$textsizelabs_pinv)) +
+          ggplot2::scale_fill_gradient2(low = "red", high = "blue",
+                                        mid = "white", midpoint = 0,
+                                        name = "") +
+          ggplot2::scale_x_discrete(expand = c(0, 0)) +
+          ggplot2::scale_y_discrete(expand = c(0, 0)) +
+          ggplot2::labs(y = "Model coefficient", x = "Sample")
+        if (input$shownumbers_pinv != "Do not show numbers") {
+          gg <- gg + ggplot2::geom_text(size = input$textsize_pinv)
+        }
+        gg
+      }
+    })
+
+    output$pinv_design_matrix <- shiny::renderUI({
+      shiny::plotOutput("pinv_design_matrix_plot",
+                        width = "100%",
+                        height = paste0(input$plotheight_pinv, "px"))
+    })
+
+    # Plot correlation among coefficients -------------------------------------
+    output$correlation_matrix_plot <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
+      if (is.null(generated_output()$designmatrix)) {
+        NULL
+      } else {
+        tmp <- generated_output()$designmatrix
+        coeffs_to_keep <- colnames(tmp)
+        tmp <- t(tmp) %*% tmp
+        if (!limma::is.fullrank(tmp)) {
+          NULL
+        } else {
+          cormat <- as.data.frame(stats::cov2cor(solve(tmp)))
+          cormat$rows <- rownames(cormat)
+          gg <- cormat %>%
+            tidyr::gather(key = "cols", value = "correlation", -rows) %>%
+            dplyr::mutate(cols = factor(cols, levels = coeffs_to_keep),
+                          rows = factor(rows, levels = rev(coeffs_to_keep))) %>%
+            dplyr::mutate(correlation = round(correlation, digits = 3)) %>%
+            ggplot2::ggplot(ggplot2::aes(x = cols, y = rows, fill = correlation,
+                                         label = correlation)) +
+            ggplot2::geom_tile(color = "black") +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+              rect = element_blank(),
+              axis.text.x = ggplot2::element_text(
+                size = input$textsizelabs_corr,
+                angle = 90,
+                hjust = 1, vjust = 0.5
+              ),
+              axis.text.y = ggplot2::element_text(size = input$textsizelabs_corr),
+              axis.title = ggplot2::element_text(size = input$textsizelabs_corr)
+            ) +
+            ggplot2::scale_fill_gradient2(low = "red", high = "blue",
+                                          mid = "white", midpoint = 0,
+                                          name = "", limits = c(-1, 1)) +
+            ggplot2::scale_x_discrete(expand = c(0, 0)) +
+            ggplot2::scale_y_discrete(expand = c(0, 0)) +
+            ggplot2::labs(y = "Model coefficient", x = "Model coefficient")
+          if (input$shownumbers_corr == "Show numbers as decimal") {
+            gg <- gg + ggplot2::geom_text(size = input$textsize_corr)
+          }
+          gg
+        }
+      }
+    })
+
+    output$correlation_matrix <- shiny::renderUI({
+      shiny::plotOutput("correlation_matrix_plot",
+                        width = "100%",
+                        height = paste0(input$plotheight_corr, "px"))
+    })
+
+    # Plot variance inflation factors -----------------------------------------
+    output$vifs <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
+      if (is.null(generated_output()$vifs)) {
+        NULL
+      } else {
+        ggplot2::ggplot(generated_output()$vifs,
+                        ggplot2::aes(x = coefficient,
+                                     y = vif,
+                                     fill = coefficient)) +
+          ggplot2::geom_bar(stat = "identity") +
+          ggplot2::labs(x = "Model coefficient", y = "VIF") +
+          ggplot2::theme_bw() +
+          ggplot2::coord_flip() +
+          ggplot2::scale_y_continuous(expand = c(0, 0, 0.05, 0)) +
+          ggplot2::scale_fill_manual(values = generated_output()$colors) +
+          ggplot2::theme(legend.position = "none")
+      }
+    })
+
+    output$rank_warning_2 <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
+      if (is.null(generated_output()$vifs)) {
+        shinydashboard::valueBox("", "VIFs could not be calculated",
+                                 color = "blue", icon = NULL, width = 4.5)
+      } else {
+        NULL
+      }
+    })
+
+    # Check rank and number of columns of design matrix ----------------------
     output$design_matrix_rank <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
@@ -382,6 +694,14 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$design_matrix_ncol <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
@@ -390,6 +710,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$rank_warning <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          ""
+        )
+      )
       if (is.null(generated_output()$designmatrix)) {
         NULL
       } else {
@@ -397,29 +724,37 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             ncol(generated_output()$designmatrix)) {
           NULL
         } else {
-          shinydashboard::valueBox("", "The design matrix is not full rank",
+          nonestim <- limma::nonEstimable(generated_output()$designmatrix)
+          msg <- paste0("The design matrix is not full rank. ",
+                        "Non-estimable parameters: ",
+                        paste(nonestim, collapse = ", "))
+          shinydashboard::valueBox("", msg,
                                    color = "red", icon = NULL, width = 4.5)
         }
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate full sample data table
-    ## --------------------------------------------------------------------- ##
+    # Generate full sample data table -----------------------------------------
     output$sample_table <- DT::renderDataTable({
       if (is.null(values$sampledata)) {
         NULL
       } else {
         DT::datatable(values$sampledata,
                       options = list(scrollX = TRUE),
-                      rownames = FALSE)
+                      rownames = TRUE)
       }
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Generate design matrix plot
-    ## --------------------------------------------------------------------- ##
+    # Generate design matrix plot ---------------------------------------------
     output$fitted_values_plot_plot <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
       if (is.null(generated_output()$plotlist)) {
         NULL
       } else {
@@ -431,12 +766,34 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$fitted_values_plot <- shiny::renderUI({
       shiny::plotOutput("fitted_values_plot_plot",
                         width = "100%",
-                        height = paste0(input$plotheight, "px"))
+                        height = paste0(input$plotheight_fitted, "px"))
     })
 
-    ## --------------------------------------------------------------------- ##
-    ## Tour
-    ## --------------------------------------------------------------------- ##
+    # Plot cooccurrence matrix ------------------------------------------------
+    output$cooccurrence_matrix_plot <- shiny::renderPlot({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .isValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
+      if (is.null(generated_output()$cooccurrenceplots)) {
+        NULL
+      } else {
+        cowplot::plot_grid(plotlist = generated_output()$cooccurrenceplots,
+                           ncol = 1)
+      }
+    })
+
+    output$cooccurrence_matrix <- shiny::renderUI({
+      shiny::plotOutput("cooccurrence_matrix_plot",
+                        width = "100%",
+                        height = paste0(input$plotheight_coocc, "px"))
+    })
+
+    # Tour --------------------------------------------------------------------
     observeEvent(input$interface_overview, {
       tour <- read.delim(system.file("extdata", "interface_overview.txt",
                                      package = "ExploreModelMatrix"),
@@ -448,8 +805,31 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   }
   #nocov end
 
-  ## ----------------------------------------------------------------------- ##
-  ## Generate app
-  ## ----------------------------------------------------------------------- ##
+  # Generate app --------------------------------------------------------------
   shiny::shinyApp(ui = p_layout, server = server_function)
 }
+
+
+#' Check whether a design formula is valid
+#'
+#' Checks whether the object is indeed a formula, and whether all specified
+#' factors are present in the experimental metadata provided
+#'
+#' @param design The specified formula
+#' @param expdata The experimental metadata data.frame
+#'
+#' @return Logical value
+#'
+#' @keywords internal
+#'
+#' @rdname INTERNAL_.isValidFormula
+#'
+.isValidFormula <- function(design, expdata) {
+  isFormula <- inherits(design, "formula")
+
+  expVars <- all.vars(design)
+  allVarsThere <- all(expVars %in% colnames(expdata))
+
+  return(isFormula & allVarsThere)
+}
+

@@ -1,7 +1,7 @@
 Package: ExploreModelMatrix
 Type: Package
-Title: Graphical Exploration Of Design Matrices
-Version: 0.1.0
+Title: Graphical Exploration of Design Matrices
+Version: 0.2.0
 Authors@R: c(person("Charlotte", "Soneson", role = c("aut", "cre"), 
     email = "charlottesoneson@gmail.com", 
     comment = c(ORCID = "0000-0003-3833-2169")),
@@ -10,7 +10,10 @@ Authors@R: c(person("Charlotte", "Soneson", role = c("aut", "cre"),
     comment = c(ORCID = "0000-0003-3252-7758")),
     person("Michael", "Love", role = "aut", 
     email = "michaelisaiahlove@gmail.com",
-    comment = c(ORCID = "0000-0001-8401-0545")))
+    comment = c(ORCID = "0000-0001-8401-0545")),
+    person("Florian", "Geier", role = "aut",
+    email = "florian.geier@unibas.ch",
+    comment = c(ORCID = "0000-0002-9076-9264")))
 Description: Given a sample data table and a design formula, 
     generate an interactive application to explore the resulting 
     design matrix. 
@@ -29,14 +32,14 @@ Imports:
     stats,
     methods,
     rintrojs,
-    scales
+    scales,
+    tibble,
+    MASS,
+    limma
 RoxygenNote: 6.1.1
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
-    htmltools,
-    icon
+    htmltools
 VignetteBuilder: knitr
-Remotes: ropenscilabs/icon
-
