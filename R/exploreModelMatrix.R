@@ -580,11 +580,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         } else {
           tmp$value <- round(tmp$value, digits = 4)
         }
-        gg <- ggplot2::ggplot(tmp, ggplot2::aes(x = Sample,
-                                          y = coefficient,
-                                          fill = value,
-                                          label = value)) +
-          ggplot2::geom_tile(color = "black") + ggplot2::theme_bw() +
+        gg <- ggplot2::ggplot(tmp,
+                              ggplot2::aes(x = Sample,
+                                           y = coefficient,
+                                           fill = value,
+                                           label = value)) +
+          ggplot2::geom_tile(color = "black") +
+          ggplot2::theme_bw() +
           ggplot2::theme(rect = element_blank(),
                          axis.text = ggplot2::element_text(
                            size = input$textsizelabs_pinv),
@@ -638,7 +640,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             dplyr::mutate(correlation = round(correlation, digits = 3)) %>%
             ggplot2::ggplot(ggplot2::aes(x = cols, y = rows, fill = correlation,
                                          label = correlation)) +
-            ggplot2::geom_tile(color = "black") + ggplot2::theme_bw() +
+            ggplot2::geom_tile(color = "black") +
+            ggplot2::theme_bw() +
             ggplot2::theme(
               rect = element_blank(),
               axis.text.x = ggplot2::element_text(
