@@ -651,7 +651,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             ) +
             ggplot2::scale_fill_gradient2(low = "red", high = "blue",
                                           mid = "white", midpoint = 0,
-                                          name = "") +
+                                          name = "", limits = c(-1, 1)) +
             ggplot2::scale_x_discrete(expand = c(0, 0)) +
             ggplot2::scale_y_discrete(expand = c(0, 0)) +
             ggplot2::labs(y = "Model coefficient", x = "Model coefficient")

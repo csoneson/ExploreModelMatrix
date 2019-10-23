@@ -11,7 +11,8 @@ Authors@R: c(person("Charlotte", "Soneson", role = c("aut", "cre"),
     person("Michael", "Love", role = "aut", 
     email = "michaelisaiahlove@gmail.com",
     comment = c(ORCID = "0000-0001-8401-0545")),
-    person("Florian", "Geier", role = "aut"))
+    person("Florian", "Geier", role = "aut",
+    email = "florian.geier@unibas.ch"))
 Description: Given a sample data table and a design formula, 
     generate an interactive application to explore the resulting 
     design matrix. 

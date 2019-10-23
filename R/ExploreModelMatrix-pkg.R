@@ -9,4 +9,5 @@
 NULL
 
 globalVariables(c("colorby", "value", "vjust", "coefficient",
-                  "Sample", "vif", "nSamples"))
+                  "Sample", "vif", "nSamples", "rows", "cols",
+                  "correlation"))

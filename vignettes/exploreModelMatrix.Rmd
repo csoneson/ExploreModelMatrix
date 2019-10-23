@@ -58,18 +58,19 @@ into the `Design formula` text box, and must start with the `~` symbol. It can
 be changed interactively while using the application. If the
 `ExploreModelMatrix()` function is called with `sampleData=NULL`, there will
 also be an input control allowing a tab-delimited text file with sample
-information to be uploaded to the application. The remaining input controls
-allow the user to change the reference levels of the factor variables, to drop
-specific columns from the design matrix, and to change the display settings of
-the plots.
+information to be uploaded to the application. Finally, the package contains a
+collection of example designs, suitable for teaching, exploration and
+illustration. The remaining input controls allow the user to change the
+reference levels of the factor variables, to drop specific columns from the
+design matrix, and to change the display settings of the plots.
 
 The first row of the main body of the application displays the fitted values (in
 terms of the model coefficients) for each combination of predictor values, in
 both figure and table form. In the next row, the full provided sample table as
 well as a summary are provided, and the third row displays the full design
-matrix as well as its rank. Panels below this display the pseudoinverse of the 
-design matrix, a visualization of variance inflation factors and a
-co-occurrence matrix.
+matrix as well as its rank. Panels below this display the pseudoinverse of the
+design matrix, a visualization of variance inflation factors, a co-occurrence
+matrix and the correlation among the model coefficients.
 
 ## Examples
 
@@ -125,17 +126,17 @@ app <- ExploreModelMatrix(sampleData = sampleData,
 if (interactive()) shiny::runApp(app)
 ```
 
-
 ### Example 3
 
 From https://support.bioconductor.org/p/121132/. In this example we are
 considering a set of patients, each being either Resistant or Sensitive to a
 treatment, and each studied before (pre) and after (post) treatment. Patients
 have been renumbered within each response group, and patients with only pre- or
-post-measurements are removed. We use the design `~ Response + Response:ind.n +
-Response:Treatment`. As can be seen from the visualization below, this lets us
-easily compare e.g. post- vs pre-treatment observations within the Sensitive
-group (via the `ResponseSensitive.Treatmentpre` coefficient).
+post-measurements are removed. We use the design 
+`~ Response + Response:ind.n + Response:Treatment`. 
+As can be seen from the visualization below, this lets us easily compare e.g.
+post- vs pre-treatment observations within the Sensitive group (via the
+`ResponseSensitive.Treatmentpre` coefficient).
 
 ```{r, fig.width = 7, fig.height = 16}
 (sampleData <- data.frame(
@@ -152,7 +153,7 @@ app <- ExploreModelMatrix(sampleData = sampleData,
 if (interactive()) shiny::runApp(app)
 ```
 
-The design above doesn't allow comparison between Resistand and Sensitive
+The design above doesn't allow comparison between Resistant and Sensitive
 patients while accounting for the patient effect, since the patient is nested
 within the response group. If we choose to ignore the patient effect, we can fit
 a factorial model with the design formula `~ Treatment + Response`, as
@@ -191,7 +192,7 @@ if (interactive()) shiny::runApp(app)
 
 From https://support.bioconductor.org/p/122764/. In this example we are
 considering healthy and diseased individuals, each observed wihout treatment as
-well as after treatment with Drug A and Drug B. The first option showed below
+well as after treatment with Drug A and Drug B. The first option shown below
 uses the design formula `~ disease + disease:patient + disease:treatment`,
 dropping the column for `diseasehealthy:patient3` since we do not have three
 patients in the healthy group. In the second formulation, we use the design
