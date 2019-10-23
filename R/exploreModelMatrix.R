@@ -7,7 +7,7 @@
 #' @param designFormula A \code{formula}. All components of the terms must be
 #'   present as columns in \code{sampleData}.
 #'
-#' @author Charlotte Soneson, Federico Marini
+#' @author Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier
 #'
 #' @export
 #'
@@ -40,7 +40,6 @@
 #'   scale_fill_gradient2 geom_text scale_x_discrete scale_y_discrete geom_bar
 #'   coord_flip scale_fill_manual
 #' @importFrom tidyr gather
-#' @importFrom tibble rownames_to_column
 #' @importFrom magrittr %>%
 #' @importFrom limma nonEstimable is.fullrank
 #' @importFrom MASS fractions
@@ -528,8 +527,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       if (is.null(generated_output()$pseudoinverse)) {
         NULL
       } else {
-        tmp <- as.data.frame(generated_output()$pseudoinverse) %>%
-          tibble::rownames_to_column("coefficient") %>%
+        tmp <- as.data.frame(generated_output()$pseudoinverse)
+        tmp$coefficient <- rownames(tmp)
+        tmp <- tmp %>%
           tidyr::gather(key = "Sample", value = "value", -coefficient) %>%
           dplyr::mutate(Sample = factor(Sample, levels = colnames(
             generated_output()$pseudoinverse)),
@@ -591,8 +591,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         if (!limma::is.fullrank(tmp)) {
           NULL
         } else {
-          gg <- as.data.frame(stats::cov2cor(solve(tmp))) %>%
-            tibble::rownames_to_column("rows") %>%
+          cormat <- as.data.frame(stats::cov2cor(solve(tmp)))
+          cormat$rows <- rownames(cormat)
+          gg <- cormat %>%
             tidyr::gather(key = "cols", value = "correlation", -rows) %>%
             dplyr::mutate(cols = factor(cols, levels = coeffs_to_keep),
                           rows = factor(rows, levels = rev(coeffs_to_keep))) %>%
