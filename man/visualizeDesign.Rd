@@ -4,11 +4,20 @@
 \alias{VisualizeDesign}
 \title{Visualize design matrix}
 \usage{
-VisualizeDesign(sampleData, designFormula, flipCoordFitted = FALSE,
-  flipCoordCoocc = FALSE, textSizeFitted = 5, textSizeCoocc = 5,
-  textSizeLabsFitted = 12, textSizeLabsCoocc = 12,
-  lineWidthFitted = 25, addColorFitted = TRUE,
-  colorPaletteFitted = scales::hue_pal(), dropCols = NULL)
+VisualizeDesign(
+  sampleData,
+  designFormula,
+  flipCoordFitted = FALSE,
+  flipCoordCoocc = FALSE,
+  textSizeFitted = 5,
+  textSizeCoocc = 5,
+  textSizeLabsFitted = 12,
+  textSizeLabsCoocc = 12,
+  lineWidthFitted = 25,
+  addColorFitted = TRUE,
+  colorPaletteFitted = scales::hue_pal(),
+  dropCols = NULL
+)
 }
 \arguments{
 \item{sampleData}{A \code{data.frame} with sample information.}

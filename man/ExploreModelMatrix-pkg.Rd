@@ -3,7 +3,6 @@
 \docType{package}
 \name{ExploreModelMatrix-pkg}
 \alias{ExploreModelMatrix-pkg}
-\alias{ExploreModelMatrix-pkg-package}
 \title{ExploreModelMatrix}
 \description{
 desc
