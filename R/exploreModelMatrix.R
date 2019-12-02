@@ -27,7 +27,7 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
-#'   need validate
+#'   need validate span
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim packageVersion
 #' @importFrom cowplot plot_grid
@@ -46,7 +46,7 @@
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
-  # Check input arguments ---------------------------------------------------
+  # Check input arguments -----------------------------------------------------
   if (!is.null(sampleData) && !methods::is(sampleData, "data.frame")) {
     stop("'sampleData' must be a data.frame")
   }
@@ -59,7 +59,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     stop("'sampleData' can not contain NA values")
   }
 
-  # UI definition -----------------------------------------------------------
+  lmText <- shiny::span(icon("warning"),
+                        paste0("Note that the content of this panel is ",
+                               "particularly useful for interpreting regular ",
+                               "linear model fit with a least squares approach."))
+
+  # UI definition -------------------------------------------------------------
   p_layout <-
     shinydashboard::dashboardPage(
       skin = "purple",
@@ -85,7 +90,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         )
       ),
 
-      # Sidebar definition ------------------------------------------------------
+      # Sidebar definition ----------------------------------------------------
       sidebar = shinydashboard::dashboardSidebar(
         width = 300,
 
@@ -182,7 +187,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         )
       ),
 
-      # Body definition --------------------------------------------------------
+      # Body definition -------------------------------------------------------
       body = shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
 
@@ -285,6 +290,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               shinydashboard::box(
                 width = NULL, title = "Pseudoinverse of design matrix",
                 collapsible = TRUE, collapsed = TRUE,
+                footer = lmText,
                 shiny::uiOutput("pinv_design_matrix")
               )
             )
@@ -295,6 +301,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               shinydashboard::box(
                 width = NULL, title = "Variance inflation factors",
                 collapsible = TRUE, collapsed = TRUE,
+                footer = lmText,
                 shiny::plotOutput("vifs"),
                 shiny::uiOutput("rank_warning_2")
               )
@@ -319,6 +326,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               shinydashboard::box(
                 width = NULL, title = "Correlation plot",
                 collapsible = TRUE, collapsed = TRUE,
+                footer = lmText,
                 shiny::uiOutput("correlation_matrix")
               )
             )
@@ -676,7 +684,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    # Check rank and number of columns of design matrix ----------------------
+    # Check rank and number of columns of design matrix -----------------------
     output$design_matrix_rank <- shiny::renderPrint({
       shiny::validate(
         shiny::need(
