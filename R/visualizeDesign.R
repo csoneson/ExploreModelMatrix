@@ -50,7 +50,7 @@
 #' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip aes
-#'   scale_color_manual scale_x_discrete scale_y_discrete expand_scale
+#'   scale_color_manual scale_x_discrete scale_y_discrete expansion
 #' @importFrom stats model.matrix as.formula cor var
 #' @importFrom methods is
 #' @importFrom MASS ginv
@@ -240,8 +240,8 @@ VisualizeDesign <- function(sampleData, designFormula,
           x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
           y = plot_terms[1],
           label = "value")) +
-        ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5)) +
-        ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5))
+        ggplot2::scale_x_discrete(expand = ggplot2::expansion(mult = 0, add = 0.5)) +
+        ggplot2::scale_y_discrete(expand = ggplot2::expansion(mult = 0, add = 0.5))
       if (addColorFitted) {
         gg <- gg +
           ggplot2::geom_text(size = textSizeFitted,
@@ -298,8 +298,8 @@ VisualizeDesign <- function(sampleData, designFormula,
           label = "nSamples"
         )) +
         ggplot2::geom_tile(color = "black") +
-        ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0)) +
-        ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0)) +
+        ggplot2::scale_x_discrete(expand = ggplot2::expansion(mult = 0, add = 0)) +
+        ggplot2::scale_y_discrete(expand = ggplot2::expansion(mult = 0, add = 0)) +
         ggplot2::theme_bw() +
         ggplot2::geom_text(size = textSizeCoocc) +
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
