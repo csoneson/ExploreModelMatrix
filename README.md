@@ -1,7 +1,7 @@
 # ExploreModelMatrix
 [![Travis CI build status](https://travis-ci.com/csoneson/ExploreModelMatrix.svg?branch=master)](https://travis-ci.com/csoneson/ExploreModelMatrix)
 [![Codecov.io coverage status](https://codecov.io/github/csoneson/ExploreModelMatrix/coverage.svg?branch=master)](https://codecov.io/github/csoneson/ExploreModelMatrix)
-
+[![R build status](https://github.com/csoneson/ExploreModelMatrix/workflows/R-CMD-check/badge.svg)](https://github.com/csoneson/ExploreModelMatrix/actions)
 
 `ExploreModelMatrix` is a small R package that lets the user interactively
 explore a design matrix. In particular, given a table with sample information

@@ -43,3 +43,6 @@ Suggests:
     rmarkdown,
     htmltools
 VignetteBuilder: knitr
+URL: https://github.com/csoneson/ExploreModelMatrix
+BugReports: https://github.com/csoneson/ExploreModelMatrix/issues
+
