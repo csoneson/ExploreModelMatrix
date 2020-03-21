@@ -37,6 +37,7 @@ jobs:
       - name: Query dependencies
         run: |
           install.packages(c('remotes', 'BiocManager'))
+          install.packages("Rcpp", repos="https://rcppcore.github.io/drat")
           BiocManager::install('limma')
           saveRDS(remotes::dev_package_deps(dependencies = TRUE, repos = c(getOption('repos'), BiocManager::repositories())), "depends.Rds", version = 2)
         shell: Rscript {0}
