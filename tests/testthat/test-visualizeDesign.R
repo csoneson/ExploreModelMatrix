@@ -25,6 +25,11 @@ test_that("VisualizeDesign fails with incorrect inputs", {
                                dropCols = NULL))
 
   expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = TRUE,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL))
+  expect_error(VisualizeDesign(sampleData = sampleData,
                                designFormula = genotype,
                                flipCoordFitted = FALSE, textSizeFitted = 5,
                                textSizeLabsFitted = 12, lineWidthFitted = 25,

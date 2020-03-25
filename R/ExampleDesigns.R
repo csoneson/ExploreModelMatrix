@@ -18,13 +18,13 @@
   if (exampleID == "One factor, unpaired samples") {
     sampledata <- data.frame(
       treatment = rep(c("control", "drug1", "drug2"), 3),
-      subject = factor(1:9)
+      subject = factor(seq_len(9))
     )
     design <- "~ treatment"
   } else if (exampleID == "One factor, paired samples") {
     sampledata <- data.frame(
       treatment = rep(c("control", "drug1", "drug2"), 3),
-      subject = factor(rep(1:3, each = 3))
+      subject = factor(rep(seq_len(3), each = 3))
     )
     design <- "~ subject + treatment"
   } else if (exampleID == "Two crossed factors") {
@@ -57,6 +57,8 @@
                        rep(c("A", "B", "C"), each = 6))
     )
     design <- "~ diagnosis + diagnosis:dummy + diagnosis:treatment"
+  } else {
+    stop("Unidentified example ID")
   }
 
   list(sampledata = sampledata, design = design)
