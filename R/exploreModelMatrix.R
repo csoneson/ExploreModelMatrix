@@ -190,6 +190,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       # Body definition -----------------------------------------------------
       body = shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
+        
+        use_cicerone(),
 
         ## Define output size and style of error messages
         shiny::tags$head(
@@ -813,7 +815,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                      package = "ExploreModelMatrix"),
                          sep = ";", stringsAsFactors = FALSE,
                          row.names = NULL, quote = "")
-      rintrojs::introjs(session, options = list(steps = tour))
+      # rintrojs::introjs(session, options = list(steps = tour))
+      emmtour$init()$start()
     })
 
   }
