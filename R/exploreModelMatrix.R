@@ -850,3 +850,30 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   return(isFormula & allVarsThere)
 }
 
+
+emmtour <- cicerone::Cicerone$
+  new()$
+  step(
+    "Welcome",
+    "Welcome!",
+    "Welcome to ExploreModelMatrix! Here you can visualize and explore your design matrix in an interactive environment, and gain a better understanding of the meaning of the model coefficients and how they are related to your contrast of interest. <br><br>In this tour you will get an overview of the user interface. You can always leave the tour by pressing Skip, or by clicking anywhere outside of the tour box. At any stage, you can access the tour by clicking on the question mark in the top right corner of the app."
+  )$
+  step(
+    "choose_design_formula",
+    "Choose design",
+    "In this box you specify the desired (fixed-effect) design formula. The formula must start with the ~ character. <br><br>If you start the app without providing a sample table, there will also be a control here to select a tab-separated file with the sample information. After selecting the file, carefully check that all the columns have been correctly interpreted (e.g., in the Sample table summary panel). <br><br>All the controls in the sidebar are interactive, meaning that if you change one of them, the content displayed in the app will update accordingly."
+  )$
+  step(
+    "use_example_design",
+    "example",
+    "Instead of supplying your own sample table and design formula, you can choose to explore one of the built-in example designs, available in this dropdown menu."
+  )$
+  step(
+    "reflevels",
+    "reflevels",
+    "These dropdown menus let you set or change the reference level for each of the factor variables in the supplied sample data table."
+  )$
+  step(
+    "dropcols",
+    "dropcols",
+    "This box lets you specify columns to drop from the design matrix. This can be useful, e.g., to obtain a design matrix with full rank."
