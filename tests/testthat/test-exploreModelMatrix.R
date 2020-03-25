@@ -26,10 +26,12 @@ test_that("ExploreModelMatrix generates a shiny app object", {
     treatment = rep(c("trt", "ctrl"), 4),
     stringsAsFactors = FALSE
   )
-  designFormula <- ~genotype
 
   expect_s3_class(ExploreModelMatrix(sampleData = sampleData,
                                      designFormula = ~genotype),
+                  "shiny.appobj")
+  expect_s3_class(ExploreModelMatrix(sampleData = sampleData,
+                                     designFormula = ~0 + genotype),
                   "shiny.appobj")
 })
 
@@ -39,10 +41,12 @@ test_that(".isValidFormula works as expected", {
     treatment = rep(c("trt", "ctrl"), 4),
     stringsAsFactors = FALSE
   )
-  designFormula <- ~genotype
 
   expect_true(ExploreModelMatrix:::.isValidFormula(
-    designFormula, sampleData
+    ~genotype, sampleData
+  ))
+  expect_true(ExploreModelMatrix:::.isValidFormula(
+    ~0 + genotype, sampleData
   ))
   expect_false(ExploreModelMatrix:::.isValidFormula(
     ~genotyp, sampleData
