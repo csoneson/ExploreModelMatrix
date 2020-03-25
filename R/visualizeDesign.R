@@ -10,10 +10,11 @@
 #' @param textSizeLabsFitted,textSizeLabsCoocc A \code{numeric} scalar giving
 #'   the text size for the axis labels in the fitted values/co-occurrence plot,
 #'   respectively.
-#' @param lineWidthFitted A \code{numeric} scalar giving the maximal length of a row
-#'   in the fitted values plot, before it is split and printed on multiple lines
-#' @param addColorFitted A \code{logical} scalar indicating whether the terms in the
-#'   fitted values plot should be shown in different colors.
+#' @param lineWidthFitted A \code{numeric} scalar giving the maximal length of a
+#'   row in the fitted values plot, before it is split and printed on multiple
+#'   lines
+#' @param addColorFitted A \code{logical} scalar indicating whether the terms
+#'   in the fitted values plot should be shown in different colors.
 #' @param colorPaletteFitted A \code{function} returning a color palette to use
 #'   for coloring the model coefficients in the fitted values plot.
 #' @param dropCols A character vector with columns to drop from the design
@@ -34,9 +35,9 @@
 #' \item pseudoinverse The pseudoinverse of the design matrix
 #' \item vifs A \code{data.frame} with calculated variance inflation factors
 #' \item colors A vector with colors to use for different model coefficients
-#' \item cooccurrenceplots A list of plots, displaying the co-occurrence pattern
-#' for the predictors (i.e., the number of observations for each combination of
-#' predictor values)
+#' \item cooccurrenceplots A list of plots, displaying the co-occurrence
+#' pattern for the predictors (i.e., the number of observations for each
+#' combination of predictor values)
 #' }
 #'
 #' @examples
@@ -50,7 +51,7 @@
 #' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip aes
-#'   scale_color_manual scale_x_discrete scale_y_discrete expand_scale
+#'   scale_color_manual scale_x_discrete scale_y_discrete expansion
 #' @importFrom stats model.matrix as.formula cor var
 #' @importFrom methods is
 #' @importFrom MASS ginv
@@ -240,8 +241,12 @@ VisualizeDesign <- function(sampleData, designFormula,
           x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
           y = plot_terms[1],
           label = "value")) +
-        ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5)) +
-        ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0.5))
+        ggplot2::scale_x_discrete(
+          expand = ggplot2::expansion(mult = 0, add = 0.5)
+        ) +
+        ggplot2::scale_y_discrete(
+          expand = ggplot2::expansion(mult = 0, add = 0.5)
+        )
       if (addColorFitted) {
         gg <- gg +
           ggplot2::geom_text(size = textSizeFitted,
@@ -258,11 +263,13 @@ VisualizeDesign <- function(sampleData, designFormula,
         ggplot2::geom_hline(yintercept = 0.5 +
                               seq_len(length(unique(
                                 sampleData[[plot_terms[1]]])) - 1)) +
-        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-                       panel.grid.minor = ggplot2::element_blank(),
-                       axis.text = ggplot2::element_text(size = textSizeLabsFitted),
-                       axis.title = ggplot2::element_text(size = textSizeLabsFitted),
-                       legend.position = "none")
+        ggplot2::theme(
+          panel.grid.major = ggplot2::element_blank(),
+          panel.grid.minor = ggplot2::element_blank(),
+          axis.text = ggplot2::element_text(size = textSizeLabsFitted),
+          axis.title = ggplot2::element_text(size = textSizeLabsFitted),
+          legend.position = "none"
+        )
       if (length(plot_terms) > 1) {
         gg <- gg +
           ggplot2::geom_vline(xintercept = 0.5 +
@@ -298,14 +305,20 @@ VisualizeDesign <- function(sampleData, designFormula,
           label = "nSamples"
         )) +
         ggplot2::geom_tile(color = "black") +
-        ggplot2::scale_x_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0)) +
-        ggplot2::scale_y_discrete(expand = ggplot2::expand_scale(mult = 0, add = 0)) +
+        ggplot2::scale_x_discrete(
+          expand = ggplot2::expansion(mult = 0, add = 0)
+        ) +
+        ggplot2::scale_y_discrete(
+          expand = ggplot2::expansion(mult = 0, add = 0)
+        ) +
         ggplot2::theme_bw() +
         ggplot2::geom_text(size = textSizeCoocc) +
-        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-                       panel.grid.minor = ggplot2::element_blank(),
-                       axis.text = ggplot2::element_text(size = textSizeLabsCoocc),
-                       axis.title = ggplot2::element_text(size = textSizeLabsCoocc)) +
+        ggplot2::theme(
+          panel.grid.major = ggplot2::element_blank(),
+          panel.grid.minor = ggplot2::element_blank(),
+          axis.text = ggplot2::element_text(size = textSizeLabsCoocc),
+          axis.title = ggplot2::element_text(size = textSizeLabsCoocc)
+        ) +
         ggplot2::scale_fill_gradient(
           low = "white", high = "deepskyblue3",
           name = "Number of\nobservations",

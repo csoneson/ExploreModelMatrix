@@ -36,10 +36,13 @@ Imports:
     tibble,
     MASS,
     limma
-RoxygenNote: 7.0.1
+RoxygenNote: 7.1.0
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
     htmltools
 VignetteBuilder: knitr
+URL: https://github.com/csoneson/ExploreModelMatrix
+BugReports: https://github.com/csoneson/ExploreModelMatrix/issues
+biocViews: ExperimentalDesign, Regression, DifferentialExpression
