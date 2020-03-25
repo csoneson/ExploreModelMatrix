@@ -43,6 +43,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom limma nonEstimable is.fullrank
 #' @importFrom MASS fractions
+#' @importFrom cicerone use_cicerone Cicerone
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
@@ -877,3 +878,4 @@ emmtour <- cicerone::Cicerone$
     "dropcols",
     "dropcols",
     "This box lets you specify columns to drop from the design matrix. This can be useful, e.g., to obtain a design matrix with full rank."
+  )
