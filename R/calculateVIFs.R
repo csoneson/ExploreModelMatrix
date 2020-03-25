@@ -48,7 +48,8 @@
         suppressWarnings({
           data.frame(vif = vapply(cols, function(i) {
             1/(1 - summary(
-              stats::lm(mm0[, i] ~ 0 + ., data = data.frame(mm0[, -i, drop = FALSE]))
+              stats::lm(mm0[, i] ~ 0 + .,
+                        data = data.frame(mm0[, -i, drop = FALSE]))
             )$r.squared)
           }, NA_real_)) %>% tibble::rownames_to_column("coefficient")
         })
@@ -56,7 +57,8 @@
         suppressWarnings({
           data.frame(vif = vapply(cols, function(i) {
             1/(1 - summary(
-              stats::lm(mm0[, i] ~ ., data = data.frame(mm0[, -i, drop = FALSE]))
+              stats::lm(mm0[, i] ~ .,
+                        data = data.frame(mm0[, -i, drop = FALSE]))
             )$r.squared)
           }, NA_real_)) %>% tibble::rownames_to_column("coefficient")
         })

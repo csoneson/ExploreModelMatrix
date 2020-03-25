@@ -35,11 +35,12 @@ size in the fitted values/co-occurrence plot, respectively.}
 the text size for the axis labels in the fitted values/co-occurrence plot,
 respectively.}
 
-\item{lineWidthFitted}{A \code{numeric} scalar giving the maximal length of a row
-in the fitted values plot, before it is split and printed on multiple lines}
+\item{lineWidthFitted}{A \code{numeric} scalar giving the maximal length of a
+row in the fitted values plot, before it is split and printed on multiple
+lines}
 
-\item{addColorFitted}{A \code{logical} scalar indicating whether the terms in the
-fitted values plot should be shown in different colors.}
+\item{addColorFitted}{A \code{logical} scalar indicating whether the terms
+in the fitted values plot should be shown in different colors.}
 
 \item{colorPaletteFitted}{A \code{function} returning a color palette to use
 for coloring the model coefficients in the fitted values plot.}
@@ -59,9 +60,9 @@ combination of predictor values, in terms of the model coefficients.
 \item pseudoinverse The pseudoinverse of the design matrix
 \item vifs A \code{data.frame} with calculated variance inflation factors
 \item colors A vector with colors to use for different model coefficients
-\item cooccurrenceplots A list of plots, displaying the co-occurrence pattern
-for the predictors (i.e., the number of observations for each combination of
-predictor values)
+\item cooccurrenceplots A list of plots, displaying the co-occurrence
+pattern for the predictors (i.e., the number of observations for each
+combination of predictor values)
 }
 }
 \description{
