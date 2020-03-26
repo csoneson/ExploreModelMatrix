@@ -20,7 +20,8 @@ VisualizeDesign(
 )
 }
 \arguments{
-\item{sampleData}{A \code{data.frame} with sample information.}
+\item{sampleData}{A \code{data.frame} of \code{DataFrame} with sample
+information.}
 
 \item{designFormula}{A \code{formula}. All components of the terms must be
 present as columns in \code{sampleData}.}

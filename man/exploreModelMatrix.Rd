@@ -7,7 +7,8 @@
 ExploreModelMatrix(sampleData = NULL, designFormula = NULL)
 }
 \arguments{
-\item{sampleData}{A \code{data.frame} with sample information.}
+\item{sampleData}{A \code{data.frame} or \code{DataFrame} with sample
+information.}
 
 \item{designFormula}{A \code{formula}. All components of the terms must be
 present as columns in \code{sampleData}.}
@@ -29,5 +30,6 @@ if (interactive()) shiny::runApp(app)
 
 }
 \author{
-Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier
+Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier,
+  Michael B Stadler
 }

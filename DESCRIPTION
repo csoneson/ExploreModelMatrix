@@ -1,7 +1,7 @@
 Package: ExploreModelMatrix
 Type: Package
 Title: Graphical Exploration of Design Matrices
-Version: 0.2.0
+Version: 0.99.0
 Authors@R: c(person("Charlotte", "Soneson", role = c("aut", "cre"), 
     email = "charlottesoneson@gmail.com", 
     comment = c(ORCID = "0000-0003-3833-2169")),
@@ -13,7 +13,10 @@ Authors@R: c(person("Charlotte", "Soneson", role = c("aut", "cre"),
     comment = c(ORCID = "0000-0001-8401-0545")),
     person("Florian", "Geier", role = "aut",
     email = "florian.geier@unibas.ch",
-    comment = c(ORCID = "0000-0002-9076-9264")))
+    comment = c(ORCID = "0000-0002-9076-9264")),
+    person("Michael", "Stadler", role = "aut",
+    email = "michael.stadler@fmi.ch",
+    comment = c(ORCID = "0000-0002-2269-4934")))
 Description: Given a sample data table and a design formula, 
     generate an interactive application to explore the resulting 
     design matrix. 
@@ -35,7 +38,8 @@ Imports:
     scales,
     tibble,
     MASS,
-    limma
+    limma,
+    S4Vectors
 RoxygenNote: 7.1.0
 Suggests: 
     testthat (>= 2.1.0),

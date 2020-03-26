@@ -1,6 +1,6 @@
 ---
 title: "ExploreModelMatrix"
-author: "Charlotte Soneson, Federico Marini, Michael I Love and Florian Geier"
+author: "Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B Stadler"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
