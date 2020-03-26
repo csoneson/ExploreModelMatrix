@@ -258,3 +258,39 @@ test_that("VisualizeDesign works without intercept", {
                           dropCols = c())
   expect_equal(res1, res2)
 })
+
+test_that("VisualizeDesign works with DataFrame input", {
+  sampleData <- S4Vectors::DataFrame(
+    genotype = rep(c("A", "B"), each = 4),
+    treatment = rep(c("trt", "ctrl"), 4)
+  )
+
+  res <- VisualizeDesign(sampleData = sampleData,
+                         designFormula = ~0 + genotype)$sampledata
+
+  expect_equal(res$value[res$genotype == "A"], "genotypeA")
+  expect_equal(res$value[res$genotype == "B"], "genotypeB")
+  expect_equal(nrow(res), 2L)
+  expect_equal(colnames(res), c("genotype", "value", "nSamples"))
+
+  res <- VisualizeDesign(sampleData = sampleData,
+                         designFormula = ~0 + genotype + treatment)$sampledata
+
+  expect_equal(res$value[res$genotype == "A" & res$treatment == "trt"],
+               "genotypeA + treatmenttrt")
+  expect_equal(res$value[res$genotype == "A" & res$treatment == "ctrl"],
+               "genotypeA")
+  expect_equal(res$value[res$genotype == "B" & res$treatment == "trt"],
+               "genotypeB + treatmenttrt")
+  expect_equal(res$value[res$genotype == "B" & res$treatment == "ctrl"],
+               "genotypeB")
+
+  ## Check that dropCols = NULL and dropCols = c() give the same results
+  res1 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~0 + genotype + treatment,
+                          dropCols = NULL)
+  res2 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~0 + genotype + treatment,
+                          dropCols = c())
+  expect_equal(res1, res2)
+})

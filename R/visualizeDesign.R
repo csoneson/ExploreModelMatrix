@@ -1,6 +1,7 @@
 #' Visualize design matrix
 #'
-#' @param sampleData A \code{data.frame} with sample information.
+#' @param sampleData A \code{data.frame} of \code{DataFrame} with sample
+#'   information.
 #' @param designFormula A \code{formula}. All components of the terms must be
 #'   present as columns in \code{sampleData}.
 #' @param flipCoordFitted,flipCoordCoocc A \code{logical}, whether to flip the
@@ -53,7 +54,7 @@
 #'   theme_bw geom_text aes_string element_blank coord_flip aes
 #'   scale_color_manual scale_x_discrete scale_y_discrete expansion
 #' @importFrom stats model.matrix as.formula cor var
-#' @importFrom methods is
+#' @importFrom methods is as
 #' @importFrom MASS ginv
 #' @importFrom magrittr %>%
 #'
@@ -69,8 +70,13 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Check input arguments
   ## ----------------------------------------------------------------------- ##
-  if (!methods::is(sampleData, "data.frame")) {
-    stop("'sampleData' must be a data.frame")
+  if (!(methods::is(sampleData, "data.frame") ||
+        methods::is(sampleData, "DataFrame"))) {
+    stop("'sampleData' must be a data.frame or a DataFrame")
+  }
+
+  if (methods::is(sampleData, "DataFrame")) {
+    sampleData <- methods::as(sampleData, "data.frame")
   }
 
   if (!methods::is(designFormula, "formula") &&
@@ -113,10 +119,6 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   designFormula <- stats::as.formula(designFormula)
   terms <- all.vars(designFormula)
-  # terms <- strsplit(gsub(" ", "", as.character(designFormula)[2]),
-  #                   "\\~|\\+|\\:|\\*|\\^|\\-|/")[[1]]
-  # terms <- setdiff(terms, c("0", "1", ""))
-  # terms <- unique(terms)
   if (!all(terms %in% colnames(sampleData))) {
     stop("Not all terms in the design formula can be generated from ",
          "the column names of the sample data")

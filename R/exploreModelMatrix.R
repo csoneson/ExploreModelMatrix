@@ -3,11 +3,13 @@
 #' Given a sample table and a design formula, explore the resulting design
 #' matrix graphically in an interactive application.
 #'
-#' @param sampleData A \code{data.frame} with sample information.
+#' @param sampleData A \code{data.frame} or \code{DataFrame} with sample
+#'   information.
 #' @param designFormula A \code{formula}. All components of the terms must be
 #'   present as columns in \code{sampleData}.
 #'
-#' @author Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier
+#' @author Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier,
+#'   Michael B Stadler
 #'
 #' @export
 #'
@@ -47,8 +49,13 @@
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
   # Check input arguments -----------------------------------------------------
-  if (!is.null(sampleData) && !methods::is(sampleData, "data.frame")) {
-    stop("'sampleData' must be a data.frame")
+  if (!is.null(sampleData) && !(methods::is(sampleData, "data.frame") ||
+                                methods::is(sampleData, "DataFrame"))) {
+    stop("'sampleData' must be a data.frame or DataFrame")
+  }
+
+  if (methods::is(sampleData, "DataFrame")) {
+    sampleData <- methods::as(sampleData, "data.frame")
   }
 
   if (!is.null(designFormula) && !methods::is(designFormula, "formula")) {
