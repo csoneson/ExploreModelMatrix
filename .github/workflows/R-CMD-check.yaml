@@ -63,7 +63,6 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
-          remotes::install_dev("pkgdown")
         shell: Rscript {0}
 
       - name: Check
@@ -88,5 +87,5 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os == 'macOS-latest' && matrix.config.r == '3.6'
         run: |
           R CMD INSTALL .
-          Rscript -e "pkgdown::deploy_to_branch(new_process = FALSE)"
+          Rscript -e "remotes::install_dev("pkgdown"); pkgdown::deploy_to_branch(new_process = FALSE)"
 
