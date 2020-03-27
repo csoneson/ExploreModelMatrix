@@ -5,8 +5,12 @@
 \alias{ExploreModelMatrix-pkg}
 \title{ExploreModelMatrix}
 \description{
-desc
+ExploreModelMatrix is an R package for visualizing design matrices generated
+by the `model.matrix()` R function.
 }
 \details{
-details
+Provided with a sample information table and a design formula, the 
+`ExploreModelMatrix()` function launches a shiny app where the user can 
+explore the fitted values (in terms of the model coefficients) for each 
+combination of predictor values.
 }
