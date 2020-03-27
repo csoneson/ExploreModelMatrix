@@ -6,11 +6,9 @@
 \title{ExploreModelMatrix}
 \description{
 ExploreModelMatrix is an R package for visualizing design matrices generated
-by the `model.matrix()` R function.
-}
-\details{
-Provided with a sample information table and a design formula, the 
-`ExploreModelMatrix()` function launches a shiny app where the user can 
-explore the fitted values (in terms of the model coefficients) for each 
+by the \code{model.matrix()} R function.
+Provided with a sample information table and a design formula, the
+\code{ExploreModelMatrix()} function launches a shiny app where the user can
+explore the fitted values (in terms of the model coefficients) for each
 combination of predictor values.
 }

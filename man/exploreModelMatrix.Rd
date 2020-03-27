@@ -7,11 +7,14 @@
 ExploreModelMatrix(sampleData = NULL, designFormula = NULL)
 }
 \arguments{
-\item{sampleData}{A \code{data.frame} or \code{DataFrame} with sample
-information.}
+\item{sampleData}{(optional) A \code{data.frame} or \code{DataFrame}
+with sample information. If set to \code{NULL}, the user can upload
+the sample information from a tab-separated text file inside the app, or
+choose among a collection of example designs provided in the app.}
 
-\item{designFormula}{A \code{formula}. All components of the terms must be
-present as columns in \code{sampleData}.}
+\item{designFormula}{(optional) A \code{formula}. All components of
+the terms must be present as columns in \code{sampleData}. If set to
+\code{NULL}, the design formula can be specified after launching the app.}
 }
 \value{
 A Shiny app object
