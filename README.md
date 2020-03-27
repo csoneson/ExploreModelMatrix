@@ -5,21 +5,20 @@
 
 `ExploreModelMatrix` is a small R package that lets the user interactively
 explore a design matrix. In particular, given a table with sample information
-and a design formula, `ExploreModelMatrix` will illustrate the fitted values
-(or, more generally, the value of the linear predictor) for each combination of
+and a design formula, `ExploreModelMatrix` illustrates the fitted values 
+from a general linear model (or, more generally, the value of the linear 
+predictor of a generalized linear model) for each combination of
 input variables, simplifying understanding and generation of contrasts. A 
 number of other visualizations are also included in the interactive interface, 
-particularly simplifying the interpretation of linear models. 
-
-`ExploreModelMatrix` is still under development and we welcome feedback. Please
-open an issue if you encounter unexpected behaviour.
+particularly simplifying the interpretation of linear and generalized linear 
+models. 
 
 ![](https://github.com/csoneson/ExploreModelMatrix/blob/master/inst/www/ExploreModelMatrix.png?raw=true)
 
 ## Installation
 
 You can install `ExploreModelMatrix` with the `remotes` (or `devtools`) package,
-like so:
+like this:
 
 ```
 install.packages("remotes")
@@ -30,8 +29,8 @@ remotes::install_github("csoneson/ExploreModelMatrix",
 ## Usage
 
 The main function in the `ExploreModelMatrix` package is called
-`ExploreModelMatrix`. When calling `ExploreModelMatrix`, simply provide a
-_data.frame_ with sample information and a design formula:
+`ExploreModelMatrix()`. When calling `ExploreModelMatrix()`, simply provide a
+_data.frame_ (or _DataFrame_) with sample information and a design formula:
 
 ```
 sampleData <- data.frame(genotype = rep(c("A", "B"), each = 4),
