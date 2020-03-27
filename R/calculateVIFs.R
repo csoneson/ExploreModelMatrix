@@ -20,11 +20,11 @@
 #'
 #' @keywords internal
 #'
-#' @rdname INTERNAL_.calculateVIFsLM
+#' @rdname INTERNAL_.CalculateVIFsLM
 #'
 #' @importFrom stats lm
 #'
-.calculateVIFsLM <- function(mm) {
+.CalculateVIFsLM <- function(mm) {
   ## Remove intercept from mm, if present
   if ("(Intercept)" %in% colnames(mm)) {
     mm0 <- mm[, colnames(mm) != "(Intercept)", drop = FALSE]

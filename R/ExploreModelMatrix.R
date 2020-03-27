@@ -462,7 +462,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$dropcols <- renderUI({
       if (is.null(values$sampledata) || is.null(input$designformula) ||
           input$designformula == "" ||
-          !(.isValidFormula(as.formula(input$designformula),
+          !(.IsValidFormula(as.formula(input$designformula),
                             values$sampledata))) {
         NULL
       } else {
@@ -501,7 +501,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -529,7 +529,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -542,7 +542,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -600,7 +600,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -664,7 +664,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -690,7 +690,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -708,7 +708,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -724,7 +724,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -740,7 +740,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           ""
         )
       )
@@ -777,7 +777,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -801,7 +801,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
-            .isValidFormula(as.formula(input$designformula), values$sampledata),
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
           paste0("Please provide a formula where all terms appear in ",
                  "the sample data")
         )
@@ -849,9 +849,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 #'
 #' @keywords internal
 #'
-#' @rdname INTERNAL_.isValidFormula
+#' @rdname INTERNAL_.IsValidFormula
 #'
-.isValidFormula <- function(design, expdata) {
+.IsValidFormula <- function(design, expdata) {
   isFormula <- inherits(design, "formula")
 
   expVars <- all.vars(design)

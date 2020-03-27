@@ -48,23 +48,23 @@ test_that("ExploreModelMatrix generates a shiny app object", {
                   "shiny.appobj")
 })
 
-test_that(".isValidFormula works as expected", {
+test_that(".IsValidFormula works as expected", {
   sampleData <- data.frame(
     genotype = rep(c("A", "B"), each = 4),
     treatment = rep(c("trt", "ctrl"), 4),
     stringsAsFactors = FALSE
   )
 
-  expect_true(ExploreModelMatrix:::.isValidFormula(
+  expect_true(ExploreModelMatrix:::.IsValidFormula(
     ~genotype, sampleData
   ))
-  expect_true(ExploreModelMatrix:::.isValidFormula(
+  expect_true(ExploreModelMatrix:::.IsValidFormula(
     ~0 + genotype, sampleData
   ))
-  expect_false(ExploreModelMatrix:::.isValidFormula(
+  expect_false(ExploreModelMatrix:::.IsValidFormula(
     ~genotyp, sampleData
   ))
-  expect_false(ExploreModelMatrix:::.isValidFormula(
+  expect_false(ExploreModelMatrix:::.IsValidFormula(
     "~genotype", sampleData
   ))
 })

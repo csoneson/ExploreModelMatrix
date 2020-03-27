@@ -154,7 +154,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Calculate variance inflation factors
   ## ----------------------------------------------------------------------- ##
-  vifs <- .calculateVIFsLM(mm)
+  vifs <- .CalculateVIFsLM(mm)
 
   ## ----------------------------------------------------------------------- ##
   ## Add modeled value column to sample data
@@ -195,7 +195,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   plot_data <- sampleData %>%
     dplyr::mutate(value = vapply(value, function(i)
-      .addNewLine(i, lineWidthFitted), ""))
+      .AddNewLine(i, lineWidthFitted), ""))
 
   ## ----------------------------------------------------------------------- ##
   ## Convert all columns to factors for plotting
@@ -362,9 +362,9 @@ VisualizeDesign <- function(sampleData, designFormula,
 #'
 #' @keywords internal
 #'
-#' @rdname INTERNAL_.addNewLine
+#' @rdname INTERNAL_.AddNewLine
 #'
-.addNewLine <- function(st, lineWidth) {
+.AddNewLine <- function(st, lineWidth) {
   if (nchar(st) > lineWidth) {
     st0 <- strsplit(st, "\\+")[[1]]
     cs <- cumsum(vapply(st0, nchar, 0))
