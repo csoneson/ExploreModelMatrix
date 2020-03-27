@@ -23,20 +23,25 @@ htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 ## Introduction
 
 `ExploreModelMatrix` is an R package for visualizing design matrices generated
-by the `model.matrix()` R function. Provided with a sample information table and
-a design formula, the `ExploreModelMatrix()` function launches a shiny app where
-the user can explore the fitted values (in terms of the model coefficients) for
-each combination of predictor values. In addition, the app allows the user to
-interactively change the design formula and the reference levels of factor
-variables as well as drop unwanted columns from the design matrix, in order to
-explore the effect on the fitted values.
+by the `model.matrix()` R function. Provided with a sample information table 
+and a design formula, the `ExploreModelMatrix()` function launches a shiny 
+app where the user can explore the fitted values (in terms of the model 
+coefficients) for each combination of predictor values. In addition, the app 
+allows the user to interactively change the design formula and the reference 
+levels of factor variables as well as drop unwanted columns from the design 
+matrix, in order to explore the effect on the composition of the fitted values.
+Note that `ExploreModelMatrix` is not intended to be used to determine _which_ 
+design formula that should be used for analyzing a data set. Instead, its 
+purpose is to assist in the interpretation of the coefficients in a given 
+model.
 
-In addition to the interactive visualization, `ExploreModelMatrix` also provides
-a function, `VisualizeDesign()`, for generating static visualizations.
+In addition to the interactive visualization, `ExploreModelMatrix` also 
+provides a function, `VisualizeDesign()`, for generating static 
+visualizations.
 
-In this vignette, we show examples of applying the `ExploreModelMatrix`
-functions to various experimental design setups. Many examples are taken from
-questions raised at the 
+In this vignette, we illustrate how the package can be used by showing 
+examples of applying the functions to various experimental design setups. 
+Many examples are taken from questions raised at the 
 [Bioconductor support site](https://support.bioconductor.org/).
 
 ```{r setup}
@@ -53,9 +58,9 @@ the top right of the application.
 
 <img src=`r system.file(package='ExploreModelMatrix', 'www/ExploreModelMatrix.png')` width="600"/>
 
-The sidebar contains the input controls. The design formula of interest is typed
-into the `Design formula` text box, and must start with the `~` symbol. It can
-be changed interactively while using the application. If the
+The sidebar contains the input controls. The design formula of interest is 
+typed into the `Design formula` text box, and must start with the `~` symbol. 
+It can be changed interactively while using the application. If the
 `ExploreModelMatrix()` function is called with `sampleData=NULL`, there will
 also be an input control allowing a tab-delimited text file with sample
 information to be uploaded to the application. Finally, the package contains a
@@ -64,13 +69,14 @@ illustration. The remaining input controls allow the user to change the
 reference levels of the factor variables, to drop specific columns from the
 design matrix, and to change the display settings of the plots.
 
-The first row of the main body of the application displays the fitted values (in
-terms of the model coefficients) for each combination of predictor values, in
-both figure and table form. In the next row, the full provided sample table as
-well as a summary are provided, and the third row displays the full design
-matrix as well as its rank. Panels below this display the pseudoinverse of the
-design matrix, a visualization of variance inflation factors, a co-occurrence
-matrix and the correlation among the model coefficients.
+The first row of the main body of the application displays the fitted values 
+(expressed in terms of the model coefficients) for each combination of 
+predictor values, in both figure and table form. In the next row, the full 
+provided sample table as well as a summary are provided, and the third row 
+displays the full design matrix as well as its rank. Panels below this 
+display the pseudoinverse of the design matrix, a visualization of variance 
+inflation factors, a co-occurrence matrix and the correlation among the 
+model coefficients.
 
 ## Examples
 
@@ -111,7 +117,10 @@ if (interactive()) shiny::runApp(app)
 
 ### Example 2
 
-In this experiment we consider a single continuous predictor (`Age`).
+In this experiment we consider a single continuous predictor (`Age`), and 
+notice that the fitted value for each individual sample is obtained as the 
+sum of the `(Intercept)` and the `age` coefficient multiplied by the age of 
+the individual.
 
 ```{r, fig.height = 5}
 set.seed(1)
@@ -215,7 +224,7 @@ interpretations of the individual coefficients are different in the two models.
 vd <- VisualizeDesign(
   sampleData = sampleData,
   designFormula = ~ disease + disease:patient + disease:treatment,
-  textSizeFitted = 3, 
+  textSizeFitted = 2, 
   dropCols = "diseasehealthy:patient3"
 )
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
@@ -230,7 +239,7 @@ sampleData$patient <- factor(rep(1:5, each = 3))
 sampleData
 vd <- VisualizeDesign(sampleData = sampleData,
                       designFormula = ~ 0 + disease:treatment + patient,
-                      textSizeFitted = 3, 
+                      textSizeFitted = 2, 
                       dropCols = c("diseasedisease:treatmentNone",
                                    "diseasehealthy:treatmentNone"))
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)

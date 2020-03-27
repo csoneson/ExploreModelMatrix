@@ -3,10 +3,13 @@
 #' Given a sample table and a design formula, explore the resulting design
 #' matrix graphically in an interactive application.
 #'
-#' @param sampleData A \code{data.frame} or \code{DataFrame} with sample
-#'   information.
-#' @param designFormula A \code{formula}. All components of the terms must be
-#'   present as columns in \code{sampleData}.
+#' @param sampleData (optional) A \code{data.frame} or \code{DataFrame}
+#'   with sample information. If set to \code{NULL}, the user can upload
+#'   the sample information from a tab-separated text file inside the app, or
+#'   choose among a collection of example designs provided in the app.
+#' @param designFormula (optional) A \code{formula}. All components of
+#'   the terms must be present as columns in \code{sampleData}. If set to
+#'   \code{NULL}, the design formula can be specified after launching the app.
 #'
 #' @author Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier,
 #'   Michael B Stadler
@@ -40,11 +43,12 @@
 #' @importFrom scales hue_pal
 #' @importFrom ggplot2 ggplot aes geom_raster theme_bw theme labs
 #'   scale_fill_gradient2 geom_text scale_x_discrete scale_y_discrete geom_bar
-#'   coord_flip scale_fill_manual
+#'   coord_flip scale_fill_manual element_blank element_text
 #' @importFrom tidyr gather
 #' @importFrom magrittr %>%
 #' @importFrom limma nonEstimable is.fullrank
 #' @importFrom MASS fractions
+#' @importFrom S4Vectors DataFrame
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
@@ -66,10 +70,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     stop("'sampleData' can not contain NA values")
   }
 
-  lmText <- shiny::span(icon("warning"),
-                        paste0("Note that the content of this panel is ",
-                               "particularly useful for interpreting regular ",
-                               "linear model fit with a least squares approach."))
+  lmText <- shiny::span(
+    icon("warning"),
+    paste0("Note that the content of this panel is ",
+           "particularly useful for interpreting regular ",
+           "linear models fit with a least squares approach.")
+  )
 
   # UI definition -------------------------------------------------------------
   p_layout <-
@@ -565,7 +571,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                            label = value)) +
           ggplot2::geom_tile(color = "black") +
           ggplot2::theme_bw() +
-          ggplot2::theme(rect = element_blank(),
+          ggplot2::theme(rect = ggplot2::element_blank(),
                          axis.text = ggplot2::element_text(
                            size = input$textsizelabs_pinv),
                          axis.title = ggplot2::element_text(
@@ -620,7 +626,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             ggplot2::geom_tile(color = "black") +
             ggplot2::theme_bw() +
             ggplot2::theme(
-              rect = element_blank(),
+              rect = ggplot2::element_blank(),
               axis.text.x = ggplot2::element_text(
                 size = input$textsizelabs_corr,
                 angle = 90,
