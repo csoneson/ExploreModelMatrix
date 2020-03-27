@@ -13,7 +13,7 @@ input variables, simplifying understanding and generation of contrasts. A
 number of other visualizations are also included in the interactive interface, 
 particularly simplifying the interpretation of linear models. 
 
-![](https://github.com/csoneson/ExploreModelMatrix/blob/master/inst/www/ExploreModelMatrix.png?raw=true)
+![](https://github.com/csoneson/ExploreModelMatrix/blob/master/inst/www/ExploreModelMatrix.jpg?raw=true)
 
 ## Installation
 

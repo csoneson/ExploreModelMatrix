@@ -6,7 +6,7 @@ date: "`r Sys.Date()`"
 output: 
   BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{ExploreModelMatrix}
   %\VignetteEncoding{UTF-8} 
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -58,7 +58,7 @@ of what is shown in the graphical interface. A step-by-step tour is also
 available by clicking on the <i class="fa fa-question-circle"></i> icon in
 the top right of the application.
 
-<img src=`r system.file(package='ExploreModelMatrix', 'www/ExploreModelMatrix.png')` width="600"/>
+<img src=`r system.file(package='ExploreModelMatrix', 'www/ExploreModelMatrix.jpg')` width="600"/>
 
 The sidebar contains the input controls. The design formula of interest is 
 typed into the `Design formula` text box, and must start with the `~` symbol. 
@@ -119,26 +119,6 @@ if (interactive()) shiny::runApp(app)
 
 ## Example 2
 
-In this experiment we consider a single continuous predictor (`Age`), and 
-notice that the fitted value for each individual sample is obtained as the 
-sum of the `(Intercept)` and the `age` coefficient multiplied by the age of 
-the individual.
-
-```{r, fig.height = 5}
-set.seed(1)
-(sampleData <- data.frame(
-  age = round(runif(10, min = 12, max = 60))
-))
-vd <- VisualizeDesign(sampleData = sampleData,
-                      designFormula = ~ age, textSizeFitted = 3)
-cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
-app <- ExploreModelMatrix(sampleData = sampleData,
-                          designFormula = ~ age)
-if (interactive()) shiny::runApp(app)
-```
-
-## Example 3
-
 From https://support.bioconductor.org/p/121132/. In this example we are
 considering a set of patients, each being either Resistant or Sensitive to a
 treatment, and each studied before (pre) and after (post) treatment. Patients
@@ -181,7 +161,7 @@ vd <- VisualizeDesign(sampleData = sampleData,
 cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
 ```
 
-## Example 4
+## Example 3
 
 From https://support.bioconductor.org/p/80408/. Here we are considering mice
 from two conditions (ctrl/ko), each measured with and without treatment with a
@@ -204,51 +184,6 @@ app <- ExploreModelMatrix(sampleData = sampleData,
 if (interactive()) shiny::runApp(app)
 ```
 
-## Example 5
-
-From https://support.bioconductor.org/p/122764/. In this example we are
-considering healthy and diseased individuals, each observed wihout treatment as
-well as after treatment with Drug A and Drug B. The first option shown below
-uses the design formula `~ disease + disease:patient + disease:treatment`,
-dropping the column for `diseasehealthy:patient3` since we do not have three
-patients in the healthy group. In the second formulation, we use the design
-formula `~ 0 + patient + disease:treatment` (after assigning each patient a
-unique ID). In terms of the underlying linear model, the approaches are
-equivalent; however, as we can see in the visualizations below, the
-interpretations of the individual coefficients are different in the two models.
-
-```{r, fig.height = 5, fig.width = 5}
-(sampleData <- data.frame(
-  disease = rep(c("healthy", "disease"), c(6, 9)),
-  treatment = rep(c("None", "Drug_A", "Drug_B"), 5),
-  patient = factor(rep(c(1:2, 1:3), each = 3))
-))
-vd <- VisualizeDesign(
-  sampleData = sampleData,
-  designFormula = ~ disease + disease:patient + disease:treatment,
-  textSizeFitted = 2, 
-  dropCols = "diseasehealthy:patient3"
-)
-cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
-app <- ExploreModelMatrix(
-  sampleData = sampleData, 
-  designFormula = ~ disease + disease:patient + disease:treatment
-)
-if (interactive()) shiny::runApp(app)
-
-## Alternative formulation
-sampleData$patient <- factor(rep(1:5, each = 3))
-sampleData
-vd <- VisualizeDesign(sampleData = sampleData,
-                      designFormula = ~ 0 + disease:treatment + patient,
-                      textSizeFitted = 2, 
-                      dropCols = c("diseasedisease:treatmentNone",
-                                   "diseasehealthy:treatmentNone"))
-cowplot::plot_grid(plotlist = vd$plotlist, ncol = 1)
-app <- ExploreModelMatrix(sampleData = sampleData, 
-                          designFormula = ~ 0 + disease:treatment + patient)
-if (interactive()) shiny::runApp(app)
-```
 
 # Session info
 
