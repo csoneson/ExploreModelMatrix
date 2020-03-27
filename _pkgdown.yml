@@ -33,7 +33,7 @@ navbar:
       text: Articles
       menu:
       - text: ExploreModelMatrix
-        href: articles/exploreModelMatrix.html
+        href: articles/ExploreModelMatrix.html
     github:
       icon: fa-github fa-lg
       href: https://github.com/csoneson/ExploreModelMatrix
