@@ -1,10 +1,9 @@
 ---
 title: "Interactive exploration of design matrices with ExploreModelMatrix"
 author: "Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B Stadler"
-package: "ExploreModelMatrix"
 date: "`r Sys.Date()`"
 output: 
-  BiocStyle::html_document
+  html_vignette
 vignette: >
   %\VignetteIndexEntry{ExploreModelMatrix}
   %\VignetteEncoding{UTF-8} 
