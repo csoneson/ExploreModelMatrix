@@ -224,6 +224,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
         shiny::fluidRow(
           shiny::column(
+            12, shiny::uiOutput("resdf_warning")
+          )
+        ),
+
+        shiny::fluidRow(
+          shiny::column(
             8, shiny::div(
               id = "fitted_values_plot_box",
               shinydashboard::box(
@@ -290,7 +296,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                 "Rank of design matrix: ",
                 shiny::textOutput("design_matrix_rank"),
                 "Number of columns in design matrix: ",
-                shiny::textOutput("design_matrix_ncol")
+                shiny::textOutput("design_matrix_ncol"),
+                "Residual degrees of freedom (number of observations - rank of design matrix): ",
+                shiny::textOutput("design_matrix_resdf")
               )
             )
           )
@@ -736,6 +744,23 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
+    output$design_matrix_resdf <- shiny::renderPrint({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
+      if (is.null(generated_output()$designmatrix)) {
+        NULL
+      } else {
+        nrow(generated_output()$designmatrix) -
+          qr(generated_output()$designmatrix)$rank
+      }
+    })
+
     output$rank_warning <- shiny::renderUI({
       shiny::validate(
         shiny::need(
@@ -755,6 +780,30 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
           msg <- paste0("The design matrix is not full rank. ",
                         "Non-estimable parameters: ",
                         paste(nonestim, collapse = ", "))
+          shinydashboard::valueBox("", msg,
+                                   color = "red", icon = NULL, width = 4.5)
+        }
+      }
+    })
+
+    output$resdf_warning <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
+          ""
+        )
+      )
+      if (is.null(generated_output()$designmatrix)) {
+        NULL
+      } else {
+        if (qr(generated_output()$designmatrix)$rank <
+            nrow(generated_output()$designmatrix)) {
+          NULL
+        } else {
+          msg <- paste0("The residual degrees of freedom is 0. ",
+                        "Values such as variances or dispersions can not be ",
+                        "estimated from data with this design.")
           shinydashboard::valueBox("", msg,
                                    color = "red", icon = NULL, width = 4.5)
         }
