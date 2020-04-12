@@ -10,6 +10,7 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
     container:
+      if: runner.image != ''
       image: ${{ matrix.config.image }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
