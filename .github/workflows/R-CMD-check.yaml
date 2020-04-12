@@ -18,10 +18,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '3.6', image = ''}
-          - {os: macOS-latest, r: '3.6', image = ''}
-          - {os: macOS-latest, r: 'devel', image = ''}
-          - {os: ubuntu-latest, r: '3.6', image: '', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: windows-latest, r: '3.6', image: }
+          - {os: macOS-latest, r: '3.6', image: }
+          - {os: macOS-latest, r: 'devel', image: }
+          - {os: ubuntu-latest, r: '3.6', image: , rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-latest, r: '4.0', image: 'bioconductor/bioconductor_full:devel'}
 
     env:
