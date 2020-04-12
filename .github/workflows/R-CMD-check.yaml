@@ -10,7 +10,6 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
     container:
-      if: runner.image != ''
       image: ${{ matrix.config.image }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -19,10 +18,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '3.6'}
-          - {os: macOS-latest, r: '3.6'}
-          - {os: macOS-latest, r: 'devel'}
-          - {os: ubuntu-latest, r: '3.6', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: windows-latest, r: '3.6', image: null}
+          - {os: macOS-latest, r: '3.6', image: null}
+          - {os: macOS-latest, r: 'devel', image: null}
+          - {os: ubuntu-latest, r: '3.6', image: null, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-latest, r: '4.0', image: 'bioconductor/bioconductor_full:devel'}
 
     env:
