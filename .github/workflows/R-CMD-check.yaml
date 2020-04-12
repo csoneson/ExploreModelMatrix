@@ -23,7 +23,8 @@ jobs:
           - {os: macOS-latest, r: '3.6', image: null}
           - {os: macOS-latest, r: 'devel', image: null}
           - {os: ubuntu-16.04, r: '3.6', image: null, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-latest, r: '4.0', image: 'bioconductor/bioconductor_full:devel'}
+          - {os: ubuntu-latest, r: '4.0', image: 'bioconductor/bioconductor:devel'}
+          - {os: ubuntu-latest, r: '3.6', image: 'bioconductor/bioconductor:RELEASE_3_10'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
