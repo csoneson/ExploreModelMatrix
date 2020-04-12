@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     container: ${{ matrix.config.image }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }} - ${{ matrix.config.image }})
 
     strategy:
       fail-fast: false
@@ -22,7 +22,7 @@ jobs:
           - {os: windows-latest, r: '3.6', image: null}
           - {os: macOS-latest, r: '3.6', image: null}
           - {os: macOS-latest, r: 'devel', image: null}
-          - {os: ubuntu-latest, r: '3.6', image: null, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-latest, r: '4.0', image: null, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-latest, r: '4.0', image: 'bioconductor/bioconductor_full:devel'}
 
     env:
