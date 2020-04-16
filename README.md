@@ -1,3 +1,5 @@
+<img src="inst/www/emm_logo.pdf" align="right" alt="" width="120" />
+
 # ExploreModelMatrix
 [![Travis CI build status](https://travis-ci.com/csoneson/ExploreModelMatrix.svg?branch=master)](https://travis-ci.com/csoneson/ExploreModelMatrix)
 [![Codecov.io coverage status](https://codecov.io/github/csoneson/ExploreModelMatrix/coverage.svg?branch=master)](https://codecov.io/github/csoneson/ExploreModelMatrix)
@@ -17,12 +19,12 @@ particularly simplifying the interpretation of linear models.
 
 ## Installation
 
-You can install `ExploreModelMatrix` with the `remotes` (or `devtools`) package:
+You can install `ExploreModelMatrix` from Bioconductor (from release 3.11):
 
 ```
-install.packages("remotes")
-remotes::install_github("csoneson/ExploreModelMatrix", 
-                        build_vignettes = TRUE, dependencies = TRUE)
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ExploreModelMatrix")
 ```
 
 ## Usage
