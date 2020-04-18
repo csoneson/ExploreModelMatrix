@@ -1,4 +1,4 @@
-<img src="inst/www/emm_logo.pdf" align="right" alt="" width="120" />
+<img src="inst/www/emm_logo.png" align="right" alt="" width="120" />
 
 # ExploreModelMatrix
 [![Travis CI build status](https://travis-ci.com/csoneson/ExploreModelMatrix.svg?branch=master)](https://travis-ci.com/csoneson/ExploreModelMatrix)
