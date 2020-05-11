@@ -10,7 +10,8 @@
 \item{exampleID}{The name of the example design. One of "One factor, unpaired
 samples", "One factor, paired samples", "Two crossed factors", "Two
 crossed, one blocking factor", "Two crossed, one nested factor", "Two
-crossed, one nested factor, dummy coded"}
+crossed, one nested factor, dummy coded", "Two crossed, one nested factor
+(manuscript example)"}
 }
 \value{
 A list with two elements: the sample data table and the design

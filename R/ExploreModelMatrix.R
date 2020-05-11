@@ -413,7 +413,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                     "Two crossed factors",
                     "Two crossed, one blocking factor",
                     "Two crossed, one nested factor",
-                    "Two crossed, one nested factor, dummy coded"),
+                    "Two crossed, one nested factor, dummy coded",
+                    "Two crossed, one nested factor (manuscript example)"),
         selectize = TRUE, multiple = FALSE
       )
     })

@@ -3,7 +3,8 @@
 #' @param exampleID The name of the example design. One of "One factor, unpaired
 #'   samples", "One factor, paired samples", "Two crossed factors", "Two
 #'   crossed, one blocking factor", "Two crossed, one nested factor", "Two
-#'   crossed, one nested factor, dummy coded"
+#'   crossed, one nested factor, dummy coded", "Two crossed, one nested factor
+#'   (manuscript example)"
 #'
 #' @author Charlotte Soneson
 #'
@@ -57,6 +58,15 @@
                        rep(c("A", "B", "C"), each = 6))
     )
     design <- "~ diagnosis + diagnosis:dummy + diagnosis:treatment"
+  } else if (exampleID == "Two crossed, one nested factor (manuscript example)") {
+    sampledata <- data.frame(
+      subject = paste0("S", rep(1:6, each = 2)),
+      count = factor(rep(c("ref", "alt"), 6), levels = c("ref", "alt")),
+      condition = rep(c("control", "treated"), each = 6),
+      subjectdummy = rep(paste0("D", rep(1:3, each = 2)), 2),
+      stringsAsFactors = FALSE
+    )
+    design <- "~condition + condition:subjectdummy + condition:count"
   } else {
     stop("Unidentified example ID")
   }
