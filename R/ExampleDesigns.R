@@ -58,12 +58,13 @@
                        rep(c("A", "B", "C"), each = 6))
     )
     design <- "~ diagnosis + diagnosis:dummy + diagnosis:treatment"
-  } else if (exampleID == "Two crossed, one nested factor (manuscript example)") {
+  } else if (exampleID == paste0("Two crossed, one nested factor ",
+                                 "(manuscript example)")) {
     sampledata <- data.frame(
-      subject = paste0("S", rep(1:6, each = 2)),
+      subject = paste0("S", rep(seq_len(6), each = 2)),
       count = factor(rep(c("ref", "alt"), 6), levels = c("ref", "alt")),
       condition = rep(c("control", "treated"), each = 6),
-      subjectdummy = rep(paste0("D", rep(1:3, each = 2)), 2),
+      subjectdummy = rep(paste0("D", rep(seq_len(3), each = 2)), 2),
       stringsAsFactors = FALSE
     )
     design <- "~condition + condition:subjectdummy + condition:count"

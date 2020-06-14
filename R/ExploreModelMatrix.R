@@ -297,7 +297,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                 shiny::textOutput("design_matrix_rank"),
                 "Number of columns in design matrix: ",
                 shiny::textOutput("design_matrix_ncol"),
-                "Residual degrees of freedom (number of observations - rank of design matrix): ",
+                paste0("Residual degrees of freedom (number of ",
+                       "observations - rank of design matrix): "),
                 shiny::textOutput("design_matrix_resdf")
               )
             )
@@ -501,7 +502,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                lineWidthFitted = input$linewidth_fitted,
                                addColorFitted = input$colorterms_fitted,
                                dropCols = input$dropcols,
-                               colorPaletteFitted = scales::hue_pal()))
+                               colorPaletteFitted = scales::hue_pal(),
+                               designMatrix = NULL))
       }
     })
 

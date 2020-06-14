@@ -25,6 +25,9 @@
 #'   for coloring the model coefficients in the fitted values plot.
 #' @param dropCols A character vector with columns to drop from the design
 #'   matrix, or NULL if no columns should be dropped.
+#' @param designMatrix A \code{numeric} matrix, which can be supplied as an
+#'   alternative to \code{designFormula}. Rows must be in the same order as
+#'   the rows in \code{sampleData}.
 #'
 #' @author Charlotte Soneson
 #'
@@ -72,7 +75,7 @@ VisualizeDesign <- function(sampleData, designFormula,
                             textSizeLabsFitted = 12, textSizeLabsCoocc = 12,
                             lineWidthFitted = 25, addColorFitted = TRUE,
                             colorPaletteFitted = scales::hue_pal(),
-                            dropCols = NULL) {
+                            dropCols = NULL, designMatrix = NULL) {
   ## TODO: Allow design of ~1 (currently fails, needs at least 1 term)
 
   ## ----------------------------------------------------------------------- ##
@@ -87,16 +90,37 @@ VisualizeDesign <- function(sampleData, designFormula,
     sampleData <- methods::as(sampleData, "data.frame")
   }
 
-  if (!methods::is(designFormula, "formula") &&
-      !methods::is(designFormula, "character")) {
-    stop("'designFormula' must be a formula or a character string")
+  if (!is.null(designFormula)) {
+    if (!methods::is(designFormula, "formula") &&
+        !methods::is(designFormula, "character")) {
+      stop("'designFormula' must be a formula or a character string")
+    }
+    if (methods::is(designFormula, "character") &&
+        substr(designFormula, 1, 1) != "~") {
+      stop("If 'designFormula' is a character string, it must start with ~")
+    }
+    if (any(grepl("\\|", designFormula))) {
+      stop("'designFormula' can't contain |")
+    }
+    if (!is.null(designMatrix)) {
+      stop("Only one of 'designFormula' and 'designMatrix' should be provided")
+    }
   }
-  if (methods::is(designFormula, "character") &&
-      substr(designFormula, 1, 1) != "~") {
-    stop("If 'designFormula' is a character string, it must start with ~")
+
+  if (is.null(designFormula) && is.null(designMatrix)) {
+    stop("Either 'designFormula' or 'designMatrix' must be provided")
   }
-  if (any(grepl("\\|", designFormula))) {
-    stop("'designFormula' can't contain |")
+  if (!is.null(designMatrix)) {
+    if (nrow(sampleData) != nrow(designMatrix)) {
+      stop("'sampleData' and 'designMatrix' must have the same number of rows")
+    }
+    if ((!is.null(rownames(designMatrix)) || !is.null(rownames(sampleData))) &&
+        !all(rownames(designMatrix) == rownames(sampleData))) {
+      stop("'sampleData' and 'designMatrix' must have the same row names")
+    }
+    if (mode(designMatrix) != "numeric") {
+      stop("'designMatrix' must be a numeric matrix")
+    }
   }
 
   if (!methods::is(flipCoordFitted, "logical") | length(flipCoordFitted) != 1) {
@@ -125,24 +149,34 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Extract terms from the design formula
   ## ----------------------------------------------------------------------- ##
-  designFormula <- stats::as.formula(designFormula)
-  terms <- all.vars(designFormula)
-  if (!all(terms %in% colnames(sampleData))) {
-    stop("Not all terms in the design formula can be generated from ",
-         "the column names of the sample data")
+  if (!is.null(designFormula)) {
+    designFormula <- stats::as.formula(designFormula)
+    terms <- all.vars(designFormula)
+    if (!all(terms %in% colnames(sampleData))) {
+      stop("Not all terms in the design formula can be generated from ",
+           "the column names of the sample data")
+    }
+    sampleData <- sampleData %>% dplyr::select(terms)
+  } else {
+    ## If we're only given a design matrix, assume that all columns of
+    ## sampleData are relevant
+    terms <- colnames(sampleData)
   }
-  sampleData <- sampleData %>% dplyr::select(terms)
 
   ## ----------------------------------------------------------------------- ##
   ## Create design matrix
   ## ----------------------------------------------------------------------- ##
-  mm <- stats::model.matrix(designFormula, data = sampleData)
-  if (!all(dropCols %in% colnames(mm))) {
-    warning("Not all values in 'dropCols' are present in the design matrix. ",
-            "Missing: ", paste(dropCols[!(dropCols %in% colnames(mm))],
-                               collapse = ", "))
+  if (!is.null(designFormula)) {
+    mm <- stats::model.matrix(designFormula, data = sampleData)
+    if (!all(dropCols %in% colnames(mm))) {
+      warning("Not all values in 'dropCols' are present in the design matrix. ",
+              "Missing: ", paste(dropCols[!(dropCols %in% colnames(mm))],
+                                 collapse = ", "))
+    }
+    mm <- mm[, !(colnames(mm) %in% dropCols), drop = FALSE]
+  } else {
+    mm <- designMatrix
   }
-  mm <- mm[, !(colnames(mm) %in% dropCols), drop = FALSE]
 
   ## ----------------------------------------------------------------------- ##
   ## Calculate pseudoinverse of design matrix

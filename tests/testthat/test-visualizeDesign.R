@@ -183,6 +183,36 @@ test_that("VisualizeDesign fails with incorrect inputs", {
                                flipCoordFitted = FALSE, textSizeFitted = 5,
                                textSizeLabsFitted = 12, lineWidthFitted = 25,
                                dropCols = NULL, colorPaletteFitted = "string"))
+
+  expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = ~genotype,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL,
+                               designMatrix = model.matrix(~genotype,
+                                                           data = sampleData)))
+  expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = NULL,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL,
+                               designMatrix = NULL))
+  expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = NULL,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL,
+                               designMatrix = data.frame(
+                                 model.matrix(~genotype,
+                                              data = sampleData))))
+  expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = NULL,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL,
+                               designMatrix = model.matrix(
+                                 ~genotype,
+                                 data = sampleData)[1:5, ]))
 })
 
 test_that("VisualizeDesign works with intercept", {
@@ -293,4 +323,38 @@ test_that("VisualizeDesign works with DataFrame input", {
                           designFormula = ~0 + genotype + treatment,
                           dropCols = c())
   expect_equal(res1, res2)
+})
+
+test_that("VisualizeDesign works with design matrix input", {
+  sampleData <- data.frame(
+    genotype = rep(c("A", "B"), each = 4),
+    treatment = rep(c("trt", "ctrl"), 4),
+    stringsAsFactors = FALSE
+  )
+
+  res <- VisualizeDesign(sampleData = sampleData %>% dplyr::select(genotype),
+                         designFormula = NULL,
+                         designMatrix = model.matrix(
+                           ~0 + genotype,
+                           data = sampleData))$sampledata
+
+  expect_equal(res$value[res$genotype == "A"], "genotypeA")
+  expect_equal(res$value[res$genotype == "B"], "genotypeB")
+  expect_equal(nrow(res), 2L)
+  expect_equal(colnames(res), c("genotype", "value", "nSamples"))
+
+  res <- VisualizeDesign(sampleData = sampleData,
+                         designFormula = NULL,
+                         designMatrix = model.matrix(
+                           ~0 + genotype + treatment,
+                           data = sampleData))$sampledata
+
+  expect_equal(res$value[res$genotype == "A" & res$treatment == "trt"],
+               "genotypeA + treatmenttrt")
+  expect_equal(res$value[res$genotype == "A" & res$treatment == "ctrl"],
+               "genotypeA")
+  expect_equal(res$value[res$genotype == "B" & res$treatment == "trt"],
+               "genotypeB + treatmenttrt")
+  expect_equal(res$value[res$genotype == "B" & res$treatment == "ctrl"],
+               "genotypeB")
 })
