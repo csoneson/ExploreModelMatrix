@@ -501,7 +501,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                lineWidthFitted = input$linewidth_fitted,
                                addColorFitted = input$colorterms_fitted,
                                dropCols = input$dropcols,
-                               colorPaletteFitted = scales::hue_pal()))
+                               colorPaletteFitted = scales::hue_pal(),
+                               designMatrix = NULL))
       }
     })
 

@@ -183,6 +183,36 @@ test_that("VisualizeDesign fails with incorrect inputs", {
                                flipCoordFitted = FALSE, textSizeFitted = 5,
                                textSizeLabsFitted = 12, lineWidthFitted = 25,
                                dropCols = NULL, colorPaletteFitted = "string"))
+
+  expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = ~genotype,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL,
+                               designMatrix = model.matrix(~genotype,
+                                                           data = sampleData)))
+  expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = NULL,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL,
+                               designMatrix = NULL))
+  expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = NULL,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL,
+                               designMatrix = data.frame(
+                                 model.matrix(~genotype,
+                                              data = sampleData))))
+  expect_error(VisualizeDesign(sampleData = sampleData,
+                               designFormula = NULL,
+                               flipCoordFitted = FALSE, textSizeFitted = 5,
+                               textSizeLabsFitted = 12, lineWidthFitted = 25,
+                               dropCols = NULL,
+                               designMatrix = model.matrix(
+                                 ~genotype,
+                                 data = sampleData)[1:5, ]))
 })
 
 test_that("VisualizeDesign works with intercept", {

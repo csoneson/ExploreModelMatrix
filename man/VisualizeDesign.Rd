@@ -16,7 +16,8 @@ VisualizeDesign(
   lineWidthFitted = 25,
   addColorFitted = TRUE,
   colorPaletteFitted = scales::hue_pal(),
-  dropCols = NULL
+  dropCols = NULL,
+  designMatrix = NULL
 )
 }
 \arguments{
@@ -48,6 +49,10 @@ for coloring the model coefficients in the fitted values plot.}
 
 \item{dropCols}{A character vector with columns to drop from the design
 matrix, or NULL if no columns should be dropped.}
+
+\item{designMatrix}{A \code{numeric} matrix, which can be supplied as an
+alternative to \code{designFormula}. Rows must be in the same order as
+the rows in \code{sampleData}.}
 }
 \value{
 A list with the following elements:
