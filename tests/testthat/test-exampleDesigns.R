@@ -63,4 +63,19 @@ test_that(".ExampleDesign works correctly", {
                ))
   expect_equal(ed$design,
                "~ diagnosis + diagnosis:dummy + diagnosis:treatment")
+
+  ed <- ExploreModelMatrix:::.ExampleDesigns(
+    "Two crossed, one nested factor (manuscript example)"
+  )
+  expect_equal(ed$sampledata,
+               data.frame(
+                 subject = paste0("S", rep(seq_len(6), each = 2)),
+                 count = factor(rep(c("ref", "alt"), 6),
+                                levels = c("ref", "alt")),
+                 condition = rep(c("control", "treated"), each = 6),
+                 subjectdummy = rep(paste0("D", rep(seq_len(3), each = 2)), 2),
+                 stringsAsFactors = FALSE
+               ))
+  expect_equal(ed$design,
+               "~condition + condition:subjectdummy + condition:count")
 })

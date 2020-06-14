@@ -297,7 +297,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                 shiny::textOutput("design_matrix_rank"),
                 "Number of columns in design matrix: ",
                 shiny::textOutput("design_matrix_ncol"),
-                "Residual degrees of freedom (number of observations - rank of design matrix): ",
+                paste0("Residual degrees of freedom (number of ",
+                       "observations - rank of design matrix): "),
                 shiny::textOutput("design_matrix_resdf")
               )
             )

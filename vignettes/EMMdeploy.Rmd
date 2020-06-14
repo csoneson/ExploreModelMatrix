@@ -21,30 +21,45 @@ stopifnot(requireNamespace("htmltools"))
 ```
 
 ```{r, echo = FALSE}
-library("ExploreModelMatrix")
+library(ExploreModelMatrix)
 ```
 
 
 # Why deploying `ExploreModelMatrix` on a Shiny server?
 
-While the installation of `ExploreModelMatrix` locally is a relatively straightforward operation, sometimes you might require an instance of it running on a server, e.g. for teaching purposes, or to provide a working version of it because you or your collaborators are lacking admin rights.
+While the installation of `ExploreModelMatrix` locally is a relatively 
+straightforward operation, sometimes you might require an instance of it 
+running on a server, e.g. for teaching purposes, or to provide a working 
+version of it because you or your collaborators are lacking admin rights.
 
-One possible solution would be to access the instance running at http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix, which we provide also for demonstration purposes.
-Alternatively, you might need to deploy `ExploreModelMatrix` for internal use, or with a different set of examples/functionality.
-This vignette details the steps to do so - it might still require the intervention of your local IT service, and some degree of tech savvyness.
+One possible solution would be to access the instance running at
+http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix, which we provide 
+also for demonstration purposes.
+Alternatively, you might need to deploy `ExploreModelMatrix` for internal 
+use, or with a different set of examples/functionality.
+This vignette details the steps to do so - it might still require the 
+intervention of your local IT service, and some degree of tech savvyness.
 
 # How to deploy `ExploreModelMatrix`
 
 ## Step 1: Setting up the Shiny Server
 
-You should mainly refer to this excellent reference: http://docs.rstudio.com/shiny-server/, the Administrator's Guide beautifully written and maintained by the RStudio team.
+You should mainly refer to this excellent reference:
+http://docs.rstudio.com/shiny-server/, the Administrator's Guide 
+beautifully written and maintained by the RStudio team.
 
-In the case of the instance linked above (http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix), the deployment is on a Ubuntu-based server. 
-If this is your case too, please go to https://docs.rstudio.com/shiny-server/#ubuntu-14.04
+In the case of the instance linked above
+(http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix), the deployment 
+is on a Ubuntu-based server. 
+If this is your case too, please go to
+https://docs.rstudio.com/shiny-server/#ubuntu-14.04
 
-If you are already familiar with Shiny Server, you can consider going directly here: http://docs.rstudio.com/shiny-server/#quick-start
+If you are already familiar with Shiny Server, you can consider going 
+directly here: http://docs.rstudio.com/shiny-server/#quick-start
 
-Follow the indications in the main reference guide to see whether you have all packages installed, and visit the address which will refer to the address of your server  (http://your.server.address:3838/sample-apps/hello/). 
+Follow the indications in the main reference guide to see whether you have 
+all packages installed, and visit the address which will refer to the address 
+of your server  (http://your.server.address:3838/sample-apps/hello/). 
 
 ## Step 2: setup `ExploreModelMatrix`
 
@@ -67,7 +82,8 @@ Once that is done, you can install `ExploreModelMatrix` with
 sudo su - -c "R -e \"BiocManager::install('ExploreModelMatrix')\""
 ```
 
-You can also install the development version of `ExploreModelMatrix` from GitHub with
+You can also install the development version of `ExploreModelMatrix` 
+from GitHub with
 
 ```
 # install remotes first
@@ -76,25 +92,32 @@ sudo su - -c "R -e \"BiocManager::install('remotes')\""
 sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""
 ```
 
-Keep in mind that if you are running the server as root, you could simply open R in the terminal and install the required packages with
+Keep in mind that if you are running the server as root, you could simply 
+open R in the terminal and install the required packages with
 
 ```{r eval=FALSE}
-install.packages('BiocManager') # to be done once
-BiocManager::install('ExploreModelMatrix')
-BiocManager::install('csoneson/ExploreModelMatrix') # for the devel version on GitHub
+## To be done once
+install.packages("BiocManager")
+BiocManager::install("ExploreModelMatrix")
+## For the devel version on GitHub
+BiocManager::install("csoneson/ExploreModelMatrix")
 ```
 
 ### Setup `ExploreModelMatrix` on the server
 
 You essentially need to do two things:
 
-- in `/srv/shiny-server`, create a folder (e.g. via `mkdir`) named `ExploreModelMatrix`, and create a file in there called `app.R`. Edit its content (e.g. with `vi`, `nano`, or any other editor), copy-pasting the following lines:
+- in `/srv/shiny-server`, create a folder (e.g. via `mkdir`) named
+`ExploreModelMatrix`, and create a file in there called `app.R`. Edit 
+its content (e.g. with `vi`, `nano`, or any other editor), copy-pasting 
+the following lines:
 
 ```
 library("ExploreModelMatrix")
 ExploreModelMatrix()
 ```
-- you need to edit `/etc/shiny-server/shiny-server.conf`. To do this, again use any text editor (e.g. `vi`),
+- you need to edit `/etc/shiny-server/shiny-server.conf`. To do this, 
+again use any text editor (e.g. `vi`),
 and add the following lines 
 
 ```
@@ -125,17 +148,22 @@ server {
 }
 ```
 
-You might need to restart the Shiny Server (`systemctl restart shiny-server` on Ubuntu). 
+You might need to restart the Shiny Server (`systemctl restart shiny-server` 
+on Ubuntu). 
 Then you should be good to go!
 
-Visit http://your.server.address:3838/ExploreModelMatrix for your personal running instance.
+Visit http://your.server.address:3838/ExploreModelMatrix for your personal 
+running instance.
 
 
 ## `ExploreModelMatrix` at the IMBEI
 
-http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix is the address for the public instance of `ExploreModelMatrix` on the Shiny Server I manage at the Institute of Medical Biostatistics, Epidemiology and Informatics.
+http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix is the address for 
+the public instance of `ExploreModelMatrix` on the Shiny Server I manage at 
+the Institute of Medical Biostatistics, Epidemiology and Informatics.
 
-The relevant setup of that machine is the following (in case you are asking what specs you need):
+The relevant setup of that machine is the following (in case you are asking 
+what specs you need):
 
 - 4 cores
 - 8 GB RAM
@@ -143,11 +171,11 @@ The relevant setup of that machine is the following (in case you are asking what
 ```
 lsb_release -a
 
-	No LSB modules are available.
-	Distributor ID:	Ubuntu
-	Description:	Ubuntu 16.04.2 LTS
-	Release:	16.04
-	Codename:	xenial
+  No LSB modules are available.
+  Distributor ID: Ubuntu
+  Description: Ubuntu 16.04.2 LTS
+  Release: 16.04
+  Codename: xenial
 ```
 
 # Session info {-}
