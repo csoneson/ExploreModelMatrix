@@ -124,10 +124,10 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         ),
 
         shinydashboard::menuItem(
-          "Settings", icon = shiny::icon("sliders-h"),
-          startExpanded = TRUE, id = "settings",
+          "Advanced plot settings", icon = shiny::icon("sliders-h"),
+          startExpanded = FALSE, id = "settings",
           shinydashboard::menuItem(
-            "Fitted values plot", startExpanded = TRUE,
+            "Fitted values plot", startExpanded = FALSE,
             shiny::numericInput(inputId = "plotheight_fitted",
                                 label = "Plot height (numeric, in pixels)",
                                 value = 400, min = 200, max = 3000, step = 10),
