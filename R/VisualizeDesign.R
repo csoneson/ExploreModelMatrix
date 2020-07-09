@@ -49,6 +49,8 @@
 #' \item \code{cooccurrenceplots}: A list of plots, displaying the
 #' co-occurrence pattern for the predictors (i.e., the number of observations
 #' for each combination of predictor values)
+#' \item \code{totnbrrows}: The total number of "rows" in the list of plots
+#' of fiitted values. Useful for deciding the required size of the plot canvas.
 #' }
 #'
 #' @examples
