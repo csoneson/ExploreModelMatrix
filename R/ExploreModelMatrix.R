@@ -479,8 +479,24 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
     # Generate output -------------------------------------------------------
     generated_output <- shiny::reactive({
+      shiny::validate(
+        shiny::need(
+          .CheckNumericArguments(input$textsize_fitted,
+                                 input$textsize_coocc,
+                                 input$textsizelabs_fitted,
+                                 input$textsizelabs_coocc,
+                                 input$linewidth_fitted),
+          paste0("Please make sure that all text size and row length ",
+                 "arguments are specified as numeric values")
+        )
+      )
       if (is.null(values$sampledata) || is.null(input$designformula) ||
-          input$designformula == "") {
+          input$designformula == "" ||
+          !.CheckNumericArguments(input$textsize_fitted,
+                                  input$textsize_coocc,
+                                  input$textsizelabs_fitted,
+                                  input$textsizelabs_coocc,
+                                  input$linewidth_fitted)) {
         return(list())
       } else {
         vd <- VisualizeDesign(sampleData = values$sampledata,
@@ -621,6 +637,18 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$pinv_design_matrix <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          .CheckNumericArguments(input$textsize_pinv,
+                                 input$textsizelabs_pinv),
+          paste0("Please make sure that all text size and row length ",
+                 "arguments are specified as numeric values")
+        ),
+        shiny::need(
+          .CheckNumericArguments(input$plotheight_pinv),
+          paste0("Please provide a valid plot height")
+        )
+      )
       shiny::plotOutput("pinv_design_matrix_plot",
                         width = "100%",
                         height = paste0(input$plotheight_pinv, "px"))
@@ -685,6 +713,18 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$correlation_matrix <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          .CheckNumericArguments(input$textsize_corr,
+                                 input$textsizelabs_corr),
+          paste0("Please make sure that all text size and row length ",
+                 "arguments are specified as numeric values")
+        ),
+        shiny::need(
+          .CheckNumericArguments(input$plotheight_corr),
+          paste0("Please provide a valid plot height")
+        )
+      )
       shiny::plotOutput("correlation_matrix_plot",
                         width = "100%",
                         height = paste0(input$plotheight_corr, "px"))
@@ -863,6 +903,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$fitted_values_plot <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          .CheckNumericArguments(input$plotheight_fitted),
+          paste0("Please provide a valid plot height")
+        )
+      )
       shiny::plotOutput("fitted_values_plot_plot",
                         width = "100%",
                         height = paste0(input$plotheight_fitted, "px"))
@@ -887,6 +933,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     output$cooccurrence_matrix <- shiny::renderUI({
+      shiny::validate(
+        shiny::need(
+          .CheckNumericArguments(input$plotheight_coocc),
+          paste0("Please provide a valid plot height")
+        )
+      )
       shiny::plotOutput("cooccurrence_matrix_plot",
                         width = "100%",
                         height = paste0(input$plotheight_coocc, "px"))
@@ -932,3 +984,6 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   return(isFormula & allVarsThere)
 }
 
+.CheckNumericArguments <- function(...) {
+  suppressWarnings(all(!is.na(as.numeric(unlist(list(...))))))
+}
