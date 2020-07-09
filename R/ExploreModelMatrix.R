@@ -483,19 +483,22 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
           input$designformula == "") {
         return(list())
       } else {
-        return(VisualizeDesign(sampleData = values$sampledata,
-                               designFormula = input$designformula,
-                               flipCoordFitted = input$flipcoord_fitted,
-                               flipCoordCoocc = input$flipcoord_coocc,
-                               textSizeFitted = input$textsize_fitted,
-                               textSizeCoocc = input$textsize_coocc,
-                               textSizeLabsFitted = input$textsizelabs_fitted,
-                               textSizeLabsCoocc = input$textsizelabs_coocc,
-                               lineWidthFitted = input$linewidth_fitted,
-                               addColorFitted = input$colorterms_fitted,
-                               dropCols = input$dropcols,
-                               colorPaletteFitted = scales::hue_pal(),
-                               designMatrix = NULL))
+        vd <- VisualizeDesign(sampleData = values$sampledata,
+                              designFormula = input$designformula,
+                              flipCoordFitted = input$flipcoord_fitted,
+                              flipCoordCoocc = input$flipcoord_coocc,
+                              textSizeFitted = input$textsize_fitted,
+                              textSizeCoocc = input$textsize_coocc,
+                              textSizeLabsFitted = input$textsizelabs_fitted,
+                              textSizeLabsCoocc = input$textsizelabs_coocc,
+                              lineWidthFitted = input$linewidth_fitted,
+                              addColorFitted = input$colorterms_fitted,
+                              dropCols = input$dropcols,
+                              colorPaletteFitted = scales::hue_pal(),
+                              designMatrix = NULL)
+        shiny::updateNumericInput(session, "plotheight_fitted",
+                                  value = vd$totnbrrows * 120)
+        return(vd)
       }
     })
 
