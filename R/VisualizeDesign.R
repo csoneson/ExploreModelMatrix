@@ -276,6 +276,18 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Create plot(s)
   ## ----------------------------------------------------------------------- ##
+  ## First, get the total number of "rows" in the final plot.
+  ## Will be used to determine the size of the panel.
+  if (flipCoordFitted & length(plot_terms) == 1) {
+    totnbrrows <- length(unique(plot_data$groupby))
+  } else if (flipCoordFitted) {
+    totnbrrows <- length(unique(plot_data$groupby)) *
+      length(unique(plot_data[[plot_terms[2]]]))
+  } else {
+    totnbrrows <- length(unique(plot_data$groupby)) *
+      length(unique(plot_data[[plot_terms[1]]]))
+  }
+
   ggp <- lapply(split(
     plot_data, f = plot_data$groupby),
     function(w) {
@@ -384,7 +396,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   list(sampledata = sampleData, plotlist = ggp, designmatrix = mm,
        pseudoinverse = psinverse, vifs = vifs, colors = colors,
-       cooccurrenceplots = ggcoocc)
+       cooccurrenceplots = ggcoocc, totnbrrows = totnbrrows)
 }
 
 #' Split a string into multiple lines if it's longer than a certain length
