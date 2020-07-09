@@ -229,27 +229,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         ),
 
         shiny::fluidRow(
-          shiny::column(
-            8, shiny::div(
-              id = "fitted_values_plot_box",
-              shinydashboard::box(
-                width = NULL, status = "primary",
-                collapsible = TRUE, collapsed = FALSE,
-                title = "Fitted values",
-                shiny::uiOutput("fitted_values_plot")
-              )
-            )
-          ),
-          shiny::column(
-            4, shiny::div(
-              id = "fitted_values_table_box",
-              shinydashboard::box(
-                width = NULL, status = "warning",
-                collapsible = TRUE, collapsed = FALSE,
-                title = "Fitted values",
-                DT::dataTableOutput("fitted_values_table")
-              )
-            )
+          shinydashboard::tabBox(
+            id = "fitted_values_box",
+            title = "Fitted values",
+            side = "right",
+            width = 12, height = NULL,
+            shiny::tabPanel("Plot", shiny::uiOutput("fitted_values_plot")),
+            shiny::tabPanel("Table", DT::dataTableOutput("fitted_values_table"))
           )
         ),
 
