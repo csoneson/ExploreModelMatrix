@@ -269,7 +269,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               shinydashboard::box(
                 width = NULL, title = "Design matrix",
                 collapsible = TRUE, collapsed = FALSE,
-                shiny::verbatimTextOutput("design_matrix")
+                shiny::radioButtons(
+                  inputId = "design_matrix_type",
+                  label = "Display as:",
+                  choices = c("data table", "R output"),
+                  selected = "R output", inline = TRUE
+                ),
+                shiny::uiOutput("design_matrix")
               )
             )
           ),
@@ -522,7 +528,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     # Generate design matrix ------------------------------------------------
-    output$design_matrix <- shiny::renderPrint({
+    output$design_matrix_R <- shiny::renderPrint({
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
@@ -532,6 +538,31 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         )
       )
       generated_output()$designmatrix
+    })
+
+    output$design_matrix_DT <- DT::renderDataTable({
+      shiny::validate(
+        shiny::need(
+          input$designformula != "" &&
+            .IsValidFormula(as.formula(input$designformula), values$sampledata),
+          paste0("Please provide a formula where all terms appear in ",
+                 "the sample data")
+        )
+      )
+      DT::datatable(data.frame(generated_output()$designmatrix,
+                               check.names = FALSE),
+                    options = list(scrollX = TRUE),
+                    rownames = TRUE)
+    })
+
+    output$design_matrix <- shiny::renderUI({
+      if (input$design_matrix_type == "R output") {
+        shiny::verbatimTextOutput("design_matrix_R")
+      } else if (input$design_matrix_type == "data table") {
+        DT::dataTableOutput("design_matrix_DT")
+      } else {
+        stop("Unknown design matrix display type")
+      }
     })
 
     # Plot design matrix pseudoinverse --------------------------------------
