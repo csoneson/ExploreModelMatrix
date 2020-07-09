@@ -732,7 +732,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     })
 
     # Check rank and number of columns of design matrix ---------------------
-    output$design_matrix_rank <- shiny::renderPrint({
+    output$design_matrix_rank <- shiny::renderText({
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
@@ -748,7 +748,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    output$design_matrix_ncol <- shiny::renderPrint({
+    output$design_matrix_ncol <- shiny::renderText({
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
@@ -764,7 +764,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
 
-    output$design_matrix_resdf <- shiny::renderPrint({
+    output$design_matrix_resdf <- shiny::renderText({
       shiny::validate(
         shiny::need(
           input$designformula != "" &&
