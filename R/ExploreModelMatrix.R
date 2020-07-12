@@ -131,9 +131,6 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             shiny::numericInput(inputId = "plotheight_fitted",
                                 label = "Plot height (numeric, in pixels)",
                                 value = 400, min = 200, max = 3000, step = 10),
-            shiny::checkboxInput(inputId = "flipcoord_fitted",
-                                 label = "Flip coordinates",
-                                 value = FALSE),
             shiny::numericInput(inputId = "textsize_fitted",
                                 label = "Text size, matrix entries",
                                 value = 5, min = 1, max = 25, step = 1),
@@ -234,7 +231,13 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             title = "Fitted values",
             side = "right",
             width = 12, height = NULL,
-            shiny::tabPanel("Plot", shiny::uiOutput("fitted_values_plot")),
+            shiny::tabPanel(
+              "Plot",
+              shiny::checkboxInput(inputId = "flipcoord_fitted",
+                                   label = "Flip coordinate axes",
+                                   value = FALSE),
+              shiny::uiOutput("fitted_values_plot")
+            ),
             shiny::tabPanel("Table", DT::dataTableOutput("fitted_values_table"))
           )
         ),
