@@ -19,7 +19,8 @@ particularly simplifying the interpretation of linear models.
 
 ## Installation
 
-You can install `ExploreModelMatrix` from Bioconductor (from release 3.11):
+You can install `ExploreModelMatrix` from Bioconductor (note that you need 
+at least release 3.11 of Bioconductor, released in April 2020):
 
 ```
 if (!requireNamespace("BiocManager", quietly = TRUE))
