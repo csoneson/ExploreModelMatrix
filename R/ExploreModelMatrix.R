@@ -32,7 +32,7 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
-#'   need validate span
+#'   need validate span markdown
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim packageVersion
 #' @importFrom cowplot plot_grid
@@ -840,10 +840,28 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
           NULL
         } else {
           nonestim <- limma::nonEstimable(generated_output()$designmatrix)
-          msg <- paste0("The design matrix is not full rank. ",
-                        "Non-estimable parameters: ",
+          msg <- paste0("**The design matrix is not full rank.**<br><br> ",
+                        "This means that one or more of the columns ",
+                        "in the design matrix can be obtained by ",
+                        "combining some of the other columns, ",
+                        "and thus the model coefficients can not be ",
+                        "unambiguously estimated. ",
+                        "Common reasons include overparametrized or ",
+                        "too complex models (for example, attempting to ",
+                        "estimate a group effect and at the same time ",
+                        "including an effect for each individual sample), ",
+                        "and columns in the design matrix with all zero ",
+                        "values (for example, if there are no samples ",
+                        "with a given combination of values for the ",
+                        "predictor variables). An accessible introduction ",
+                        "to linear models, including a discussion of ",
+                        "collinearity and rank deficiency, is provided in ",
+                        "[Irizarry & Love: Data Analysis for the Life Sciences]" ,
+                        "(https://leanpub.com/dataanalysisforthelifesciences). ",
+                        "<br><br>In the current design, the ",
+                        "non-estimable parameter(s) are: ",
                         paste(nonestim, collapse = ", "))
-          shinydashboard::valueBox("", msg,
+          shinydashboard::valueBox("", shiny::markdown(msg),
                                    color = "red", icon = NULL, width = 4.5)
         }
       }
@@ -864,10 +882,18 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             nrow(generated_output()$designmatrix)) {
           NULL
         } else {
-          msg <- paste0("The residual degrees of freedom is 0. ",
-                        "Values such as variances or dispersions can not be ",
-                        "estimated from data with this design.")
-          shinydashboard::valueBox("", msg,
+          msg <- paste0("**The residual degrees of freedom is 0.**<br><br> ",
+                        "This means that you have as many model coefficients ",
+                        "in your design matrix as you have samples in ",
+                        "your data set. This can happen ",
+                        "when you only have a single replicate ",
+                        "for each combination of predictor variable ",
+                        "values in your data set. In practice, it means ",
+                        "that measures of variability (such as variances ",
+                        "or dispersions) can not be estimated, and as a ",
+                        "consequence, proper hypothesis testing can typically ",
+                        "not be performed with the specified design.")
+          shinydashboard::valueBox("", shiny::markdown(msg),
                                    color = "red", icon = NULL, width = 4.5)
         }
       }
