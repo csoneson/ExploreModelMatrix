@@ -1,6 +1,7 @@
 #' Explore model matrix
 #'
-#' Given a sample table and a design formula, explore the resulting design
+#' Given a sample data table and a design formula, explore the
+#' resulting design
 #' matrix graphically in an interactive application.
 #'
 #' @param sampleData (optional) A \code{data.frame} or \code{DataFrame}
@@ -247,7 +248,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             7, shiny::div(
               id = "sample_table_box",
               shinydashboard::box(
-                width = NULL, title = "Full sample table",
+                width = NULL, title = "Full sample data table",
                 collapsible = TRUE, collapsed = TRUE,
                 DT::dataTableOutput("sample_table")
               )
@@ -257,7 +258,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             5, shiny::div(
               id = "sample_table_summary_box",
               shinydashboard::box(
-                width = NULL, title = "Sample table summary",
+                width = NULL, title = "Sample data table summary",
                 collapsible = TRUE, collapsed = TRUE,
                 shiny::verbatimTextOutput("sample_table_summary")
               )
