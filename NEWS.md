@@ -1,3 +1,7 @@
+# Changes in version 1.1.4
+* Updated interface to make better use of screen space
+* Expanded explanation of statistical concepts
+
 # Changes in version 0.99.0
 * Prepared for Bioconductor submission
 
