@@ -20,7 +20,8 @@ the terms must be present as columns in \code{sampleData}. If set to
 A Shiny app object
 }
 \description{
-Given a sample table and a design formula, explore the resulting design
+Given a sample data table and a design formula, explore the
+resulting design
 matrix graphically in an interactive application.
 }
 \examples{
