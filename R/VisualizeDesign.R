@@ -55,7 +55,7 @@
 #'   designFormula = ~genotype + treatment
 #' )
 #'
-#' @importFrom dplyr select distinct mutate mutate_all n group_by_at
+#' @importFrom dplyr select distinct mutate mutate_all n group_by_at all_of
 #' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip aes element_text
@@ -131,7 +131,7 @@ VisualizeDesign <- function(sampleData, designFormula,
     stop("Not all terms in the design formula can be generated from ",
          "the column names of the sample data")
   }
-  sampleData <- sampleData %>% dplyr::select(terms)
+  sampleData <- sampleData %>% dplyr::select(dplyr::all_of(terms))
 
   ## ----------------------------------------------------------------------- ##
   ## Create design matrix
@@ -201,7 +201,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## Convert all columns to factors for plotting
   ## ----------------------------------------------------------------------- ##
   plot_data <- plot_data %>%
-    dplyr::mutate_at(dplyr::vars(-nSamples), as.factor)
+    dplyr::mutate_at(dplyr::vars(-nSamples, -value), as.factor)
 
   ## ----------------------------------------------------------------------- ##
   ## Add value of split terms (to use for plot titles)
@@ -305,7 +305,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ggcoocc <- lapply(split(
     plot_data, f = plot_data$groupby),
     function(w) {
-      w <- w %>% dplyr::select(keepcols) %>% dplyr::distinct()
+      w <- w %>% dplyr::select(dplyr::all_of(keepcols)) %>% dplyr::distinct()
       gp <- ggplot2::ggplot(
         w,
         ggplot2::aes_string(
