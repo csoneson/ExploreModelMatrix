@@ -33,7 +33,7 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
-#'   need validate span markdown
+#'   need validate span markdown HTML
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim packageVersion
 #' @importFrom cowplot plot_grid
@@ -50,6 +50,7 @@
 #' @importFrom limma nonEstimable is.fullrank
 #' @importFrom MASS fractions
 #' @importFrom S4Vectors DataFrame
+#' @importFrom shinyjs useShinyjs onclick
 #'
 ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
@@ -82,6 +83,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   p_layout <-
     shinydashboard::dashboardPage(
       skin = "purple",
+      shinyjs::useShinyjs(),
 
       # Header definition ---------------------------------------------------
       header = shinydashboard::dashboardHeader(
@@ -229,7 +231,14 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         shiny::fluidRow(
           shinydashboard::tabBox(
             id = "fitted_values_box",
-            title = "Fitted values",
+            title = shiny::div(
+              "Fitted values",
+              shiny::HTML("&nbsp;"),
+              shiny::div(id = "paneltour_fitted_values_box",
+                         style = "display: inline-block;",
+                         icon("question-circle fa-1g"))
+            ),
+            # title = "Fitted values",
             side = "right",
             width = 12, height = NULL,
             shiny::tabPanel(
@@ -248,7 +257,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             7, shiny::div(
               id = "sample_table_box",
               shinydashboard::box(
-                width = NULL, title = "Full sample data table",
+                width = NULL,
+                title = shiny::div(
+                  "Full sample data table",
+                  shiny::HTML("&nbsp;"),
+                  shiny::div(id = "paneltour_sample_table_box",
+                             style = "display: inline-block;",
+                             icon("question-circle fa-1g"))
+                ),
+                # title = "Full sample data table",
                 collapsible = TRUE, collapsed = TRUE,
                 DT::dataTableOutput("sample_table")
               )
@@ -258,7 +275,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             5, shiny::div(
               id = "sample_table_summary_box",
               shinydashboard::box(
-                width = NULL, title = "Sample data table summary",
+                width = NULL,
+                title = shiny::div(
+                  "Sample data table summary",
+                  shiny::HTML("&nbsp;"),
+                  shiny::div(id = "paneltour_sample_table_summary_box",
+                             style = "display: inline-block;",
+                             icon("question-circle fa-1g"))
+                ),
+                # , title = "Sample data table summary",
                 collapsible = TRUE, collapsed = TRUE,
                 shiny::verbatimTextOutput("sample_table_summary")
               )
@@ -271,7 +296,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             7, shiny::div(
               id = "design_matrix_box",
               shinydashboard::box(
-                width = NULL, title = "Design matrix",
+                width = NULL,
+                title = shiny::div(
+                  "Design matrix",
+                  shiny::HTML("&nbsp;"),
+                  shiny::div(id = "paneltour_design_matrix_box",
+                             style = "display: inline-block;",
+                             icon("question-circle fa-1g"))
+                ),
+                # title = "Design matrix",
                 collapsible = TRUE, collapsed = FALSE,
                 shiny::radioButtons(
                   inputId = "design_matrix_type",
@@ -287,7 +320,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             5, shiny::div(
               id = "design_matrix_rank_box",
               shinydashboard::box(
-                width = NULL, title = "Rank",
+                width = NULL,
+                title = shiny::div(
+                  "Rank",
+                  shiny::HTML("&nbsp;"),
+                  shiny::div(id = "paneltour_design_matrix_rank_box",
+                             style = "display: inline-block;",
+                             icon("question-circle fa-1g"))
+                ),
+                # title = "Rank",
                 collapsible = TRUE, collapsed = FALSE,
                 "Rank of design matrix: ",
                 shiny::textOutput("design_matrix_rank"),
@@ -306,7 +347,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             8, shiny::div(
               id = "pinv_design_matrix_box",
               shinydashboard::box(
-                width = NULL, title = "Pseudoinverse of design matrix",
+                width = NULL,
+                title = shiny::div(
+                  "Pseudoinverse of design matrix",
+                  shiny::HTML("&nbsp;"),
+                  shiny::div(id = "paneltour_pinv_design_matrix_box",
+                             style = "display: inline-block;",
+                             icon("question-circle fa-1g"))
+                ),
+                # title = "Pseudoinverse of design matrix",
                 collapsible = TRUE, collapsed = TRUE,
                 footer = lmText,
                 shiny::uiOutput("pinv_design_matrix")
@@ -317,7 +366,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             4, shiny::div(
               id = "vifs_box",
               shinydashboard::box(
-                width = NULL, title = "Variance inflation factors",
+                width = NULL,
+                title = shiny::div(
+                  "Variance inflation factors",
+                  shiny::HTML("&nbsp;"),
+                  shiny::div(id = "paneltour_vifs_box",
+                             style = "display: inline-block;",
+                             icon("question-circle fa-1g"))
+                ),
+                # title = "Variance inflation factors",
                 collapsible = TRUE, collapsed = TRUE,
                 footer = lmText,
                 shiny::plotOutput("vifs"),
@@ -332,7 +389,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             6, shiny::div(
               id = "cooccurrence_matrix_box",
               shinydashboard::box(
-                width = NULL, title = "Co-occurrence plot",
+                width = NULL,
+                title = shiny::div(
+                  "Co-occurrence plot",
+                  shiny::HTML("&nbsp;"),
+                  shiny::div(id = "paneltour_cooccurrence_matrix_box",
+                             style = "display: inline-block;",
+                             icon("question-circle fa-1g"))
+                ),
+                # title = "Co-occurrence plot",
                 collapsible = TRUE, collapsed = TRUE,
                 shiny::uiOutput("cooccurrence_matrix")
               )
@@ -342,7 +407,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
             6, shiny::div(
               id = "correlation_matrix_box",
               shinydashboard::box(
-                width = NULL, title = "Correlation plot",
+                width = NULL,
+                title = shiny::div(
+                  "Correlation plot",
+                  shiny::HTML("&nbsp;"),
+                  shiny::div(id = "paneltour_correlation_matrix_box",
+                             style = "display: inline-block;",
+                             icon("question-circle fa-1g"))
+                ),
+                # title = "Correlation plot",
                 collapsible = TRUE, collapsed = TRUE,
                 footer = lmText,
                 shiny::uiOutput("correlation_matrix")
@@ -983,6 +1056,26 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       rintrojs::introjs(session, options = list(steps = tour))
     })
 
+    ## Define help buttons for each panel (displaying only the
+    ## corresponding part of the tour)
+    lapply(c("fitted_values_box", "sample_table_box",
+             "sample_table_summary_box", "design_matrix_box",
+             "design_matrix_rank_box", "pinv_design_matrix_box",
+             "vifs_box", "cooccurrence_matrix_box",
+             "correlation_matrix_box"),
+           function(p) {
+             shinyjs::onclick(paste0("paneltour_", p), {
+               ptour <- read.delim(system.file("extdata",
+                                               "interface_overview.txt",
+                                               package = "ExploreModelMatrix"),
+                                   sep = ";", stringsAsFactors = FALSE,
+                                   row.names = NULL, quote = "")
+               ptour <- ptour[ptour[, 1] == paste0("#", p), , drop = FALSE]
+               if (nrow(ptour)) {
+                 rintrojs::introjs(session, options = list(steps = ptour))
+               }
+             })
+           })
   }
   #nocov end
 
