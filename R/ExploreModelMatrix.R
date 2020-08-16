@@ -537,6 +537,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       }
     })
     
+    # Handling the ui for the fitted values box -----------------------------
     output$ui_fitted_values_box <- shiny::renderUI({
       shiny::tagList(
         shinydashboard::tabBox(
