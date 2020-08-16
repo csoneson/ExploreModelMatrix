@@ -227,20 +227,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         ),
 
         shiny::fluidRow(
-          shinydashboard::tabBox(
-            id = "fitted_values_box",
-            title = "Fitted values",
-            side = "right",
-            width = 12, height = NULL,
-            shiny::tabPanel(
-              "Plot",
-              shiny::checkboxInput(inputId = "flipcoord_fitted",
-                                   label = "Flip coordinate axes",
-                                   value = FALSE),
-              shiny::uiOutput("fitted_values_plot")
-            ),
-            shiny::tabPanel("Table", DT::dataTableOutput("fitted_values_table"))
-          )
+          shiny::uiOutput("ui_fitted_values_box")
         ),
 
         shiny::fluidRow(
@@ -548,6 +535,25 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       } else {
         summary(values$sampledata)
       }
+    })
+    
+    output$ui_fitted_values_box <- shiny::renderUI({
+      shiny::tagList(
+        shinydashboard::tabBox(
+          id = "fitted_values_box",
+          title = "Fitted values",
+          side = "right",
+          width = 12, height = NULL,
+          shiny::tabPanel(
+            "Plot",
+            shiny::checkboxInput(inputId = "flipcoord_fitted",
+                                 label = "Flip coordinate axes",
+                                 value = FALSE),
+            shiny::uiOutput("fitted_values_plot")
+          ),
+          shiny::tabPanel("Table", DT::dataTableOutput("fitted_values_table"))
+        )
+      )
     })
 
     # Generate design matrix ------------------------------------------------
