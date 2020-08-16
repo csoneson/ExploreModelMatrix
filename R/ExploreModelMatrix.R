@@ -73,7 +73,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
   }
 
   lmText <- shiny::span(
-    icon("warning"),
+    shiny::icon("warning"),
     paste0("Note that the content of this panel is ",
            "particularly useful for interpreting regular ",
            "linear models fit with a least squares approach.")
@@ -236,7 +236,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
               shiny::HTML("&nbsp;"),
               shiny::div(id = "paneltour_fitted_values_box",
                          style = "display: inline-block;",
-                         icon("question-circle fa-1g"))
+                         shiny::tags$i(
+                           class = "fa fa-question-circle",
+                           style = "color: lightgrey"
+                         )
+              )
             ),
             # title = "Fitted values",
             side = "right",
@@ -263,7 +267,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                   shiny::HTML("&nbsp;"),
                   shiny::div(id = "paneltour_sample_table_box",
                              style = "display: inline-block;",
-                             icon("question-circle fa-1g"))
+                             shiny::tags$i(
+                               class = "fa fa-question-circle",
+                               style = "color: lightgrey"
+                             )
+                  )
                 ),
                 # title = "Full sample data table",
                 collapsible = TRUE, collapsed = TRUE,
@@ -281,7 +289,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                   shiny::HTML("&nbsp;"),
                   shiny::div(id = "paneltour_sample_table_summary_box",
                              style = "display: inline-block;",
-                             icon("question-circle fa-1g"))
+                             shiny::tags$i(
+                               class = "fa fa-question-circle",
+                               style = "color: lightgrey"
+                             )
+                  )
                 ),
                 # , title = "Sample data table summary",
                 collapsible = TRUE, collapsed = TRUE,
@@ -302,7 +314,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                   shiny::HTML("&nbsp;"),
                   shiny::div(id = "paneltour_design_matrix_box",
                              style = "display: inline-block;",
-                             icon("question-circle fa-1g"))
+                             shiny::tags$i(
+                               class = "fa fa-question-circle",
+                               style = "color: lightgrey"
+                             )
+                  )
                 ),
                 # title = "Design matrix",
                 collapsible = TRUE, collapsed = FALSE,
@@ -326,7 +342,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                   shiny::HTML("&nbsp;"),
                   shiny::div(id = "paneltour_design_matrix_rank_box",
                              style = "display: inline-block;",
-                             icon("question-circle fa-1g"))
+                             shiny::tags$i(
+                               class = "fa fa-question-circle",
+                               style = "color: lightgrey"
+                             )
+                  )
                 ),
                 # title = "Rank",
                 collapsible = TRUE, collapsed = FALSE,
@@ -353,7 +373,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                   shiny::HTML("&nbsp;"),
                   shiny::div(id = "paneltour_pinv_design_matrix_box",
                              style = "display: inline-block;",
-                             icon("question-circle fa-1g"))
+                             shiny::tags$i(
+                               class = "fa fa-question-circle",
+                               style = "color: lightgrey"
+                             )
+                  )
                 ),
                 # title = "Pseudoinverse of design matrix",
                 collapsible = TRUE, collapsed = TRUE,
@@ -372,7 +396,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                   shiny::HTML("&nbsp;"),
                   shiny::div(id = "paneltour_vifs_box",
                              style = "display: inline-block;",
-                             icon("question-circle fa-1g"))
+                             shiny::tags$i(
+                               class = "fa fa-question-circle",
+                               style = "color: lightgrey"
+                             )
+                  )
                 ),
                 # title = "Variance inflation factors",
                 collapsible = TRUE, collapsed = TRUE,
@@ -395,7 +423,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                   shiny::HTML("&nbsp;"),
                   shiny::div(id = "paneltour_cooccurrence_matrix_box",
                              style = "display: inline-block;",
-                             icon("question-circle fa-1g"))
+                             shiny::tags$i(
+                               class = "fa fa-question-circle",
+                               style = "color: lightgrey"
+                             )
+                  )
                 ),
                 # title = "Co-occurrence plot",
                 collapsible = TRUE, collapsed = TRUE,
@@ -413,7 +445,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                   shiny::HTML("&nbsp;"),
                   shiny::div(id = "paneltour_correlation_matrix_box",
                              style = "display: inline-block;",
-                             icon("question-circle fa-1g"))
+                             shiny::tags$i(
+                               class = "fa fa-question-circle",
+                               style = "color: lightgrey"
+                             )
+                  )
                 ),
                 # title = "Correlation plot",
                 collapsible = TRUE, collapsed = TRUE,
