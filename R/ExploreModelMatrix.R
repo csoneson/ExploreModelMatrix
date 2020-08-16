@@ -126,78 +126,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
           shiny::uiOutput("dropcols")
         ),
 
-        shinydashboard::menuItem(
-          "Advanced plot settings", icon = shiny::icon("sliders-h"),
-          startExpanded = FALSE, id = "settings",
-          shinydashboard::menuItem(
-            "Fitted values plot", startExpanded = FALSE,
-            shiny::numericInput(inputId = "plotheight_fitted",
-                                label = "Plot height (numeric, in pixels)",
-                                value = 400, min = 200, max = 3000, step = 10),
-            shiny::numericInput(inputId = "textsize_fitted",
-                                label = "Text size, matrix entries",
-                                value = 5, min = 1, max = 25, step = 1),
-            shiny::numericInput(inputId = "textsizelabs_fitted",
-                                label = "Text size, axis labels",
-                                value = 12, min = 1, max = 25, step = 1),
-            shiny::checkboxInput(inputId = "colorterms_fitted",
-                                 label = "Color terms",
-                                 value = TRUE),
-            shiny::numericInput(inputId = "linewidth_fitted",
-                                label = "Maximal row length",
-                                value = 25, min = 1, max = 100, step = 1)
-          ),
-          shinydashboard::menuItem(
-            "Pseudoinverse plot", startExpanded = FALSE,
-            shiny::numericInput(inputId = "plotheight_pinv",
-                                label = "Plot height (numeric, in pixels)",
-                                value = 400, min = 200, max = 3000, step = 10),
-            shiny::numericInput(inputId = "textsize_pinv",
-                                label = "Text size, matrix entries",
-                                value = 5, min = 1, max = 25, step = 1),
-            shiny::numericInput(inputId = "textsizelabs_pinv",
-                                label = "Text size, axis labels",
-                                value = 12, min = 1, max = 25, step = 1),
-            shiny::radioButtons(inputId = "shownumbers_pinv",
-                                label = "Display numbers",
-                                choices = c("Do not show numbers",
-                                            "Show numbers as decimal",
-                                            "Show numbers as fractions"),
-                                selected = "Show numbers as decimal")
-          ),
-          shinydashboard::menuItem(
-            "Co-occurrence plot", startExpanded = FALSE,
-            shiny::numericInput(inputId = "plotheight_coocc",
-                                label = "Plot height (numeric, in pixels)",
-                                value = 400, min = 200, max = 3000, step = 10),
-            shiny::checkboxInput(inputId = "flipcoord_coocc",
-                                 label = "Flip coordinates",
-                                 value = FALSE),
-            shiny::numericInput(inputId = "textsize_coocc",
-                                label = "Text size, matrix entries",
-                                value = 5, min = 1, max = 25, step = 1),
-            shiny::numericInput(inputId = "textsizelabs_coocc",
-                                label = "Text size, axis labels",
-                                value = 12, min = 1, max = 25, step = 1)
-          ),
-          shinydashboard::menuItem(
-            "Correlation plot", startExpanded = FALSE,
-            shiny::numericInput(inputId = "plotheight_corr",
-                                label = "Plot height (numeric, in pixels)",
-                                value = 400, min = 200, max = 3000, step = 10),
-            shiny::numericInput(inputId = "textsize_corr",
-                                label = "Text size, matrix entries",
-                                value = 5, min = 1, max = 25, step = 1),
-            shiny::numericInput(inputId = "textsizelabs_corr",
-                                label = "Text size, axis labels",
-                                value = 12, min = 1, max = 25, step = 1),
-            shiny::radioButtons(inputId = "shownumbers_corr",
-                                label = "Display numbers",
-                                choices = c("Do not show numbers",
-                                            "Show numbers as decimal"),
-                                selected = "Show numbers as decimal")
-          )
-        )
+        shiny::uiOutput("ui_settings")
       ),
 
       # Body definition -----------------------------------------------------
@@ -229,31 +158,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
         ),
 
         shiny::fluidRow(
-          shinydashboard::tabBox(
-            id = "fitted_values_box",
-            title = shiny::div(
-              "Fitted values",
-              shiny::HTML("&nbsp;"),
-              shiny::div(id = "paneltour_fitted_values_box",
-                         style = "display: inline-block;",
-                         shiny::tags$i(
-                           class = "fa fa-question-circle",
-                           style = "color: lightgrey"
-                         )
-              )
-            ),
-            # title = "Fitted values",
-            side = "right",
-            width = 12, height = NULL,
-            shiny::tabPanel(
-              "Plot",
-              shiny::checkboxInput(inputId = "flipcoord_fitted",
-                                   label = "Flip coordinate axes",
-                                   value = FALSE),
-              shiny::uiOutput("fitted_values_plot")
-            ),
-            shiny::tabPanel("Table", DT::dataTableOutput("fitted_values_table"))
-          )
+          shiny::uiOutput("ui_fitted_values_box")
         ),
 
         shiny::fluidRow(
@@ -525,6 +430,85 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       )
     })
 
+    # Handling the menu for the advanced settings ---------------------------
+
+    output$ui_settings <- renderUI({
+      tagList(
+        shinydashboard::menuItem(
+          "Advanced plot settings", icon = shiny::icon("sliders-h"),
+          startExpanded = TRUE, id = "settings",
+          shinydashboard::menuItem(
+            "Fitted values plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_fitted",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::numericInput(inputId = "textsize_fitted",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_fitted",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::checkboxInput(inputId = "colorterms_fitted",
+                                 label = "Color terms",
+                                 value = TRUE),
+            shiny::numericInput(inputId = "linewidth_fitted",
+                                label = "Maximal row length",
+                                value = 25, min = 1, max = 100, step = 1)
+          ),
+          shinydashboard::menuItem(
+            "Pseudoinverse plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_pinv",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::numericInput(inputId = "textsize_pinv",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_pinv",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::radioButtons(inputId = "shownumbers_pinv",
+                                label = "Display numbers",
+                                choices = c("Do not show numbers",
+                                            "Show numbers as decimal",
+                                            "Show numbers as fractions"),
+                                selected = "Show numbers as decimal")
+          ),
+          shinydashboard::menuItem(
+            "Co-occurrence plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_coocc",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::checkboxInput(inputId = "flipcoord_coocc",
+                                 label = "Flip coordinates",
+                                 value = FALSE),
+            shiny::numericInput(inputId = "textsize_coocc",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_coocc",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1)
+          ),
+          shinydashboard::menuItem(
+            "Correlation plot", startExpanded = FALSE,
+            shiny::numericInput(inputId = "plotheight_corr",
+                                label = "Plot height (numeric, in pixels)",
+                                value = 400, min = 200, max = 3000, step = 10),
+            shiny::numericInput(inputId = "textsize_corr",
+                                label = "Text size, matrix entries",
+                                value = 5, min = 1, max = 25, step = 1),
+            shiny::numericInput(inputId = "textsizelabs_corr",
+                                label = "Text size, axis labels",
+                                value = 12, min = 1, max = 25, step = 1),
+            shiny::radioButtons(inputId = "shownumbers_corr",
+                                label = "Display numbers",
+                                choices = c("Do not show numbers",
+                                            "Show numbers as decimal"),
+                                selected = "Show numbers as decimal")
+          )
+        )
+      )
+    })
+
     # Populate variables if example design is used --------------------------
     observeEvent(input$exampledesign, {
       if (input$exampledesign == "---") {
@@ -657,6 +641,37 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       } else {
         summary(values$sampledata)
       }
+    })
+
+    # Handling the ui for the fitted values box -----------------------------
+    output$ui_fitted_values_box <- shiny::renderUI({
+      shiny::tagList(
+        shinydashboard::tabBox(
+          id = "fitted_values_box",
+          title = shiny::div(
+            "Fitted values",
+            shiny::HTML("&nbsp;"),
+            shiny::div(id = "paneltour_ui_fitted_values_box",
+                       style = "display: inline-block;",
+                       shiny::tags$i(
+                         class = "fa fa-question-circle",
+                         style = "color: lightgrey"
+                       )
+            )
+          ),
+          # title = "Fitted values",
+          side = "right",
+          width = 12, height = NULL,
+          shiny::tabPanel(
+            "Plot",
+            shiny::checkboxInput(inputId = "flipcoord_fitted",
+                                 label = "Flip coordinate axes",
+                                 value = FALSE),
+            shiny::uiOutput("fitted_values_plot")
+          ),
+          shiny::tabPanel("Table", DT::dataTableOutput("fitted_values_table"))
+        )
+      )
     })
 
     # Generate design matrix ------------------------------------------------
@@ -1094,7 +1109,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
 
     ## Define help buttons for each panel (displaying only the
     ## corresponding part of the tour)
-    lapply(c("fitted_values_box", "sample_table_box",
+    lapply(c("ui_fitted_values_box", "sample_table_box",
              "sample_table_summary_box", "design_matrix_box",
              "design_matrix_rank_box", "pinv_design_matrix_box",
              "vifs_box", "cooccurrence_matrix_box",
