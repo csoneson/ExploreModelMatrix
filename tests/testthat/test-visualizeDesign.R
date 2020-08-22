@@ -222,17 +222,30 @@ test_that("VisualizeDesign works with intercept", {
     stringsAsFactors = FALSE
   )
 
-  res <- VisualizeDesign(sampleData = sampleData,
-                         designFormula = ~genotype)$sampledata
+  res0 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~genotype)
+  res <- res0$sampledata
 
+  expect_equal(res0$totnbrrows, 2L)
+  expect_equal(nrow(res0$designmatrix), 8L)
+  expect_equal(ncol(res0$designmatrix), 2L)
+  expect_equivalent(res0$designmatrix[, "(Intercept)"], rep(1L, 8L))
+  expect_equivalent(res0$designmatrix[, "genotypeB"], rep(c(0L, 1L), each = 4))
   expect_equal(res$value[res$genotype == "A"], "(Intercept)")
   expect_equal(res$value[res$genotype == "B"], "(Intercept) + genotypeB")
   expect_equal(nrow(res), 2L)
   expect_equal(colnames(res), c("genotype", "value", "nSamples"))
 
-  res <- VisualizeDesign(sampleData = sampleData,
-                         designFormula = ~genotype + treatment)$sampledata
+  res0 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~genotype + treatment)
+  res <- res0$sampledata
 
+  expect_equal(res0$totnbrrows, 2L)
+  expect_equal(nrow(res0$designmatrix), 8L)
+  expect_equal(ncol(res0$designmatrix), 3L)
+  expect_equivalent(res0$designmatrix[, "(Intercept)"], rep(1L, 8L))
+  expect_equivalent(res0$designmatrix[, "genotypeB"], rep(c(0L, 1L), each = 4))
+  expect_equivalent(res0$designmatrix[, "treatmenttrt"], rep(c(1L, 0L), 4))
   expect_equal(res$value[res$genotype == "A" & res$treatment == "trt"],
                "(Intercept) + treatmenttrt")
   expect_equal(res$value[res$genotype == "A" & res$treatment == "ctrl"],
@@ -259,17 +272,30 @@ test_that("VisualizeDesign works without intercept", {
     stringsAsFactors = FALSE
   )
 
-  res <- VisualizeDesign(sampleData = sampleData,
-                         designFormula = ~0 + genotype)$sampledata
+  res0 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~0 + genotype)
+  res <- res0$sampledata
 
+  expect_equal(res0$totnbrrows, 2L)
+  expect_equal(nrow(res0$designmatrix), 8L)
+  expect_equal(ncol(res0$designmatrix), 2L)
+  expect_equivalent(res0$designmatrix[, "genotypeA"], rep(c(1L, 0L), each = 4))
+  expect_equivalent(res0$designmatrix[, "genotypeB"], rep(c(0L, 1L), each = 4))
   expect_equal(res$value[res$genotype == "A"], "genotypeA")
   expect_equal(res$value[res$genotype == "B"], "genotypeB")
   expect_equal(nrow(res), 2L)
   expect_equal(colnames(res), c("genotype", "value", "nSamples"))
 
-  res <- VisualizeDesign(sampleData = sampleData,
-                         designFormula = ~0 + genotype + treatment)$sampledata
+  res0 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~0 + genotype + treatment)
+  res <- res0$sampledata
 
+  expect_equal(res0$totnbrrows, 2L)
+  expect_equal(nrow(res0$designmatrix), 8L)
+  expect_equal(ncol(res0$designmatrix), 3L)
+  expect_equivalent(res0$designmatrix[, "genotypeA"], rep(c(1L, 0L), each = 4))
+  expect_equivalent(res0$designmatrix[, "genotypeB"], rep(c(0L, 1L), each = 4))
+  expect_equivalent(res0$designmatrix[, "treatmenttrt"], rep(c(1L, 0L), 4))
   expect_equal(res$value[res$genotype == "A" & res$treatment == "trt"],
                "genotypeA + treatmenttrt")
   expect_equal(res$value[res$genotype == "A" & res$treatment == "ctrl"],
@@ -323,6 +349,19 @@ test_that("VisualizeDesign works with DataFrame input", {
                           designFormula = ~0 + genotype + treatment,
                           dropCols = c())
   expect_equal(res1, res2)
+
+  ## Check that flipCoordFitted = TRUE/FALSE give same results except for the plot
+  res1 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~0 + genotype + treatment,
+                          flipCoordFitted = TRUE)
+  res2 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~0 + genotype + treatment,
+                          flipCoordFitted = FALSE)
+  for (nm in names(res1)) {
+    if (nm != "plotlist") {
+      expect_equal(res1[[nm]], res2[[nm]])
+    }
+  }
 })
 
 test_that("VisualizeDesign works with design matrix input", {
@@ -332,23 +371,36 @@ test_that("VisualizeDesign works with design matrix input", {
     stringsAsFactors = FALSE
   )
 
-  res <- VisualizeDesign(sampleData = sampleData %>% dplyr::select(genotype),
-                         designFormula = NULL,
-                         designMatrix = model.matrix(
-                           ~0 + genotype,
-                           data = sampleData))$sampledata
+  res0 <- VisualizeDesign(sampleData = sampleData %>% dplyr::select(genotype),
+                          designFormula = NULL,
+                          designMatrix = model.matrix(
+                            ~0 + genotype,
+                            data = sampleData))
+  res <- res0$sampledata
 
+  expect_equal(res0$totnbrrows, 2L)
+  expect_equal(nrow(res0$designmatrix), 8L)
+  expect_equal(ncol(res0$designmatrix), 2L)
+  expect_equivalent(res0$designmatrix[, "genotypeA"], rep(c(1L, 0L), each = 4))
+  expect_equivalent(res0$designmatrix[, "genotypeB"], rep(c(0L, 1L), each = 4))
   expect_equal(res$value[res$genotype == "A"], "genotypeA")
   expect_equal(res$value[res$genotype == "B"], "genotypeB")
   expect_equal(nrow(res), 2L)
   expect_equal(colnames(res), c("genotype", "value", "nSamples"))
 
-  res <- VisualizeDesign(sampleData = sampleData,
-                         designFormula = NULL,
-                         designMatrix = model.matrix(
-                           ~0 + genotype + treatment,
-                           data = sampleData))$sampledata
+  res0 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = NULL,
+                          designMatrix = model.matrix(
+                            ~0 + genotype + treatment,
+                            data = sampleData))
+  res <- res0$sampledata
 
+  expect_equal(res0$totnbrrows, 2L)
+  expect_equal(nrow(res0$designmatrix), 8L)
+  expect_equal(ncol(res0$designmatrix), 3L)
+  expect_equivalent(res0$designmatrix[, "genotypeA"], rep(c(1L, 0L), each = 4))
+  expect_equivalent(res0$designmatrix[, "genotypeB"], rep(c(0L, 1L), each = 4))
+  expect_equivalent(res0$designmatrix[, "treatmenttrt"], rep(c(1L, 0L), 4))
   expect_equal(res$value[res$genotype == "A" & res$treatment == "trt"],
                "genotypeA + treatmenttrt")
   expect_equal(res$value[res$genotype == "A" & res$treatment == "ctrl"],
@@ -357,4 +409,48 @@ test_that("VisualizeDesign works with design matrix input", {
                "genotypeB + treatmenttrt")
   expect_equal(res$value[res$genotype == "B" & res$treatment == "ctrl"],
                "genotypeB")
+})
+
+test_that("VisualizeDesign works with three predictors", {
+  sampleData <- data.frame(
+    genotype = rep(c("A", "B"), each = 4),
+    treatment = rep(c("trt", "ctrl"), 4),
+    pred3 = rep(rep(paste0("C", 1:2), each = 2), 2),
+    stringsAsFactors = FALSE
+  )
+
+  res0 <- VisualizeDesign(sampleData = sampleData,
+                          designFormula = ~genotype + treatment + pred3)
+  res <- res0$sampledata
+
+  expect_equal(res0$totnbrrows, 4L)
+  expect_equal(nrow(res0$designmatrix), 8L)
+  expect_equal(ncol(res0$designmatrix), 4L)
+  expect_equivalent(res0$designmatrix[, "(Intercept)"], rep(1L, 8L))
+  expect_equivalent(res0$designmatrix[, "genotypeB"],
+                    as.integer(sampleData$genotype == "B"))
+  expect_equivalent(res0$designmatrix[, "treatmenttrt"],
+                    as.integer(sampleData$treatment == "trt"))
+  expect_equivalent(res0$designmatrix[, "pred3C2"],
+                    as.integer(sampleData$pred3 == "C2"))
+
+  expect_equal(res$value[res$genotype == "A" & res$treatment == "ctrl" &
+                           res$pred3 == "C1"], "(Intercept)")
+  expect_equal(res$value[res$genotype == "A" & res$treatment == "trt" &
+                           res$pred3 == "C1"], "(Intercept) + treatmenttrt")
+  expect_equal(res$value[res$genotype == "A" & res$treatment == "ctrl" &
+                           res$pred3 == "C2"], "(Intercept) + pred3C2")
+  expect_equal(res$value[res$genotype == "A" & res$treatment == "trt" &
+                           res$pred3 == "C2"], "(Intercept) + treatmenttrt + pred3C2")
+  expect_equal(res$value[res$genotype == "B" & res$treatment == "ctrl" &
+                           res$pred3 == "C1"], "(Intercept) + genotypeB")
+  expect_equal(res$value[res$genotype == "B" & res$treatment == "trt" &
+                           res$pred3 == "C1"], "(Intercept) + genotypeB + treatmenttrt")
+  expect_equal(res$value[res$genotype == "B" & res$treatment == "ctrl" &
+                           res$pred3 == "C2"], "(Intercept) + genotypeB + pred3C2")
+  expect_equal(res$value[res$genotype == "B" & res$treatment == "trt" &
+                           res$pred3 == "C2"], "(Intercept) + genotypeB + treatmenttrt + pred3C2")
+
+  expect_equal(nrow(res), 8L)
+  expect_equal(colnames(res), c("genotype", "treatment", "pred3", "value", "nSamples"))
 })

@@ -68,3 +68,13 @@ test_that(".IsValidFormula works as expected", {
     "~genotype", sampleData
   ))
 })
+
+test_that(".CheckNumericArguments works as expected", {
+  expect_true(ExploreModelMatrix:::.CheckNumericArguments(1))
+  expect_true(ExploreModelMatrix:::.CheckNumericArguments(1, 2))
+  expect_true(ExploreModelMatrix:::.CheckNumericArguments(1, pi))
+  expect_true(ExploreModelMatrix:::.CheckNumericArguments("1"))
+  expect_false(ExploreModelMatrix:::.CheckNumericArguments("str"))
+  expect_false(ExploreModelMatrix:::.CheckNumericArguments(0, "str"))
+  expect_true(ExploreModelMatrix:::.CheckNumericArguments(1, TRUE))
+})

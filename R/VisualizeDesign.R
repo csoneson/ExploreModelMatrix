@@ -49,6 +49,8 @@
 #' \item \code{cooccurrenceplots}: A list of plots, displaying the
 #' co-occurrence pattern for the predictors (i.e., the number of observations
 #' for each combination of predictor values)
+#' \item \code{totnbrrows}: The total number of "rows" in the list of plots
+#' of fiitted values. Useful for deciding the required size of the plot canvas.
 #' }
 #'
 #' @examples
@@ -58,7 +60,7 @@
 #'   designFormula = ~genotype + treatment
 #' )
 #'
-#' @importFrom dplyr select distinct mutate mutate_all n group_by_at
+#' @importFrom dplyr select distinct mutate mutate_all n group_by_at all_of
 #' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip aes element_text
@@ -156,7 +158,7 @@ VisualizeDesign <- function(sampleData, designFormula,
       stop("Not all terms in the design formula can be generated from ",
            "the column names of the sample data")
     }
-    sampleData <- sampleData %>% dplyr::select(terms)
+    sampleData <- sampleData %>% dplyr::select(dplyr::all_of(terms))
   } else {
     ## If we're only given a design matrix, assume that all columns of
     ## sampleData are relevant
@@ -235,7 +237,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## Convert all columns to factors for plotting
   ## ----------------------------------------------------------------------- ##
   plot_data <- plot_data %>%
-    dplyr::mutate_at(dplyr::vars(-nSamples), as.factor)
+    dplyr::mutate_at(dplyr::vars(-nSamples, -value), as.factor)
 
   ## ----------------------------------------------------------------------- ##
   ## Add value of split terms (to use for plot titles)
@@ -276,6 +278,18 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   ## Create plot(s)
   ## ----------------------------------------------------------------------- ##
+  ## First, get the total number of "rows" in the final plot.
+  ## Will be used to determine the size of the panel.
+  if (flipCoordFitted & length(plot_terms) == 1) {
+    totnbrrows <- length(unique(plot_data$groupby))
+  } else if (flipCoordFitted) {
+    totnbrrows <- length(unique(plot_data$groupby)) *
+      length(unique(plot_data[[plot_terms[2]]]))
+  } else {
+    totnbrrows <- length(unique(plot_data$groupby)) *
+      length(unique(plot_data[[plot_terms[1]]]))
+  }
+
   ggp <- lapply(split(
     plot_data, f = plot_data$groupby),
     function(w) {
@@ -339,7 +353,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ggcoocc <- lapply(split(
     plot_data, f = plot_data$groupby),
     function(w) {
-      w <- w %>% dplyr::select(keepcols) %>% dplyr::distinct()
+      w <- w %>% dplyr::select(dplyr::all_of(keepcols)) %>% dplyr::distinct()
       gp <- ggplot2::ggplot(
         w,
         ggplot2::aes_string(
@@ -384,7 +398,7 @@ VisualizeDesign <- function(sampleData, designFormula,
   ## ----------------------------------------------------------------------- ##
   list(sampledata = sampleData, plotlist = ggp, designmatrix = mm,
        pseudoinverse = psinverse, vifs = vifs, colors = colors,
-       cooccurrenceplots = ggcoocc)
+       cooccurrenceplots = ggcoocc, totnbrrows = totnbrrows)
 }
 
 #' Split a string into multiple lines if it's longer than a certain length
