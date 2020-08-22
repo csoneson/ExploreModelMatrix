@@ -26,7 +26,7 @@ Description: Given a sample data table and a design formula,
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: 
-    shiny,
+    shiny (>= 1.5.0),
     shinydashboard,
     DT,
     cowplot,
