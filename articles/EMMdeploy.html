@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -82,13 +82,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="EMMdeploy_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Deploying ExploreModelMatrix on a Shiny Server</h1>
                         <h4 class="author">Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B Stadler</h4>
             
-            <h4 class="date">2020-06-14</h4>
+            <h4 class="date">2020-08-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/csoneson/ExploreModelMatrix/blob/master/vignettes/EMMdeploy.Rmd"><code>vignettes/EMMdeploy.Rmd</code></a></small>
       <div class="hidden name"><code>EMMdeploy.Rmd</code></div>
@@ -139,11 +139,13 @@ sudo su - -c "R -e \"BiocManager::install('remotes')\""
 # and then ExploreModelMatrix
 sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""</code></pre>
 <p>Keep in mind that if you are running the server as root, you could simply open R in the terminal and install the required packages with</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co">## To be done once</span>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="co">## To be done once</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)
-<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"ExploreModelMatrix"</span>)
+<span class="kw">BiocManager</span>::<span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"ExploreModelMatrix"</span>)
 <span class="co">## For the devel version on GitHub</span>
-<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"csoneson/ExploreModelMatrix"</span>)</pre></body></html></div>
+<span class="kw">BiocManager</span>::<span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"csoneson/ExploreModelMatrix"</span>)
+</pre></div>
 </div>
 <div id="setup-exploremodelmatrix-on-the-server" class="section level3">
 <h3 class="hasAnchor">
@@ -152,7 +154,7 @@ sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""</cod
 <ul>
 <li>in <code>/srv/shiny-server</code>, create a folder (e.g. via <code>mkdir</code>) named <code>ExploreModelMatrix</code>, and create a file in there called <code>app.R</code>. Edit its content (e.g. with <code>vi</code>, <code>nano</code>, or any other editor), copy-pasting the following lines:</li>
 </ul>
-<pre><code><a href="https://rdrr.io/pkg/ExploreModelMatrix/man">library("ExploreModelMatrix")
+<pre><code><a href="https://github.com/csoneson/ExploreModelMatrix">library("ExploreModelMatrix")
 ExploreModelMatrix()</a></code></pre>
 <ul>
 <li>you need to edit <code>/etc/shiny-server/shiny-server.conf</code>. To do this, again use any text editor (e.g. <code>vi</code>), and add the following lines</li>
@@ -207,10 +209,11 @@ ExploreModelMatrix()</a></code></pre>
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h1>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
-<span class="co">#&gt; R version 4.0.0 (2020-04-24)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
+<span class="co">#&gt; R version 4.0.2 (2020-06-22)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span>
-<span class="co">#&gt; Running under: macOS Catalina 10.15.5</span>
+<span class="co">#&gt; Running under: macOS Catalina 10.15.6</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
 <span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib</span>
@@ -223,29 +226,31 @@ ExploreModelMatrix()</a></code></pre>
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] ExploreModelMatrix_1.1.3</span>
+<span class="co">#&gt; [1] ExploreModelMatrix_1.1.4</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] Rcpp_1.0.4.6         later_1.1.0.1        compiler_4.0.0      </span>
-<span class="co">#&gt;  [4] pillar_1.4.4         rintrojs_0.2.2       tools_4.0.0         </span>
-<span class="co">#&gt;  [7] digest_0.6.25        jsonlite_1.6.1       evaluate_0.14       </span>
-<span class="co">#&gt; [10] memoise_1.1.0        lifecycle_0.2.0      tibble_3.0.1        </span>
-<span class="co">#&gt; [13] gtable_0.3.0         pkgconfig_2.0.3      rlang_0.4.6         </span>
-<span class="co">#&gt; [16] shiny_1.4.0.2        yaml_2.2.1           parallel_4.0.0      </span>
-<span class="co">#&gt; [19] pkgdown_1.5.1.9000   xfun_0.14            fastmap_1.0.1       </span>
-<span class="co">#&gt; [22] dplyr_1.0.0          stringr_1.4.0        knitr_1.28          </span>
-<span class="co">#&gt; [25] generics_0.0.2       vctrs_0.3.1          desc_1.2.0          </span>
-<span class="co">#&gt; [28] fs_1.4.1             S4Vectors_0.27.12    htmlwidgets_1.5.1   </span>
-<span class="co">#&gt; [31] shinydashboard_0.7.1 tidyselect_1.1.0     stats4_4.0.0        </span>
-<span class="co">#&gt; [34] rprojroot_1.3-2      DT_0.13              grid_4.0.0          </span>
-<span class="co">#&gt; [37] cowplot_1.0.0        glue_1.4.1           R6_2.4.1            </span>
-<span class="co">#&gt; [40] rmarkdown_2.2        limma_3.45.7         tidyr_1.1.0         </span>
-<span class="co">#&gt; [43] purrr_0.3.4          ggplot2_3.3.1        magrittr_1.5        </span>
-<span class="co">#&gt; [46] promises_1.1.1       backports_1.1.7      scales_1.1.1        </span>
-<span class="co">#&gt; [49] htmltools_0.4.0      ellipsis_0.3.1       MASS_7.3-51.5       </span>
-<span class="co">#&gt; [52] BiocGenerics_0.35.4  assertthat_0.2.1     xtable_1.8-4        </span>
-<span class="co">#&gt; [55] mime_0.9             colorspace_1.4-1     httpuv_1.5.4        </span>
-<span class="co">#&gt; [58] stringi_1.4.6        munsell_0.5.0        crayon_1.3.4</span></pre></body></html></div>
+<span class="co">#&gt;  [1] Rcpp_1.0.5           later_1.1.0.1        compiler_4.0.2      </span>
+<span class="co">#&gt;  [4] pillar_1.4.6         shinyjs_1.1          rintrojs_0.2.2      </span>
+<span class="co">#&gt;  [7] tools_4.0.2          digest_0.6.25        jsonlite_1.7.0      </span>
+<span class="co">#&gt; [10] evaluate_0.14        memoise_1.1.0        lifecycle_0.2.0     </span>
+<span class="co">#&gt; [13] tibble_3.0.3         gtable_0.3.0         pkgconfig_2.0.3     </span>
+<span class="co">#&gt; [16] rlang_0.4.7          shiny_1.5.0          yaml_2.2.1          </span>
+<span class="co">#&gt; [19] parallel_4.0.2       pkgdown_1.5.1.9000   xfun_0.16           </span>
+<span class="co">#&gt; [22] fastmap_1.0.1        stringr_1.4.0        dplyr_1.0.2         </span>
+<span class="co">#&gt; [25] knitr_1.29           generics_0.0.2       desc_1.2.0          </span>
+<span class="co">#&gt; [28] fs_1.5.0             S4Vectors_0.27.12    htmlwidgets_1.5.1   </span>
+<span class="co">#&gt; [31] vctrs_0.3.2          shinydashboard_0.7.1 tidyselect_1.1.0    </span>
+<span class="co">#&gt; [34] stats4_4.0.2         rprojroot_1.3-2      DT_0.15             </span>
+<span class="co">#&gt; [37] grid_4.0.2           cowplot_1.0.0        glue_1.4.1          </span>
+<span class="co">#&gt; [40] R6_2.4.1             rmarkdown_2.3        limma_3.45.10       </span>
+<span class="co">#&gt; [43] tidyr_1.1.1          purrr_0.3.4          ggplot2_3.3.2       </span>
+<span class="co">#&gt; [46] magrittr_1.5         promises_1.1.1       backports_1.1.8     </span>
+<span class="co">#&gt; [49] scales_1.1.1         htmltools_0.5.0      ellipsis_0.3.1      </span>
+<span class="co">#&gt; [52] MASS_7.3-51.6        BiocGenerics_0.35.4  assertthat_0.2.1    </span>
+<span class="co">#&gt; [55] xtable_1.8-4         mime_0.9             colorspace_1.4-1    </span>
+<span class="co">#&gt; [58] httpuv_1.5.4         stringi_1.4.6        munsell_0.5.0       </span>
+<span class="co">#&gt; [61] crayon_1.3.4</span>
+</pre></div>
 </div>
   </div>
 
