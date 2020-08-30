@@ -773,7 +773,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                  "arguments are specified as numeric values")
         ),
         shiny::need(
-          .CheckNumericArguments(input$plotheight_pinv),
+          .CheckNumericArguments(input$plotheight_pinv) &&
+            !is.null(input$plotheight_pinv),
           paste0("Please provide a valid plot height")
         )
       )
@@ -849,7 +850,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                  "arguments are specified as numeric values")
         ),
         shiny::need(
-          .CheckNumericArguments(input$plotheight_corr),
+          .CheckNumericArguments(input$plotheight_corr) &&
+            !is.null(input$plotheight_corr),
           paste0("Please provide a valid plot height")
         )
       )
@@ -1059,7 +1061,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$fitted_values_plot <- shiny::renderUI({
       shiny::validate(
         shiny::need(
-          .CheckNumericArguments(input$plotheight_fitted),
+          .CheckNumericArguments(input$plotheight_fitted) &&
+            !is.null(input$plotheight_fitted),
           paste0("Please provide a valid plot height")
         )
       )
@@ -1089,7 +1092,8 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
     output$cooccurrence_matrix <- shiny::renderUI({
       shiny::validate(
         shiny::need(
-          .CheckNumericArguments(input$plotheight_coocc),
+          .CheckNumericArguments(input$plotheight_coocc) &&
+            !is.null(input$plotheight_coocc),
           paste0("Please provide a valid plot height")
         )
       )
