@@ -75,7 +75,7 @@ can also be used directly if interactivity is not required." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -245,7 +245,8 @@ of fiitted values. Useful for deciding the required size of the plot canvas.</p>
   sampleData = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(genotype = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>), each = <span class='fl'>4</span>),
                           treatment = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"treated"</span>, <span class='st'>"untreated"</span>), <span class='fl'>4</span>)),
   designFormula = <span class='op'>~</span><span class='kw'>genotype</span> <span class='op'>+</span> <span class='kw'>treatment</span>
-)</div><div class='output co'>#&gt; $sampledata
+)
+</div><div class='output co'>#&gt; $sampledata
 #&gt;   genotype treatment                                        value nSamples
 #&gt; 1        A   treated                                  (Intercept)        2
 #&gt; 2        A untreated             (Intercept) + treatmentuntreated        2
@@ -286,7 +287,8 @@ of fiitted values. Useful for deciding the required size of the plot canvas.</p>
 #&gt; 
 #&gt; $totnbrrows
 #&gt; [1] 2
-#&gt; </div><div class='input'></div></pre>
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

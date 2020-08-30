@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@
       <h1 data-toc-skip>Interactive exploration of design matrices with ExploreModelMatrix</h1>
                         <h4 class="author">Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B Stadler</h4>
             
-            <h4 class="date">2020-08-22</h4>
+            <h4 class="date">2020-08-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/csoneson/ExploreModelMatrix/blob/master/vignettes/ExploreModelMatrix.Rmd"><code>vignettes/ExploreModelMatrix.Rmd</code></a></small>
       <div class="hidden name"><code>ExploreModelMatrix.Rmd</code></div>
@@ -270,30 +270,31 @@
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] ExploreModelMatrix_1.1.4</span>
+<span class="co">#&gt; [1] ExploreModelMatrix_1.1.5</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] Rcpp_1.0.5           later_1.1.0.1        compiler_4.0.2      </span>
-<span class="co">#&gt;  [4] pillar_1.4.6         shinyjs_1.1          rintrojs_0.2.2      </span>
-<span class="co">#&gt;  [7] tools_4.0.2          digest_0.6.25        jsonlite_1.7.0      </span>
-<span class="co">#&gt; [10] evaluate_0.14        memoise_1.1.0        lifecycle_0.2.0     </span>
-<span class="co">#&gt; [13] tibble_3.0.3         gtable_0.3.0         pkgconfig_2.0.3     </span>
-<span class="co">#&gt; [16] rlang_0.4.7          shiny_1.5.0          crosstalk_1.1.0.1   </span>
-<span class="co">#&gt; [19] yaml_2.2.1           parallel_4.0.2       pkgdown_1.5.1.9000  </span>
-<span class="co">#&gt; [22] xfun_0.16            fastmap_1.0.1        stringr_1.4.0       </span>
-<span class="co">#&gt; [25] dplyr_1.0.2          knitr_1.29           generics_0.0.2      </span>
-<span class="co">#&gt; [28] desc_1.2.0           fs_1.5.0             S4Vectors_0.27.12   </span>
-<span class="co">#&gt; [31] htmlwidgets_1.5.1    vctrs_0.3.2          shinydashboard_0.7.1</span>
-<span class="co">#&gt; [34] tidyselect_1.1.0     stats4_4.0.2         rprojroot_1.3-2     </span>
-<span class="co">#&gt; [37] DT_0.15              grid_4.0.2           cowplot_1.0.0       </span>
-<span class="co">#&gt; [40] glue_1.4.1           R6_2.4.1             rmarkdown_2.3       </span>
-<span class="co">#&gt; [43] limma_3.45.10        farver_2.0.3         tidyr_1.1.1         </span>
-<span class="co">#&gt; [46] purrr_0.3.4          ggplot2_3.3.2        magrittr_1.5        </span>
-<span class="co">#&gt; [49] promises_1.1.1       backports_1.1.8      scales_1.1.1        </span>
-<span class="co">#&gt; [52] htmltools_0.5.0      ellipsis_0.3.1       MASS_7.3-51.6       </span>
-<span class="co">#&gt; [55] BiocGenerics_0.35.4  assertthat_0.2.1     xtable_1.8-4        </span>
-<span class="co">#&gt; [58] mime_0.9             colorspace_1.4-1     httpuv_1.5.4        </span>
-<span class="co">#&gt; [61] stringi_1.4.6        munsell_0.5.0        crayon_1.3.4</span>
+<span class="co">#&gt;  [1] tidyselect_1.1.0     xfun_0.16            shinyjs_1.1         </span>
+<span class="co">#&gt;  [4] purrr_0.3.4          colorspace_1.4-1     vctrs_0.3.4         </span>
+<span class="co">#&gt;  [7] generics_0.0.2       htmltools_0.5.0      stats4_4.0.2        </span>
+<span class="co">#&gt; [10] yaml_2.2.1           rintrojs_0.2.2       rlang_0.4.7         </span>
+<span class="co">#&gt; [13] pkgdown_1.5.1.9000   pillar_1.4.6         later_1.1.0.1       </span>
+<span class="co">#&gt; [16] glue_1.4.2           BiocGenerics_0.35.4  lifecycle_0.2.0     </span>
+<span class="co">#&gt; [19] stringr_1.4.0        munsell_0.5.0        gtable_0.3.0        </span>
+<span class="co">#&gt; [22] ragg_0.3.1           htmlwidgets_1.5.1    memoise_1.1.0       </span>
+<span class="co">#&gt; [25] evaluate_0.14        knitr_1.29           fastmap_1.0.1       </span>
+<span class="co">#&gt; [28] crosstalk_1.1.0.1    httpuv_1.5.4         parallel_4.0.2      </span>
+<span class="co">#&gt; [31] Rcpp_1.0.5           xtable_1.8-4         scales_1.1.1        </span>
+<span class="co">#&gt; [34] backports_1.1.9      promises_1.1.1       DT_0.15             </span>
+<span class="co">#&gt; [37] limma_3.45.10        S4Vectors_0.27.12    desc_1.2.0          </span>
+<span class="co">#&gt; [40] jsonlite_1.7.0       mime_0.9             farver_2.0.3        </span>
+<span class="co">#&gt; [43] systemfonts_0.2.3    fs_1.5.0             ggplot2_3.3.2       </span>
+<span class="co">#&gt; [46] digest_0.6.25        stringi_1.4.6        dplyr_1.0.2         </span>
+<span class="co">#&gt; [49] shiny_1.5.0          cowplot_1.0.0        grid_4.0.2          </span>
+<span class="co">#&gt; [52] rprojroot_1.3-2      tools_4.0.2          magrittr_1.5        </span>
+<span class="co">#&gt; [55] tibble_3.0.3         crayon_1.3.4         tidyr_1.1.2         </span>
+<span class="co">#&gt; [58] pkgconfig_2.0.3      MASS_7.3-51.6        ellipsis_0.3.1      </span>
+<span class="co">#&gt; [61] shinydashboard_0.7.1 assertthat_0.2.1     rmarkdown_2.3       </span>
+<span class="co">#&gt; [64] R6_2.4.1             compiler_4.0.2</span>
 </pre></div>
 </div>
   </div>
