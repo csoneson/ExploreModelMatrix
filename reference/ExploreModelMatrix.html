@@ -74,7 +74,7 @@ matrix graphically in an interactive application." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.6</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@ resulting design
 matrix graphically in an interactive application.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ExploreModelMatrix</span>(sampleData = <span class='kw'>NULL</span>, designFormula = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>ExploreModelMatrix</span><span class='op'>(</span>sampleData <span class='op'>=</span> <span class='cn'>NULL</span>, designFormula <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,12 +168,12 @@ the terms must be present as columns in <code>sampleData</code>. If set to
   Michael B Stadler</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>app</span> <span class='op'>&lt;-</span> <span class='fu'>ExploreModelMatrix</span>(
-  sampleData = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(genotype = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>), each = <span class='fl'>4</span>),
-                          treatment = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"treated"</span>, <span class='st'>"untreated"</span>), <span class='fl'>4</span>)),
-  designFormula = <span class='op'>~</span><span class='kw'>genotype</span> <span class='op'>+</span> <span class='kw'>treatment</span>
-)
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/runApp.html'>runApp</a></span>(<span class='kw'>app</span>)
+    <pre class="examples"><div class='input'><span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'>ExploreModelMatrix</span><span class='op'>(</span>
+  sampleData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>genotype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,
+                          treatment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"treated"</span>, <span class='st'>"untreated"</span><span class='op'>)</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>,
+  designFormula <span class='op'>=</span> <span class='op'>~</span><span class='va'>genotype</span> <span class='op'>+</span> <span class='va'>treatment</span>
+<span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/runApp.html'>runApp</a></span><span class='op'>(</span><span class='va'>app</span><span class='op'>)</span>
 
 </div></pre>
   </div>
@@ -191,7 +191,7 @@ the terms must be present as columns in <code>sampleData</code>. If set to
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
