@@ -1,0 +1,17 @@
+bibentry(
+    bibtype = "Article",
+    title = "ExploreModelMatrix: Interactive exploration for improved understanding of design matrices and linear models in R",
+    author = c(
+        person("Charlotte", "Soneson"),
+        person("Federico", "Marini"),
+        person("Florian", "Geier"),
+        person("Michael I", "Love"),
+        person("Michael B", "Stadler")),
+    publisher = "F1000 Research, Ltd.",
+    journal = "F1000Research",
+    year = "2020",
+    month = "Sep",
+    volume = "9",
+    pages = "512",
+    doi = "10.12688/f1000research.24187.2"
+)
