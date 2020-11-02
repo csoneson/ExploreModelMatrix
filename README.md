@@ -1,7 +1,6 @@
 <img src="inst/www/emm_logo.png" align="right" alt="" width="120" />
 
 # ExploreModelMatrix
-[![Travis CI build status](https://travis-ci.com/csoneson/ExploreModelMatrix.svg?branch=master)](https://travis-ci.com/csoneson/ExploreModelMatrix)
 [![Codecov.io coverage status](https://codecov.io/github/csoneson/ExploreModelMatrix/coverage.svg?branch=master)](https://codecov.io/github/csoneson/ExploreModelMatrix)
 [![R build status](https://github.com/csoneson/ExploreModelMatrix/workflows/R-CMD-check/badge.svg)](https://github.com/csoneson/ExploreModelMatrix/actions)
 
