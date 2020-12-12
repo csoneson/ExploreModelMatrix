@@ -262,7 +262,11 @@ test_that("VisualizeDesign works with intercept", {
   res2 <- VisualizeDesign(sampleData = sampleData,
                           designFormula = ~genotype + treatment,
                           dropCols = c())
-  expect_equal(res1, res2)
+  for (nm in names(res1)) {
+    if (!(nm %in% c("plotlist", "cooccurrenceplots"))) {
+      expect_equal(res1[[nm]], res2[[nm]])
+    }
+  }
 })
 
 test_that("VisualizeDesign works without intercept", {
@@ -312,7 +316,11 @@ test_that("VisualizeDesign works without intercept", {
   res2 <- VisualizeDesign(sampleData = sampleData,
                           designFormula = ~0 + genotype + treatment,
                           dropCols = c())
-  expect_equal(res1, res2)
+  for (nm in names(res1)) {
+    if (!(nm %in% c("plotlist", "cooccurrenceplots"))) {
+      expect_equal(res1[[nm]], res2[[nm]])
+    }
+  }
 })
 
 test_that("VisualizeDesign works with DataFrame input", {
@@ -348,7 +356,11 @@ test_that("VisualizeDesign works with DataFrame input", {
   res2 <- VisualizeDesign(sampleData = sampleData,
                           designFormula = ~0 + genotype + treatment,
                           dropCols = c())
-  expect_equal(res1, res2)
+  for (nm in names(res1)) {
+    if (!(nm %in% c("plotlist", "cooccurrenceplots"))) {
+      expect_equal(res1[[nm]], res2[[nm]])
+    }
+  }
 
   ## Check that flipCoordFitted = TRUE/FALSE give same results except for the plot
   res1 <- VisualizeDesign(sampleData = sampleData,
@@ -358,7 +370,7 @@ test_that("VisualizeDesign works with DataFrame input", {
                           designFormula = ~0 + genotype + treatment,
                           flipCoordFitted = FALSE)
   for (nm in names(res1)) {
-    if (nm != "plotlist") {
+    if (!(nm %in% c("plotlist", "cooccurrenceplots"))) {
       expect_equal(res1[[nm]], res2[[nm]])
     }
   }
