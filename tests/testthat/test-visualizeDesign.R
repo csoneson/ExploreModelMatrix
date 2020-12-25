@@ -466,3 +466,21 @@ test_that("VisualizeDesign works with three predictors", {
   expect_equal(nrow(res), 8L)
   expect_equal(colnames(res), c("genotype", "treatment", "pred3", "value", "nSamples"))
 })
+
+test_that(".AddNewLine works", {
+  st <- "abcdefgh+ijklmnopqrst+abstkdlsi"
+  expect_equal(.AddNewLine(st, lineWidth = 5),
+               "abcdefgh+\nijklmnopqrst+\nabstkdlsi")
+  expect_equal(.AddNewLine(st, lineWidth = 10),
+               "abcdefgh+\nijklmnopqrst+\nabstkdlsi")
+  expect_equal(.AddNewLine(st, lineWidth = 20),
+               "abcdefgh+ijklmnopqrst+\nabstkdlsi")
+
+  st <- "abc+defgh+ijklmn+opqrst+abstkdlsi"
+  expect_equal(.AddNewLine(st, lineWidth = 20),
+               "abc+defgh+ijklmn+opqrst+\nabstkdlsi")
+
+  st <- "abc defgh+ijklmnopqrst+abstkdlsi"
+  expect_equal(.AddNewLine(st, lineWidth = 20),
+               "abc defgh+\nijklmnopqrst+\nabstkdlsi")
+})
