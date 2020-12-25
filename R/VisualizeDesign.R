@@ -415,9 +415,21 @@ VisualizeDesign <- function(sampleData, designFormula,
 .AddNewLine <- function(st, lineWidth) {
   if (nchar(st) > lineWidth) {
     st0 <- strsplit(st, "\\+")[[1]]
-    cs <- cumsum(vapply(st0, nchar, 0))
-    csgr <- cs %/% lineWidth
-    st1 <- vapply(split(st0, csgr),
+    nchs <- vapply(st0, nchar, 0)
+    cs <- cumsum(nchs)
+    grp <- rep(0, length(st0))
+    curtot <- 0
+    curgrp <- 0
+    for (i in seq_along(st0)) {
+      if (curtot + nchs[i] > lineWidth) {
+        curgrp <- curgrp + 1
+        curtot <- nchs[i]
+      } else {
+        curtot <- curtot + nchs[i]
+      }
+      grp[i] <- curgrp
+    }
+    st1 <- vapply(split(st0, grp),
                   function(x) paste(x, collapse = "+"), "")
     st <- paste(st1, collapse = "+\n")
   }
