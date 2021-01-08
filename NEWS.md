@@ -1,3 +1,6 @@
+# Changes in version 1.3.2
+* Enable MathJax in tour
+
 # Changes in version 1.1.4
 * Updated interface to make better use of screen space
 * Expanded explanation of statistical concepts
