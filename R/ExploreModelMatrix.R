@@ -33,7 +33,7 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
-#'   need validate span markdown HTML
+#'   need validate span markdown HTML withMathJax
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim packageVersion
 #' @importFrom cowplot plot_grid
@@ -132,6 +132,7 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       # Body definition -----------------------------------------------------
       body = shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
+        shiny::withMathJax(),
 
         ## Define output size and style of error messages
         shiny::tags$head(
@@ -1108,7 +1109,12 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
                                      package = "ExploreModelMatrix"),
                          sep = ";", stringsAsFactors = FALSE,
                          row.names = NULL, quote = "")
-      rintrojs::introjs(session, options = list(steps = tour))
+      rintrojs::introjs(session, options = list(steps = tour),
+                        events = list(
+                          onafterchange = I(
+                            'if (window.MathJax) {MathJax.Hub.Queue(["Typeset", MathJax.Hub])}'
+                          )
+                        ))
     })
 
     ## Define help buttons for each panel (displaying only the
