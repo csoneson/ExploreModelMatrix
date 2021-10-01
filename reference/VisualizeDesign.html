@@ -48,6 +48,8 @@ can also be used directly if interactivity is not required." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -59,9 +61,15 @@ can also be used directly if interactivity is not required." />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,7 +83,7 @@ can also be used directly if interactivity is not required." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
       </span>
     </div>
 
@@ -83,7 +91,7 @@ can also be used directly if interactivity is not required." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -112,7 +120,7 @@ can also be used directly if interactivity is not required." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/csoneson/ExploreModelMatrix">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -141,7 +149,7 @@ This function is called internally by <code><a href='ExploreModelMatrix.html'>Ex
 can also be used directly if interactivity is not required.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>VisualizeDesign</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>VisualizeDesign</span><span class='op'>(</span>
   <span class='va'>sampleData</span>,
   <span class='va'>designFormula</span>,
   flipCoordFitted <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -152,10 +160,10 @@ can also be used directly if interactivity is not required.</p>
   textSizeLabsCoocc <span class='op'>=</span> <span class='fl'>12</span>,
   lineWidthFitted <span class='op'>=</span> <span class='fl'>25</span>,
   addColorFitted <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  colorPaletteFitted <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/hue_pal.html'>hue_pal</a></span><span class='op'>(</span><span class='op'>)</span>,
+  colorPaletteFitted <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/hue_pal.html'>hue_pal</a></span><span class='op'>(</span><span class='op'>)</span>,
   dropCols <span class='op'>=</span> <span class='cn'>NULL</span>,
   designMatrix <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -241,54 +249,59 @@ of fiitted values. Useful for deciding the required size of the plot canvas.</p>
     <p>Charlotte Soneson</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>VisualizeDesign</span><span class='op'>(</span>
-  sampleData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>genotype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,
-                          treatment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"treated"</span>, <span class='st'>"untreated"</span><span class='op'>)</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>,
-  designFormula <span class='op'>=</span> <span class='op'>~</span><span class='va'>genotype</span> <span class='op'>+</span> <span class='va'>treatment</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; $sampledata
-#&gt;   genotype treatment                                        value nSamples
-#&gt; 1        A   treated                                  (Intercept)        2
-#&gt; 2        A untreated             (Intercept) + treatmentuntreated        2
-#&gt; 3        B   treated                      (Intercept) + genotypeB        2
-#&gt; 4        B untreated (Intercept) + genotypeB + treatmentuntreated        2
-#&gt; 
-#&gt; $plotlist
-#&gt; $plotlist[[1]]</div><div class='img'><img src='VisualizeDesign-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; 
-#&gt; $designmatrix
-#&gt;   (Intercept) genotypeB treatmentuntreated
-#&gt; 1           1         0                  0
-#&gt; 2           1         0                  1
-#&gt; 3           1         0                  0
-#&gt; 4           1         0                  1
-#&gt; 5           1         1                  0
-#&gt; 6           1         1                  1
-#&gt; 7           1         1                  0
-#&gt; 8           1         1                  1
-#&gt; 
-#&gt; $pseudoinverse
-#&gt;                         1      2      3      4      5      6      7      8
-#&gt; (Intercept)         0.375  0.125  0.375  0.125  0.125 -0.125  0.125 -0.125
-#&gt; genotypeB          -0.250 -0.250 -0.250 -0.250  0.250  0.250  0.250  0.250
-#&gt; treatmentuntreated -0.250  0.250 -0.250  0.250 -0.250  0.250 -0.250  0.250
-#&gt; 
-#&gt; $vifs
-#&gt;          coefficient vif
-#&gt; 1          genotypeB   1
-#&gt; 2 treatmentuntreated   1
-#&gt; 
-#&gt; $colors
-#&gt;        (Intercept) treatmentuntreated          genotypeB 
-#&gt;          "#F8766D"          "#00BA38"          "#619CFF" 
-#&gt; 
-#&gt; $cooccurrenceplots
-#&gt; $cooccurrenceplots[[1]]</div><div class='img'><img src='VisualizeDesign-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; 
-#&gt; $totnbrrows
-#&gt; [1] 2
-#&gt; </div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>VisualizeDesign</span><span class='op'>(</span></span>
+<span class='r-in'>  sampleData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>genotype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,</span>
+<span class='r-in'>                          treatment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"treated"</span>, <span class='st'>"untreated"</span><span class='op'>)</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  designFormula <span class='op'>=</span> <span class='op'>~</span><span class='va'>genotype</span> <span class='op'>+</span> <span class='va'>treatment</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $sampledata</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   genotype treatment                                        value nSamples</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        A   treated                                  (Intercept)        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        A untreated             (Intercept) + treatmentuntreated        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        B   treated                      (Intercept) + genotypeB        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4        B untreated (Intercept) + genotypeB + treatmentuntreated        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $plotlist</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $plotlist[[1]]</span>
+<span class='r-plt'><img src='VisualizeDesign-1.png' alt='' width='700' height='433' /></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $designmatrix</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   (Intercept) genotypeB treatmentuntreated</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1         0                  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1         0                  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1         0                  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1         0                  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1         1                  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6           1         1                  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7           1         1                  0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8           1         1                  1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $pseudoinverse</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                         1      2      3      4      5      6      7      8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept)         0.375  0.125  0.375  0.125  0.125 -0.125  0.125 -0.125</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> genotypeB          -0.250 -0.250 -0.250 -0.250  0.250  0.250  0.250  0.250</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> treatmentuntreated -0.250  0.250 -0.250  0.250 -0.250  0.250 -0.250  0.250</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $vifs</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          coefficient vif</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1          genotypeB   1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 treatmentuntreated   1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $colors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        (Intercept) treatmentuntreated          genotypeB </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          "#F8766D"          "#00BA38"          "#619CFF" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $cooccurrenceplots</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $cooccurrenceplots[[1]]</span>
+<span class='r-plt'><img src='VisualizeDesign-2.png' alt='' width='700' height='433' /></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $totnbrrows</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -300,11 +313,11 @@ of fiitted values. Useful for deciding the required size of the plot canvas.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://csoneson.github.io'>Charlotte Soneson</a>, <a href='https://federicomarini.github.io'>Federico Marini</a>, <a href='https://mikelove.github.io'>Michael Love</a>, Florian Geier, <a href='https://github.com/mbstadler'>Michael Stadler</a>.</p>
+  <p><p>Developed by <a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link">Federico Marini</a>, <a href="https://mikelove.github.io" class="external-link">Michael Love</a>, Florian Geier, <a href="https://github.com/mbstadler" class="external-link">Michael Stadler</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -312,6 +325,8 @@ of fiitted values. Useful for deciding the required size of the plot canvas.</p>
 
   
 
+
+  
 
   </body>
 </html>

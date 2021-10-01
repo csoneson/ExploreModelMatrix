@@ -47,6 +47,8 @@ matrix graphically in an interactive application." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -58,9 +60,15 @@ matrix graphically in an interactive application." />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -74,7 +82,7 @@ matrix graphically in an interactive application." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
       </span>
     </div>
 
@@ -82,7 +90,7 @@ matrix graphically in an interactive application." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -111,7 +119,7 @@ matrix graphically in an interactive application." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/csoneson/ExploreModelMatrix">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -139,7 +147,7 @@ resulting design
 matrix graphically in an interactive application.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ExploreModelMatrix</span><span class='op'>(</span>sampleData <span class='op'>=</span> <span class='cn'>NULL</span>, designFormula <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>ExploreModelMatrix</span><span class='op'>(</span>sampleData <span class='op'>=</span> <span class='cn'>NULL</span>, designFormula <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,14 +176,26 @@ the terms must be present as columns in <code>sampleData</code>. If set to
   Michael B Stadler</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'>ExploreModelMatrix</span><span class='op'>(</span>
-  sampleData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>genotype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,
-                          treatment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"treated"</span>, <span class='st'>"untreated"</span><span class='op'>)</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>,
-  designFormula <span class='op'>=</span> <span class='op'>~</span><span class='va'>genotype</span> <span class='op'>+</span> <span class='va'>treatment</span>
-<span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/runApp.html'>runApp</a></span><span class='op'>(</span><span class='va'>app</span><span class='op'>)</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'>ExploreModelMatrix</span><span class='op'>(</span></span>
+<span class='r-in'>  sampleData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>genotype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,</span>
+<span class='r-in'>                          treatment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"treated"</span>, <span class='st'>"untreated"</span><span class='op'>)</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  designFormula <span class='op'>=</span> <span class='op'>~</span><span class='va'>genotype</span> <span class='op'>+</span> <span class='va'>treatment</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> This Font Awesome icon ('warning') does not exist:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> * if providing a custom `html_dependency` these `name` checks can </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   be deactivated with `verify_fa = FALSE`</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> This Font Awesome icon ('') does not exist:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> * if providing a custom `html_dependency` these `name` checks can </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   be deactivated with `verify_fa = FALSE`</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The `name` provided ('hand-o-right') is deprecated in Font Awesome 5:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> * please consider using 'hand-point-right' or 'fas fa-hand-point-right' instead</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> * use the `verify_fa = FALSE` to deactivate these messages</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> This Font Awesome icon ('question-circle fa-1g') does not exist:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> * if providing a custom `html_dependency` these `name` checks can </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   be deactivated with `verify_fa = FALSE`</span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span><span class='op'>(</span><span class='va'>app</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -187,11 +207,11 @@ the terms must be present as columns in <code>sampleData</code>. If set to
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://csoneson.github.io'>Charlotte Soneson</a>, <a href='https://federicomarini.github.io'>Federico Marini</a>, <a href='https://mikelove.github.io'>Michael Love</a>, Florian Geier, <a href='https://github.com/mbstadler'>Michael Stadler</a>.</p>
+  <p><p>Developed by <a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link">Federico Marini</a>, <a href="https://mikelove.github.io" class="external-link">Michael Love</a>, Florian Geier, <a href="https://github.com/mbstadler" class="external-link">Michael Stadler</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -199,6 +219,8 @@ the terms must be present as columns in <code>sampleData</code>. If set to
 
   
 
+
+  
 
   </body>
 </html>

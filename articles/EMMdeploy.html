@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
       </span>
     </div>
 
@@ -39,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -67,8 +69,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/csoneson/ExploreModelMatrix">
-    <span class="fas fa-github fa-lg"></span>
+  <a href="https://github.com/csoneson/ExploreModelMatrix" class="external-link">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -86,11 +88,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Deploying ExploreModelMatrix on a Shiny Server</h1>
-                        <h4 class="author">Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B Stadler</h4>
+                        <h4 data-toc-skip class="author">Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B Stadler</h4>
             
-            <h4 class="date">2021-01-08</h4>
+            <h4 data-toc-skip class="date">2021-10-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/csoneson/ExploreModelMatrix/blob/master/vignettes/EMMdeploy.Rmd"><code>vignettes/EMMdeploy.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/csoneson/ExploreModelMatrix/blob/master/vignettes/EMMdeploy.Rmd" class="external-link"><code>vignettes/EMMdeploy.Rmd</code></a></small>
       <div class="hidden name"><code>EMMdeploy.Rmd</code></div>
 
     </div>
@@ -99,25 +101,25 @@
     
 <div id="why-deploying-exploremodelmatrix-on-a-shiny-server" class="section level1">
 <h1 class="hasAnchor">
-<a href="#why-deploying-exploremodelmatrix-on-a-shiny-server" class="anchor"></a>Why deploying <code>ExploreModelMatrix</code> on a Shiny server?</h1>
+<a href="#why-deploying-exploremodelmatrix-on-a-shiny-server" class="anchor" aria-hidden="true"></a>Why deploying <code>ExploreModelMatrix</code> on a Shiny server?</h1>
 <p>While the installation of <code>ExploreModelMatrix</code> locally is a relatively straightforward operation, sometimes you might require an instance of it running on a server, e.g. for teaching purposes, or to provide a working version of it because you or your collaborators are lacking admin rights.</p>
-<p>One possible solution would be to access the instance running at <a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>, which we provide also for demonstration purposes. Alternatively, you might need to deploy <code>ExploreModelMatrix</code> for internal use, or with a different set of examples/functionality. This vignette details the steps to do so - it might still require the intervention of your local IT service, and some degree of tech savvyness.</p>
+<p>One possible solution would be to access the instance running at <a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>, which we provide also for demonstration purposes. Alternatively, you might need to deploy <code>ExploreModelMatrix</code> for internal use, or with a different set of examples/functionality. This vignette details the steps to do so - it might still require the intervention of your local IT service, and some degree of tech savvyness.</p>
 </div>
 <div id="how-to-deploy-exploremodelmatrix" class="section level1">
 <h1 class="hasAnchor">
-<a href="#how-to-deploy-exploremodelmatrix" class="anchor"></a>How to deploy <code>ExploreModelMatrix</code>
+<a href="#how-to-deploy-exploremodelmatrix" class="anchor" aria-hidden="true"></a>How to deploy <code>ExploreModelMatrix</code>
 </h1>
 <div id="step-1-setting-up-the-shiny-server" class="section level2">
 <h2 class="hasAnchor">
-<a href="#step-1-setting-up-the-shiny-server" class="anchor"></a>Step 1: Setting up the Shiny Server</h2>
-<p>You should mainly refer to this excellent reference: <a href="http://docs.rstudio.com/shiny-server/" class="uri">http://docs.rstudio.com/shiny-server/</a>, the Administrator’s Guide beautifully written and maintained by the RStudio team.</p>
-<p>In the case of the instance linked above (<a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>), the deployment is on a Ubuntu-based server. If this is your case too, please go to <a href="https://docs.rstudio.com/shiny-server/#ubuntu-14.04" class="uri">https://docs.rstudio.com/shiny-server/#ubuntu-14.04</a></p>
-<p>If you are already familiar with Shiny Server, you can consider going directly here: <a href="http://docs.rstudio.com/shiny-server/#quick-start" class="uri">http://docs.rstudio.com/shiny-server/#quick-start</a></p>
-<p>Follow the indications in the main reference guide to see whether you have all packages installed, and visit the address which will refer to the address of your server (<a href="http://your.server.address:3838/sample-apps/hello/" class="uri">http://your.server.address:3838/sample-apps/hello/</a>).</p>
+<a href="#step-1-setting-up-the-shiny-server" class="anchor" aria-hidden="true"></a>Step 1: Setting up the Shiny Server</h2>
+<p>You should mainly refer to this excellent reference: <a href="http://docs.rstudio.com/shiny-server/" class="external-link uri">http://docs.rstudio.com/shiny-server/</a>, the Administrator’s Guide beautifully written and maintained by the RStudio team.</p>
+<p>In the case of the instance linked above (<a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>), the deployment is on a Ubuntu-based server. If this is your case too, please go to <a href="https://docs.rstudio.com/shiny-server/#ubuntu-14.04" class="external-link uri">https://docs.rstudio.com/shiny-server/#ubuntu-14.04</a></p>
+<p>If you are already familiar with Shiny Server, you can consider going directly here: <a href="http://docs.rstudio.com/shiny-server/#quick-start" class="external-link uri">http://docs.rstudio.com/shiny-server/#quick-start</a></p>
+<p>Follow the indications in the main reference guide to see whether you have all packages installed, and visit the address which will refer to the address of your server (<a href="http://your.server.address:3838/sample-apps/hello/" class="external-link uri">http://your.server.address:3838/sample-apps/hello/</a>).</p>
 </div>
 <div id="step-2-setup-exploremodelmatrix" class="section level2">
 <h2 class="hasAnchor">
-<a href="#step-2-setup-exploremodelmatrix" class="anchor"></a>Step 2: setup <code>ExploreModelMatrix</code>
+<a href="#step-2-setup-exploremodelmatrix" class="anchor" aria-hidden="true"></a>Step 2: setup <code>ExploreModelMatrix</code>
 </h2>
 <p>You need to:</p>
 <ul>
@@ -127,7 +129,7 @@
 </ul>
 <div id="installing-exploremodelmatrix" class="section level3">
 <h3 class="hasAnchor">
-<a href="#installing-exploremodelmatrix" class="anchor"></a>Installing <code>ExploreModelMatrix</code>
+<a href="#installing-exploremodelmatrix" class="anchor" aria-hidden="true"></a>Installing <code>ExploreModelMatrix</code>
 </h3>
 <p>You need first to install Bioconductor</p>
 <pre><code>sudo su - -c "R -e \"install.packages('BiocManager')\""</code></pre>
@@ -141,19 +143,19 @@ sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""</cod
 <p>Keep in mind that if you are running the server as root, you could simply open R in the terminal and install the required packages with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## To be done once</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"ExploreModelMatrix"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"ExploreModelMatrix"</span><span class="op">)</span>
 <span class="co">## For the devel version on GitHub</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"csoneson/ExploreModelMatrix"</span><span class="op">)</span></code></pre></div>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"csoneson/ExploreModelMatrix"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="setup-exploremodelmatrix-on-the-server" class="section level3">
 <h3 class="hasAnchor">
-<a href="#setup-exploremodelmatrix-on-the-server" class="anchor"></a>Setup <code>ExploreModelMatrix</code> on the server</h3>
+<a href="#setup-exploremodelmatrix-on-the-server" class="anchor" aria-hidden="true"></a>Setup <code>ExploreModelMatrix</code> on the server</h3>
 <p>You essentially need to do two things:</p>
 <ul>
 <li>in <code>/srv/shiny-server</code>, create a folder (e.g. via <code>mkdir</code>) named <code>ExploreModelMatrix</code>, and create a file in there called <code>app.R</code>. Edit its content (e.g. with <code>vi</code>, <code>nano</code>, or any other editor), copy-pasting the following lines:</li>
 </ul>
-<pre><code><a href="https://github.com/csoneson/ExploreModelMatrix">library("ExploreModelMatrix")
+<pre><code><a href="https://github.com/csoneson/ExploreModelMatrix" class="external-link">library("ExploreModelMatrix")
 ExploreModelMatrix()</a></code></pre>
 <ul>
 <li>you need to edit <code>/etc/shiny-server/shiny-server.conf</code>. To do this, again use any text editor (e.g. <code>vi</code>), and add the following lines</li>
@@ -184,13 +186,13 @@ ExploreModelMatrix()</a></code></pre>
   # ...
 }</code></pre>
 <p>You might need to restart the Shiny Server (<code>systemctl restart shiny-server</code> on Ubuntu). Then you should be good to go!</p>
-<p>Visit <a href="http://your.server.address:3838/ExploreModelMatrix" class="uri">http://your.server.address:3838/ExploreModelMatrix</a> for your personal running instance.</p>
+<p>Visit <a href="http://your.server.address:3838/ExploreModelMatrix" class="external-link uri">http://your.server.address:3838/ExploreModelMatrix</a> for your personal running instance.</p>
 </div>
 </div>
 <div id="exploremodelmatrix-at-the-imbei" class="section level2">
 <h2 class="hasAnchor">
-<a href="#exploremodelmatrix-at-the-imbei" class="anchor"></a><code>ExploreModelMatrix</code> at the IMBEI</h2>
-<p><a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a> is the address for the public instance of <code>ExploreModelMatrix</code> on the Shiny Server I manage at the Institute of Medical Biostatistics, Epidemiology and Informatics.</p>
+<a href="#exploremodelmatrix-at-the-imbei" class="anchor" aria-hidden="true"></a><code>ExploreModelMatrix</code> at the IMBEI</h2>
+<p><a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a> is the address for the public instance of <code>ExploreModelMatrix</code> on the Shiny Server I manage at the Institute of Medical Biostatistics, Epidemiology and Informatics.</p>
 <p>The relevant setup of that machine is the following (in case you are asking what specs you need):</p>
 <ul>
 <li>4 cores</li>
@@ -207,15 +209,15 @@ ExploreModelMatrix()</a></code></pre>
 </div>
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
-<a href="#session-info" class="anchor"></a>Session info</h1>
+<a href="#session-info" class="anchor" aria-hidden="true"></a>Session info</h1>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R Under development (unstable) (2021-01-07 r79806)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; R version 4.1.1 (2021-08-10)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span>
 <span class="co">#&gt; Running under: macOS Catalina 10.15.7</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
-<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib</span>
+<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib</span>
 <span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; locale:</span>
@@ -225,30 +227,32 @@ ExploreModelMatrix()</a></code></pre>
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] ExploreModelMatrix_1.3.2</span>
+<span class="co">#&gt; [1] ExploreModelMatrix_1.5.0</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] tidyselect_1.1.0     xfun_0.20            shinyjs_2.0.0       </span>
-<span class="co">#&gt;  [4] purrr_0.3.4          colorspace_2.0-0     vctrs_0.3.6         </span>
-<span class="co">#&gt;  [7] generics_0.1.0       htmltools_0.5.0      stats4_4.1.0        </span>
-<span class="co">#&gt; [10] yaml_2.2.1           rintrojs_0.2.2       rlang_0.4.10        </span>
-<span class="co">#&gt; [13] pkgdown_1.6.1.9000   pillar_1.4.7         later_1.1.0.1       </span>
-<span class="co">#&gt; [16] glue_1.4.2           BiocGenerics_0.37.0  lifecycle_0.2.0     </span>
-<span class="co">#&gt; [19] stringr_1.4.0        munsell_0.5.0        gtable_0.3.0        </span>
-<span class="co">#&gt; [22] ragg_0.4.0           htmlwidgets_1.5.3    memoise_1.1.0       </span>
-<span class="co">#&gt; [25] evaluate_0.14        knitr_1.30           fastmap_1.0.1       </span>
-<span class="co">#&gt; [28] httpuv_1.5.4         parallel_4.1.0       Rcpp_1.0.5          </span>
-<span class="co">#&gt; [31] xtable_1.8-4         scales_1.1.1         promises_1.1.1      </span>
-<span class="co">#&gt; [34] DT_0.17              limma_3.47.3         S4Vectors_0.29.6    </span>
-<span class="co">#&gt; [37] desc_1.2.0           jsonlite_1.7.2       mime_0.9            </span>
-<span class="co">#&gt; [40] systemfonts_0.3.2    fs_1.5.0             textshaping_0.2.1   </span>
-<span class="co">#&gt; [43] ggplot2_3.3.3        digest_0.6.27        stringi_1.5.3       </span>
-<span class="co">#&gt; [46] dplyr_1.0.2          shiny_1.5.0          cowplot_1.1.1       </span>
-<span class="co">#&gt; [49] grid_4.1.0           rprojroot_2.0.2      tools_4.1.0         </span>
-<span class="co">#&gt; [52] magrittr_2.0.1       tibble_3.0.4         tidyr_1.1.2         </span>
-<span class="co">#&gt; [55] crayon_1.3.4         pkgconfig_2.0.3      MASS_7.3-53         </span>
-<span class="co">#&gt; [58] ellipsis_0.3.1       shinydashboard_0.7.1 assertthat_0.2.1    </span>
-<span class="co">#&gt; [61] rmarkdown_2.6        R6_2.5.0             compiler_4.1.0</span></code></pre></div>
+<span class="co">#&gt;  [1] tidyselect_1.1.1     xfun_0.26            bslib_0.3.0         </span>
+<span class="co">#&gt;  [4] shinyjs_2.0.0        purrr_0.3.4          colorspace_2.0-2    </span>
+<span class="co">#&gt;  [7] vctrs_0.3.8          generics_0.1.0       htmltools_0.5.2     </span>
+<span class="co">#&gt; [10] stats4_4.1.1         yaml_2.2.1           rintrojs_0.3.0      </span>
+<span class="co">#&gt; [13] utf8_1.2.2           rlang_0.4.11         later_1.3.0         </span>
+<span class="co">#&gt; [16] pkgdown_1.6.1.9001   jquerylib_0.1.4      pillar_1.6.3        </span>
+<span class="co">#&gt; [19] glue_1.4.2           BiocGenerics_0.39.2  lifecycle_1.0.1     </span>
+<span class="co">#&gt; [22] stringr_1.4.0        munsell_0.5.0        gtable_0.3.0        </span>
+<span class="co">#&gt; [25] ragg_1.1.3           htmlwidgets_1.5.4    memoise_2.0.0       </span>
+<span class="co">#&gt; [28] evaluate_0.14        knitr_1.36           fastmap_1.1.0       </span>
+<span class="co">#&gt; [31] httpuv_1.6.3         fansi_0.5.0          Rcpp_1.0.7          </span>
+<span class="co">#&gt; [34] xtable_1.8-4         promises_1.2.0.1     scales_1.1.1        </span>
+<span class="co">#&gt; [37] DT_0.19              cachem_1.0.6         limma_3.49.4        </span>
+<span class="co">#&gt; [40] S4Vectors_0.31.4     desc_1.4.0           jsonlite_1.7.2      </span>
+<span class="co">#&gt; [43] mime_0.12            systemfonts_1.0.2    fs_1.5.0            </span>
+<span class="co">#&gt; [46] textshaping_0.3.5    ggplot2_3.3.5        digest_0.6.28       </span>
+<span class="co">#&gt; [49] stringi_1.7.4        dplyr_1.0.7          shiny_1.7.0         </span>
+<span class="co">#&gt; [52] cowplot_1.1.1        grid_4.1.1           rprojroot_2.0.2     </span>
+<span class="co">#&gt; [55] tools_4.1.1          magrittr_2.0.1       sass_0.4.0          </span>
+<span class="co">#&gt; [58] tibble_3.1.5         tidyr_1.1.4          crayon_1.4.1        </span>
+<span class="co">#&gt; [61] pkgconfig_2.0.3      MASS_7.3-54          ellipsis_0.3.2      </span>
+<span class="co">#&gt; [64] shinydashboard_0.7.2 rmarkdown_2.11       R6_2.5.1            </span>
+<span class="co">#&gt; [67] compiler_4.1.1</span></code></pre></div>
 </div>
   </div>
 
@@ -263,11 +267,13 @@ ExploreModelMatrix()</a></code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://csoneson.github.io">Charlotte Soneson</a>, <a href="https://federicomarini.github.io">Federico Marini</a>, <a href="https://mikelove.github.io">Michael Love</a>, Florian Geier, <a href="https://github.com/mbstadler">Michael Stadler</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://csoneson.github.io" class="external-link external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link external-link">Federico Marini</a>, <a href="https://mikelove.github.io" class="external-link external-link">Michael Love</a>, Florian Geier, <a href="https://github.com/mbstadler" class="external-link external-link">Michael Stadler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -275,6 +281,8 @@ ExploreModelMatrix()</a></code></pre>
 
   
 
+
+  
 
   </body>
 </html>
