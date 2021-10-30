@@ -103,18 +103,18 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install <code>ExploreModelMatrix</code> from Bioconductor (note that you need at least release 3.11 of Bioconductor, released in April 2020):</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install("ExploreModelMatrix")</code></pre>
+<pre><code><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"ExploreModelMatrix"</span><span class="op">)</span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>The main function in the <code>ExploreModelMatrix</code> package is called <code><a href="reference/ExploreModelMatrix.html">ExploreModelMatrix()</a></code>. When calling <code><a href="reference/ExploreModelMatrix.html">ExploreModelMatrix()</a></code>, simply provide a <em>data.frame</em> (or <em>DataFrame</em>) with sample information and a design formula:</p>
-<pre><code>sampleData &lt;- data.frame(genotype = rep(c("A", "B"), each = 4),
-                         treatment = rep(c("ctrl", "trt"), 4))
-ExploreModelMatrix(sampleData = sampleData,
-                   designFormula = ~ genotype + treatment)</code></pre>
+<pre><code><span class="va">sampleData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>genotype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,
+                         treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ctrl"</span>, <span class="st">"trt"</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="reference/ExploreModelMatrix.html">ExploreModelMatrix</a></span><span class="op">(</span>sampleData <span class="op">=</span> <span class="va">sampleData</span>,
+                   designFormula <span class="op">=</span> <span class="op">~</span> <span class="va">genotype</span> <span class="op">+</span> <span class="va">treatment</span><span class="op">)</span></code></pre>
 <p>This will open up an <a href="https://shiny.rstudio.com/" class="external-link">R/Shiny</a> application where you can explore the specified design matrix and the fitted values for each combination of predictor values.</p>
 <p>For more examples of designs, we refer to the package vignette.</p>
 </div>
