@@ -109,7 +109,7 @@ jobs:
 
       - name: Show testthat output
         if: always()
-        run: find ${GITHUB_WORKSPACE} -name 'testthat.Rout*' -exec cat '{}' \; || true
+        run: find . -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
 
       - name: Upload check results
@@ -117,7 +117,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{ runner.os }}-bioc-${{ matrix.config.bioc }}-results
-          path: ${GITHUB_WORKSPACE}/ExploreModelMatrix.Rcheck
+          path: ExploreModelMatrix.Rcheck
 
       - name: Test coverage
         if: matrix.config.os == 'macOS-latest'
