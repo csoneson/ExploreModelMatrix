@@ -36,6 +36,9 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
 
+      - name: Print working directory
+        run: echo ${GITHUB_WORKSPACE}
+
       - name: Set up R and install BiocManager
         uses: grimbough/bioc-actions/setup-bioc@v1
         if: matrix.config.image == null
@@ -106,7 +109,7 @@ jobs:
 
       - name: Show testthat output
         if: always()
-        run: find -name 'testthat.Rout*' -exec cat '{}' \; || true
+        run: find ${GITHUB_WORKSPACE} -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
 
       - name: Upload check results
@@ -114,7 +117,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{ runner.os }}-bioc-${{ matrix.config.bioc }}-results
-          path: check
+          path: ${GITHUB_WORKSPACE}/ExploreModelMatrix.Rcheck
 
       - name: Test coverage
         if: matrix.config.os == 'macOS-latest'
