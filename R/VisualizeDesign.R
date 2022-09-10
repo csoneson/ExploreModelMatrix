@@ -71,7 +71,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom S4Vectors DataFrame
 #'
-VisualizeDesign <- function(sampleData, designFormula,
+VisualizeDesign <- function(sampleData, designFormula = NULL,
                             flipCoordFitted = FALSE, flipCoordCoocc = FALSE,
                             textSizeFitted = 5, textSizeCoocc = 5,
                             textSizeLabsFitted = 12, textSizeLabsCoocc = 12,
@@ -159,6 +159,9 @@ VisualizeDesign <- function(sampleData, designFormula,
            "the column names of the sample data")
     }
     sampleData <- sampleData %>% dplyr::select(dplyr::all_of(terms))
+    if (any(is.na(sampleData))) {
+      stop("The sample data frame should not contain NA values.")
+    }
   } else {
     ## If we're only given a design matrix, assume that all columns of
     ## sampleData are relevant

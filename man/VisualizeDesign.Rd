@@ -6,7 +6,7 @@
 \usage{
 VisualizeDesign(
   sampleData,
-  designFormula,
+  designFormula = NULL,
   flipCoordFitted = FALSE,
   flipCoordCoocc = FALSE,
   textSizeFitted = 5,
