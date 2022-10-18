@@ -81,6 +81,13 @@ static plots for exploring the resulting design matrix graphically.
 This function is called internally by \code{ExploreModelMatrix()}, but
 can also be used directly if interactivity is not required.
 }
+\details{
+Note that if a design matrix is supplied (via the \code{designMatrix}
+argument), caution is required in order to interpret especially the
+cooccurrence plot in the situation where the provided \code{sampleData}
+contains additional columns not used to generate the design matrix (or
+when it does not contain all the relevant columns).
+}
 \examples{
 VisualizeDesign(
   sampleData = data.frame(genotype = rep(c("A", "B"), each = 4),

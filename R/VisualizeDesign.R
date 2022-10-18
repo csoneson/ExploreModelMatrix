@@ -5,6 +5,12 @@
 #' This function is called internally by \code{ExploreModelMatrix()}, but
 #' can also be used directly if interactivity is not required.
 #'
+#' Note that if a design matrix is supplied (via the \code{designMatrix}
+#' argument), caution is required in order to interpret especially the
+#' cooccurrence plot in the situation where the provided \code{sampleData}
+#' contains additional columns not used to generate the design matrix (or
+#' when it does not contain all the relevant columns).
+#'
 #' @param sampleData A \code{data.frame} of \code{DataFrame} with sample
 #'   information.
 #' @param designFormula A \code{formula}. All components of the terms must be
@@ -61,6 +67,7 @@
 #' )
 #'
 #' @importFrom dplyr select distinct mutate mutate_all n group_by_at all_of
+#'   across everything
 #' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
 #'   theme_bw geom_text aes_string element_blank coord_flip aes element_text
@@ -211,7 +218,8 @@ VisualizeDesign <- function(sampleData, designFormula = NULL,
     v <- paste(v, collapse = " + ")
     sampleData$value[i] <- v
   }
-  sampleData <- sampleData %>% dplyr::group_by(value) %>%
+  sampleData <- sampleData %>%
+    dplyr::group_by(dplyr::across(dplyr::everything())) %>%
     dplyr::mutate(nSamples = length(value)) %>% dplyr::ungroup() %>%
     dplyr::distinct() %>% as.data.frame()
 
@@ -250,7 +258,7 @@ VisualizeDesign <- function(sampleData, designFormula = NULL,
       plot_data[[st]] <- paste0(st, " = ", plot_data[[st]])
     }
     plot_data <- plot_data %>%
-      tidyr::unite("groupby", split_terms, sep = ", ")
+      tidyr::unite("groupby", dplyr::all_of(split_terms), sep = ", ")
   } else {
     plot_data$groupby <- ""
   }

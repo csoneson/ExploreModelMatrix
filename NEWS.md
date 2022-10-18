@@ -1,3 +1,6 @@
+# Changes in version 1.9.2
+* Fix inconsistency in cooccurrence plots obtained when providing the design matrix directly, if the sample table contained additional columns not used for the design matrix.
+
 # Changes in version 1.3.2
 * Enable MathJax in tour
 
