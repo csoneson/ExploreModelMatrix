@@ -19,7 +19,7 @@ matrix graphically in an interactive application."><!-- mathjax --><script src="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.2</span>
       </span>
     </div>
 
@@ -76,7 +76,7 @@ matrix graphically in an interactive application.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ExploreModelMatrix</span><span class="op">(</span>sampleData <span class="op">=</span> <span class="cn">NULL</span>, designFormula <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ExploreModelMatrix</span><span class="op">(</span>sampleData <span class="op">=</span> <span class="cn">NULL</span>, designFormula <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -86,14 +86,19 @@ matrix graphically in an interactive application.</p>
 with sample information. If set to <code>NULL</code>, the user can upload
 the sample information from a tab-separated text file inside the app, or
 choose among a collection of example designs provided in the app.</p></dd>
+
+
 <dt>designFormula</dt>
 <dd><p>(optional) A <code>formula</code>. All components of
 the terms must be present as columns in <code>sampleData</code>. If set to
 <code>NULL</code>, the design formula can be specified after launching the app.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A Shiny app object</p>
+    
+
+<p>A Shiny app object</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -103,25 +108,25 @@ the terms must be present as columns in <code>sampleData</code>. If set to
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">ExploreModelMatrix</span><span class="op">(</span></span>
-<span class="r-in">  sampleData <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>genotype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
-<span class="r-in">                          treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"treated"</span>, <span class="st">"untreated"</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  designFormula <span class="op">=</span> <span class="op">~</span><span class="va">genotype</span> <span class="op">+</span> <span class="va">treatment</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">ExploreModelMatrix</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  sampleData <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>genotype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                          treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"treated"</span>, <span class="st">"untreated"</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  designFormula <span class="op">=</span> <span class="op">~</span><span class="va">genotype</span> <span class="op">+</span> <span class="va">treatment</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This Font Awesome icon ('warning') does not exist:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> * if providing a custom `html_dependency` these `name` checks can </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   be deactivated with `verify_fa = FALSE`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This Font Awesome icon ('') does not exist:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> * if providing a custom `html_dependency` these `name` checks can </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   be deactivated with `verify_fa = FALSE`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The `name` provided ('hand-o-right') is deprecated in Font Awesome 5:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The `name` provided ('hand-o-right') is deprecated in Font Awesome 6:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> * please consider using 'hand-point-right' or 'fas fa-hand-point-right' instead</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> * use the `verify_fa = FALSE` to deactivate these messages</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This Font Awesome icon ('question-circle fa-1g') does not exist:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> * if providing a custom `html_dependency` these `name` checks can </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   be deactivated with `verify_fa = FALSE`</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -136,7 +141,7 @@ the terms must be present as columns in <code>sampleData</code>. If set to
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer></div>
