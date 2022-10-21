@@ -1,8 +1,8 @@
-pandoc: 2.7.3
+pandoc: 2.14.2
 pkgdown: 2.0.6.9000
 pkgdown_sha: 7fe9e802df2964d483d0267f1d5a59aa7b3c685d
 articles:
   EMMdeploy: EMMdeploy.html
   ExploreModelMatrix: ExploreModelMatrix.html
-last_built: 2022-10-18T12:02Z
+last_built: 2022-10-21T08:14Z
 
