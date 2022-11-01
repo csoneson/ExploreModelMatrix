@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.11.0</span>
       </span>
     </div>
 
@@ -87,10 +87,13 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Deploying ExploreModelMatrix on a Shiny Server</h1>
-                        <h4 data-toc-skip class="author">Charlotte Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B Stadler</h4>
+      <h1 data-toc-skip>Deploying ExploreModelMatrix on a Shiny
+Server</h1>
+                        <h4 data-toc-skip class="author">Charlotte
+Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B
+Stadler</h4>
             
-            <h4 data-toc-skip class="date">2022-10-21</h4>
+            <h4 data-toc-skip class="date">2022-11-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/csoneson/ExploreModelMatrix/blob/HEAD/vignettes/EMMdeploy.Rmd" class="external-link"><code>vignettes/EMMdeploy.Rmd</code></a></small>
       <div class="hidden name"><code>EMMdeploy.Rmd</code></div>
@@ -100,10 +103,20 @@
     
     
 <div class="section level2">
-<h2 id="why-deploying-exploremodelmatrix-on-a-shiny-server">Why deploying <code>ExploreModelMatrix</code> on a Shiny server?<a class="anchor" aria-label="anchor" href="#why-deploying-exploremodelmatrix-on-a-shiny-server"></a>
+<h2 id="why-deploying-exploremodelmatrix-on-a-shiny-server">Why deploying <code>ExploreModelMatrix</code> on a Shiny
+server?<a class="anchor" aria-label="anchor" href="#why-deploying-exploremodelmatrix-on-a-shiny-server"></a>
 </h2>
-<p>While the installation of <code>ExploreModelMatrix</code> locally is a relatively straightforward operation, sometimes you might require an instance of it running on a server, e.g. for teaching purposes, or to provide a working version of it because you or your collaborators are lacking admin rights.</p>
-<p>One possible solution would be to access the instance running at <a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>, which we provide also for demonstration purposes. Alternatively, you might need to deploy <code>ExploreModelMatrix</code> for internal use, or with a different set of examples/functionality. This vignette details the steps to do so - it might still require the intervention of your local IT service, and some degree of tech savvyness.</p>
+<p>While the installation of <code>ExploreModelMatrix</code> locally is
+a relatively straightforward operation, sometimes you might require an
+instance of it running on a server, e.g. for teaching purposes, or to
+provide a working version of it because you or your collaborators are
+lacking admin rights.</p>
+<p>One possible solution would be to access the instance running at <a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>,
+which we provide also for demonstration purposes. Alternatively, you
+might need to deploy <code>ExploreModelMatrix</code> for internal use,
+or with a different set of examples/functionality. This vignette details
+the steps to do so - it might still require the intervention of your
+local IT service, and some degree of tech savvyness.</p>
 </div>
 <div class="section level2">
 <h2 id="how-to-deploy-exploremodelmatrix">How to deploy <code>ExploreModelMatrix</code><a class="anchor" aria-label="anchor" href="#how-to-deploy-exploremodelmatrix"></a>
@@ -111,10 +124,17 @@
 <div class="section level3">
 <h3 id="step-1-setting-up-the-shiny-server">Step 1: Setting up the Shiny Server<a class="anchor" aria-label="anchor" href="#step-1-setting-up-the-shiny-server"></a>
 </h3>
-<p>You should mainly refer to this excellent reference: <a href="http://docs.rstudio.com/shiny-server/" class="external-link uri">http://docs.rstudio.com/shiny-server/</a>, the Administrator’s Guide beautifully written and maintained by the RStudio team.</p>
-<p>In the case of the instance linked above (<a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>), the deployment is on a Ubuntu-based server. If this is your case too, please go to <a href="https://docs.rstudio.com/shiny-server/#ubuntu-14.04" class="external-link uri">https://docs.rstudio.com/shiny-server/#ubuntu-14.04</a></p>
-<p>If you are already familiar with Shiny Server, you can consider going directly here: <a href="http://docs.rstudio.com/shiny-server/#quick-start" class="external-link uri">http://docs.rstudio.com/shiny-server/#quick-start</a></p>
-<p>Follow the indications in the main reference guide to see whether you have all packages installed, and visit the address which will refer to the address of your server (<a href="http://your.server.address:3838/sample-apps/hello/" class="external-link uri">http://your.server.address:3838/sample-apps/hello/</a>).</p>
+<p>You should mainly refer to this excellent reference: <a href="http://docs.rstudio.com/shiny-server/" class="external-link uri">http://docs.rstudio.com/shiny-server/</a>, the
+Administrator’s Guide beautifully written and maintained by the RStudio
+team.</p>
+<p>In the case of the instance linked above (<a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>),
+the deployment is on a Ubuntu-based server. If this is your case too,
+please go to <a href="https://docs.rstudio.com/shiny-server/#ubuntu-14.04" class="external-link uri">https://docs.rstudio.com/shiny-server/#ubuntu-14.04</a></p>
+<p>If you are already familiar with Shiny Server, you can consider going
+directly here: <a href="http://docs.rstudio.com/shiny-server/#quick-start" class="external-link uri">http://docs.rstudio.com/shiny-server/#quick-start</a></p>
+<p>Follow the indications in the main reference guide to see whether you
+have all packages installed, and visit the address which will refer to
+the address of your server (<a href="http://your.server.address:3838/sample-apps/hello/" class="external-link uri">http://your.server.address:3838/sample-apps/hello/</a>).</p>
 </div>
 <div class="section level3">
 <h3 id="step-2-setup-exploremodelmatrix">Step 2: setup <code>ExploreModelMatrix</code><a class="anchor" aria-label="anchor" href="#step-2-setup-exploremodelmatrix"></a>
@@ -130,14 +150,17 @@
 </h4>
 <p>You need first to install Bioconductor</p>
 <pre><code>sudo su - -c "R -e \"install.packages('BiocManager')\""</code></pre>
-<p>Once that is done, you can install <code>ExploreModelMatrix</code> with</p>
+<p>Once that is done, you can install <code>ExploreModelMatrix</code>
+with</p>
 <pre><code>sudo su - -c "R -e \"BiocManager::install('ExploreModelMatrix')\""</code></pre>
-<p>You can also install the development version of <code>ExploreModelMatrix</code> from GitHub with</p>
+<p>You can also install the development version of
+<code>ExploreModelMatrix</code> from GitHub with</p>
 <pre><code># install remotes first
 sudo su - -c "R -e \"BiocManager::install('remotes')\""
 # and then ExploreModelMatrix
 sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""</code></pre>
-<p>Keep in mind that if you are running the server as root, you could simply open R in the terminal and install the required packages with</p>
+<p>Keep in mind that if you are running the server as root, you could
+simply open R in the terminal and install the required packages with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## To be done once</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
@@ -150,12 +173,18 @@ sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""</cod
 </h4>
 <p>You essentially need to do two things:</p>
 <ul>
-<li>in <code>/srv/shiny-server</code>, create a folder (e.g. via <code>mkdir</code>) named <code>ExploreModelMatrix</code>, and create a file in there called <code>app.R</code>. Edit its content (e.g. with <code>vi</code>, <code>nano</code>, or any other editor), copy-pasting the following lines:</li>
+<li>in <code>/srv/shiny-server</code>, create a folder (e.g. via
+<code>mkdir</code>) named <code>ExploreModelMatrix</code>, and create a
+file in there called <code>app.R</code>. Edit its content (e.g. with
+<code>vi</code>, <code>nano</code>, or any other editor), copy-pasting
+the following lines:</li>
 </ul>
 <pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/csoneson/ExploreModelMatrix" class="external-link">"ExploreModelMatrix"</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/ExploreModelMatrix.html">ExploreModelMatrix</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
 <ul>
-<li>you need to edit <code>/etc/shiny-server/shiny-server.conf</code>. To do this, again use any text editor (e.g. <code>vi</code>), and add the following lines</li>
+<li>you need to edit <code>/etc/shiny-server/shiny-server.conf</code>.
+To do this, again use any text editor (e.g. <code>vi</code>), and add
+the following lines</li>
 </ul>
 <pre><code>server {
   listen 3838;
@@ -182,16 +211,23 @@ sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""</cod
 
   # ...
 }</code></pre>
-<p>You might need to restart the Shiny Server (<code>systemctl restart shiny-server</code> on Ubuntu). Then you should be good to go!</p>
-<p>Visit <a href="http://your.server.address:3838/ExploreModelMatrix" class="external-link uri">http://your.server.address:3838/ExploreModelMatrix</a> for your personal running instance.</p>
+<p>You might need to restart the Shiny Server
+(<code>systemctl restart shiny-server</code> on Ubuntu). Then you should
+be good to go!</p>
+<p>Visit <a href="http://your.server.address:3838/ExploreModelMatrix" class="external-link uri">http://your.server.address:3838/ExploreModelMatrix</a> for
+your personal running instance.</p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="exploremodelmatrix-at-the-imbei">
 <code>ExploreModelMatrix</code> at the IMBEI<a class="anchor" aria-label="anchor" href="#exploremodelmatrix-at-the-imbei"></a>
 </h3>
-<p><a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a> is the address for the public instance of <code>ExploreModelMatrix</code> on the Shiny Server I manage at the Institute of Medical Biostatistics, Epidemiology and Informatics.</p>
-<p>The relevant setup of that machine is the following (in case you are asking what specs you need):</p>
+<p><a href="http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix" class="external-link uri">http://shiny.imbei.uni-mainz.de:3838/ExploreModelMatrix</a>
+is the address for the public instance of
+<code>ExploreModelMatrix</code> on the Shiny Server I manage at the
+Institute of Medical Biostatistics, Epidemiology and Informatics.</p>
+<p>The relevant setup of that machine is the following (in case you are
+asking what specs you need):</p>
 <ul>
 <li>4 cores</li>
 <li>8 GB RAM</li>
@@ -210,7 +246,7 @@ sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""</cod
 </h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.2.1 (2022-06-23)</span></span>
+<span><span class="co">#&gt; R version 4.2.2 (2022-10-31)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>
 <span><span class="co">#&gt; Running under: macOS Big Sur ... 10.16</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -225,32 +261,32 @@ sudo su - -c "R -e \"BiocManager::install('csoneson/ExploreModelMatrix')\""</cod
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] ExploreModelMatrix_1.9.2</span></span>
+<span><span class="co">#&gt; [1] ExploreModelMatrix_1.11.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] tidyselect_1.2.0     xfun_0.34            bslib_0.4.0         </span></span>
 <span><span class="co">#&gt;  [4] shinyjs_2.1.0        purrr_0.3.5          colorspace_2.0-3    </span></span>
-<span><span class="co">#&gt;  [7] vctrs_0.4.2          generics_0.1.3       htmltools_0.5.3     </span></span>
-<span><span class="co">#&gt; [10] stats4_4.2.1         yaml_2.3.6           rintrojs_0.3.2      </span></span>
+<span><span class="co">#&gt;  [7] vctrs_0.5.0          generics_0.1.3       htmltools_0.5.3     </span></span>
+<span><span class="co">#&gt; [10] stats4_4.2.2         yaml_2.3.6           rintrojs_0.3.2      </span></span>
 <span><span class="co">#&gt; [13] utf8_1.2.2           rlang_1.0.6          pkgdown_2.0.6.9000  </span></span>
 <span><span class="co">#&gt; [16] jquerylib_0.1.4      pillar_1.8.1         later_1.3.0         </span></span>
 <span><span class="co">#&gt; [19] glue_1.6.2           BiocGenerics_0.43.4  lifecycle_1.0.3     </span></span>
 <span><span class="co">#&gt; [22] stringr_1.4.1        munsell_0.5.0        gtable_0.3.1        </span></span>
-<span><span class="co">#&gt; [25] ragg_1.2.3           htmlwidgets_1.5.4    memoise_2.0.1       </span></span>
+<span><span class="co">#&gt; [25] ragg_1.2.4           htmlwidgets_1.5.4    memoise_2.0.1       </span></span>
 <span><span class="co">#&gt; [28] evaluate_0.17        knitr_1.40           fastmap_1.1.0       </span></span>
 <span><span class="co">#&gt; [31] httpuv_1.6.6         fansi_1.0.3          Rcpp_1.0.9          </span></span>
 <span><span class="co">#&gt; [34] xtable_1.8-4         promises_1.2.0.1     scales_1.2.1        </span></span>
-<span><span class="co">#&gt; [37] DT_0.26              cachem_1.0.6         limma_3.53.10       </span></span>
-<span><span class="co">#&gt; [40] S4Vectors_0.35.4     desc_1.4.2           jsonlite_1.8.2      </span></span>
+<span><span class="co">#&gt; [37] DT_0.26              cachem_1.0.6         limma_3.53.11       </span></span>
+<span><span class="co">#&gt; [40] S4Vectors_0.35.4     desc_1.4.2           jsonlite_1.8.3      </span></span>
 <span><span class="co">#&gt; [43] mime_0.12            systemfonts_1.0.4    fs_1.5.2            </span></span>
 <span><span class="co">#&gt; [46] textshaping_0.3.6    ggplot2_3.3.6        digest_0.6.30       </span></span>
-<span><span class="co">#&gt; [49] stringi_1.7.8        dplyr_1.0.10         shiny_1.7.2         </span></span>
-<span><span class="co">#&gt; [52] cowplot_1.1.1        grid_4.2.1           rprojroot_2.0.3     </span></span>
-<span><span class="co">#&gt; [55] cli_3.4.1            tools_4.2.1          magrittr_2.0.3      </span></span>
+<span><span class="co">#&gt; [49] stringi_1.7.8        dplyr_1.0.10         shiny_1.7.3         </span></span>
+<span><span class="co">#&gt; [52] cowplot_1.1.1        grid_4.2.2           rprojroot_2.0.3     </span></span>
+<span><span class="co">#&gt; [55] cli_3.4.1            tools_4.2.2          magrittr_2.0.3      </span></span>
 <span><span class="co">#&gt; [58] sass_0.4.2           tibble_3.1.8         tidyr_1.2.1         </span></span>
 <span><span class="co">#&gt; [61] pkgconfig_2.0.3      ellipsis_0.3.2       MASS_7.3-58.1       </span></span>
 <span><span class="co">#&gt; [64] shinydashboard_0.7.2 rmarkdown_2.17       R6_2.5.1            </span></span>
-<span><span class="co">#&gt; [67] compiler_4.2.1</span></span></code></pre></div>
+<span><span class="co">#&gt; [67] compiler_4.2.2</span></span></code></pre></div>
 </div>
   </div>
 
