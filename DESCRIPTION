@@ -44,7 +44,7 @@ Imports:
     limma,
     S4Vectors,
     shinyjs
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
