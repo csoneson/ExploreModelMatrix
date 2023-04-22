@@ -54,4 +54,4 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://github.com/csoneson/ExploreModelMatrix
 BugReports: https://github.com/csoneson/ExploreModelMatrix/issues
-biocViews: ExperimentalDesign, Regression, DifferentialExpression
+biocViews: ExperimentalDesign, Regression, DifferentialExpression, ShinyApps
