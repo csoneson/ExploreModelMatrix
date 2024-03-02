@@ -1,3 +1,6 @@
+# Changes in version 1.15.1
+* Add 'Close app' button to close the application and export the data
+
 # Changes in version 1.9.2
 * Fix inconsistency in cooccurrence plots obtained when providing the design matrix directly, if the sample table contained additional columns not used for the design matrix.
 

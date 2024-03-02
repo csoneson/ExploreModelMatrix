@@ -33,7 +33,7 @@
 #'   reactive renderUI fileInput observeEvent isolate textInput plotOutput
 #'   shinyApp icon renderPlot tagList selectInput checkboxInput
 #'   verbatimTextOutput textOutput observe renderPrint actionButton div
-#'   need validate span markdown HTML withMathJax
+#'   need validate span markdown HTML withMathJax stopApp
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom utils read.delim packageVersion
 #' @importFrom cowplot plot_grid
@@ -126,7 +126,9 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
           shiny::uiOutput("dropcols")
         ),
 
-        shiny::uiOutput("ui_settings")
+        shiny::uiOutput("ui_settings"),
+
+        shiny::actionButton("close_app", "Close app")
       ),
 
       # Body definition -----------------------------------------------------
@@ -1101,6 +1103,11 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL) {
       shiny::plotOutput("cooccurrence_matrix_plot",
                         width = "100%",
                         height = paste0(input$plotheight_coocc, "px"))
+    })
+
+    # Close and return ------------------------------------------------------
+    observeEvent(input$close_app, {
+      shiny::stopApp(returnValue = generated_output())
     })
 
     # Tour ------------------------------------------------------------------
