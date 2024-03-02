@@ -1,7 +1,8 @@
 Package: ExploreModelMatrix
 Type: Package
 Title: Graphical Exploration of Design Matrices
-Version: 1.15.0
+Version: 1.15.1
+Date: 2024-03-02
 Authors@R: c(person("Charlotte", "Soneson", role = c("aut", "cre"), 
     email = "charlottesoneson@gmail.com", 
     comment = c(ORCID = "0000-0003-3833-2169")),
@@ -44,7 +45,7 @@ Imports:
     limma,
     S4Vectors,
     shinyjs
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

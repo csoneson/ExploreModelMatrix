@@ -7,9 +7,9 @@
 #' explore the fitted values (in terms of the model coefficients) for each
 #' combination of predictor values.
 #'
-#' @name ExploreModelMatrix-pkg
-#' @docType package
-NULL
+#' @keywords internal
+#' @aliases ExploreModelMatrix-package NULL
+"_PACKAGE"
 
 globalVariables(c("colorby", "value", "vjust", "coefficient",
                   "Sample", "vif", "nSamples", "rows", "cols",
