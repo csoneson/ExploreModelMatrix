@@ -19,8 +19,6 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,13 +34,11 @@
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.17.0</span>
       </span>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
-     
   </a>
 </li>
 <li>
@@ -54,12 +50,11 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/ExploreModelMatrix.html">ExploreModelMatrix</a>
+      <a href="../articles/EMMdeploy.html">Deploying ExploreModelMatrix on a Shiny Server</a>
     </li>
   </ul>
 </li>
@@ -71,7 +66,6 @@
 <li>
   <a href="https://github.com/csoneson/ExploreModelMatrix" class="external-link">
     <span class="fa fa-github fa-lg"></span>
-     
   </a>
 </li>
       </ul>
@@ -81,9 +75,6 @@
 <!--/.container -->
 </div>
 <!--/.navbar -->
-
-      
-
       </header><link href="ExploreModelMatrix_files/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="ExploreModelMatrix_files/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <div class="row">
@@ -94,17 +85,11 @@ ExploreModelMatrix</h1>
                         <h4 data-toc-skip class="author">Charlotte
 Soneson, Federico Marini, Michael I Love, Florian Geier and Michael B
 Stadler</h4>
-            
-            <h4 data-toc-skip class="date">2024-04-30</h4>
-      
-      <small class="dont-index">Source: <a href="https://github.com/csoneson/ExploreModelMatrix/blob/HEAD/vignettes/ExploreModelMatrix.Rmd" class="external-link"><code>vignettes/ExploreModelMatrix.Rmd</code></a></small>
+                        <h4 data-toc-skip class="date">2024-05-16</h4>
+            <small class="dont-index">Source: <a href="https://github.com/csoneson/ExploreModelMatrix/blob/HEAD/vignettes/ExploreModelMatrix.Rmd" class="external-link"><code>vignettes/ExploreModelMatrix.Rmd</code></a></small>
       <div class="hidden name"><code>ExploreModelMatrix.Rmd</code></div>
-
     </div>
-
-    
-    
-<div class="section level2">
+        <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p><code>ExploreModelMatrix</code> is an R package for visualizing
@@ -203,19 +188,21 @@ with genotype A.</p>
 <span><span class="co">#&gt; 5        B      ctrl</span></span>
 <span><span class="co">#&gt; 6        B       trt</span></span>
 <span><span class="co">#&gt; 7        B      ctrl</span></span>
-<span><span class="co">#&gt; 8        B       trt</span></span>
-<span><span class="va">vd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VisualizeDesign.html">VisualizeDesign</a></span><span class="op">(</span>sampleData <span class="op">=</span> <span class="va">sampleData</span>, </span>
+<span><span class="co">#&gt; 8        B       trt</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VisualizeDesign.html">VisualizeDesign</a></span><span class="op">(</span>sampleData <span class="op">=</span> <span class="va">sampleData</span>, </span>
 <span>                      designFormula <span class="op">=</span> <span class="op">~</span> <span class="va">genotype</span> <span class="op">+</span> <span class="va">treatment</span>, </span>
 <span>                      textSizeFitted <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="va">vd</span><span class="op">$</span><span class="va">plotlist</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ExploreModelMatrix_files/figure-html/unnamed-chunk-2-1.png" width="480"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ExploreModelMatrix.html">ExploreModelMatrix</a></span><span class="op">(</span>sampleData <span class="op">=</span> <span class="va">sampleData</span>,</span>
 <span>                          designFormula <span class="op">=</span> <span class="op">~</span> <span class="va">genotype</span> <span class="op">+</span> <span class="va">treatment</span><span class="op">)</span></span>
 <span><span class="co">#&gt; The `name` provided ('') does not correspond to a known icon</span></span>
 <span><span class="co">#&gt; The `name` provided ('hand-o-right') does not correspond to a known icon</span></span>
-<span><span class="co">#&gt; The `name` provided ('question-circle fa-1g') does not correspond to a known icon</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co">#&gt; The `name` provided ('question-circle fa-1g') does not correspond to a known icon</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -232,7 +219,7 @@ removed. We use the design
 seen from the visualization below, this lets us easily compare e.g.
 post- vs pre-treatment observations within the Sensitive group (via the
 <code>ResponseSensitive.Treatmentpre</code> coefficient).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">sampleData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Resistant"</span>, <span class="st">"Sensitive"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  Patient <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">8</span>, <span class="fl">11</span><span class="op">:</span><span class="fl">18</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -268,23 +255,25 @@ post- vs pre-treatment observations within the Sensitive group (via the
 <span><span class="co">#&gt; 27 Sensitive      17       pre    11</span></span>
 <span><span class="co">#&gt; 28 Sensitive      17      post    11</span></span>
 <span><span class="co">#&gt; 29 Sensitive      18       pre    12</span></span>
-<span><span class="co">#&gt; 30 Sensitive      18      post    12</span></span>
-<span><span class="va">vd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VisualizeDesign.html">VisualizeDesign</a></span><span class="op">(</span></span>
+<span><span class="co">#&gt; 30 Sensitive      18      post    12</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VisualizeDesign.html">VisualizeDesign</a></span><span class="op">(</span></span>
 <span>  sampleData <span class="op">=</span> <span class="va">sampleData</span>,</span>
 <span>  designFormula <span class="op">=</span> <span class="op">~</span> <span class="va">Response</span> <span class="op">+</span> <span class="va">Response</span><span class="op">:</span><span class="va">ind.n</span> <span class="op">+</span> <span class="va">Response</span><span class="op">:</span><span class="va">Treatment</span>,</span>
 <span>  textSizeFitted <span class="op">=</span> <span class="fl">3</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="va">vd</span><span class="op">$</span><span class="va">plotlist</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ExploreModelMatrix_files/figure-html/unnamed-chunk-3-1.png" width="480"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ExploreModelMatrix.html">ExploreModelMatrix</a></span><span class="op">(</span></span>
 <span>  sampleData <span class="op">=</span> <span class="va">sampleData</span>,</span>
 <span>  designFormula <span class="op">=</span> <span class="op">~</span> <span class="va">Response</span> <span class="op">+</span> <span class="va">Response</span><span class="op">:</span><span class="va">ind.n</span> <span class="op">+</span> <span class="va">Response</span><span class="op">:</span><span class="va">Treatment</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; The `name` provided ('') does not correspond to a known icon</span></span>
 <span><span class="co">#&gt; The `name` provided ('hand-o-right') does not correspond to a known icon</span></span>
-<span><span class="co">#&gt; The `name` provided ('question-circle fa-1g') does not correspond to a known icon</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co">#&gt; The `name` provided ('question-circle fa-1g') does not correspond to a known icon</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>The design above doesn’t allow comparison between Resistant and
@@ -292,7 +281,7 @@ Sensitive patients while accounting for the patient effect, since the
 patient is nested within the response group. If we choose to ignore the
 patient effect, we can fit a factorial model with the design formula
 <code>~ Treatment + Response</code>, as illustrated below.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VisualizeDesign.html">VisualizeDesign</a></span><span class="op">(</span>sampleData <span class="op">=</span> <span class="va">sampleData</span>,</span>
 <span>                      designFormula <span class="op">=</span> <span class="op">~</span> <span class="va">Treatment</span> <span class="op">+</span> <span class="va">Response</span>, </span>
 <span>                      textSizeFitted <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
@@ -308,7 +297,7 @@ without treatment with a drug (plus/minus). We use the design
 <code>~ 0 + batch + condition</code> (where <code>batch</code>
 corresponds to the mouse ID), and drop the column corresponding to
 <code>conditionko_minus</code> to get a full-rank design matrix.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">sampleData</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ctrl_minus"</span>, <span class="st">"ctrl_plus"</span>, </span>
 <span>                           <span class="st">"ko_minus"</span>, <span class="st">"ko_plus"</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -325,20 +314,22 @@ corresponds to the mouse ID), and drop the column corresponding to
 <span><span class="co">#&gt; 9  ctrl_minus     5</span></span>
 <span><span class="co">#&gt; 10  ctrl_plus     5</span></span>
 <span><span class="co">#&gt; 11   ko_minus     6</span></span>
-<span><span class="co">#&gt; 12    ko_plus     6</span></span>
-<span><span class="va">vd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VisualizeDesign.html">VisualizeDesign</a></span><span class="op">(</span>sampleData <span class="op">=</span> <span class="va">sampleData</span>,</span>
+<span><span class="co">#&gt; 12    ko_plus     6</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VisualizeDesign.html">VisualizeDesign</a></span><span class="op">(</span>sampleData <span class="op">=</span> <span class="va">sampleData</span>,</span>
 <span>                      designFormula <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">batch</span> <span class="op">+</span> <span class="va">condition</span>, </span>
 <span>                      textSizeFitted <span class="op">=</span> <span class="fl">4</span>, lineWidthFitted <span class="op">=</span> <span class="fl">20</span>, </span>
 <span>                      dropCols <span class="op">=</span> <span class="st">"conditionko_minus"</span><span class="op">)</span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="va">vd</span><span class="op">$</span><span class="va">plotlist</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ExploreModelMatrix_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ExploreModelMatrix.html">ExploreModelMatrix</a></span><span class="op">(</span>sampleData <span class="op">=</span> <span class="va">sampleData</span>,</span>
 <span>                          designFormula <span class="op">=</span> <span class="op">~</span> <span class="va">batch</span> <span class="op">+</span> <span class="va">condition</span><span class="op">)</span></span>
 <span><span class="co">#&gt; The `name` provided ('') does not correspond to a known icon</span></span>
 <span><span class="co">#&gt; The `name` provided ('hand-o-right') does not correspond to a known icon</span></span>
-<span><span class="co">#&gt; The `name` provided ('question-circle fa-1g') does not correspond to a known icon</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co">#&gt; The `name` provided ('question-circle fa-1g') does not correspond to a known icon</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -352,7 +343,7 @@ application (in effect, the output from the internal call to
 the <code>app</code> object as in the examples above, and then assign
 the call to <code><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">shiny::runApp()</a></code> to a variable to capture the
 output. For example:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -365,7 +356,7 @@ generated by <code><a href="../reference/VisualizeDesign.html">VisualizeDesign()
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin20</span></span>
@@ -390,57 +381,43 @@ generated by <code><a href="../reference/VisualizeDesign.html">VisualizeDesign()
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] tidyr_1.3.1          sass_0.4.9           utf8_1.2.4          </span></span>
 <span><span class="co">#&gt;  [4] generics_0.1.3       digest_0.6.35        magrittr_2.0.3      </span></span>
-<span><span class="co">#&gt;  [7] evaluate_0.23        grid_4.4.0           fastmap_1.1.1       </span></span>
-<span><span class="co">#&gt; [10] jsonlite_1.8.8       limma_3.59.10        promises_1.3.0      </span></span>
+<span><span class="co">#&gt;  [7] evaluate_0.23        grid_4.4.0           fastmap_1.2.0       </span></span>
+<span><span class="co">#&gt; [10] jsonlite_1.8.8       limma_3.60.0         promises_1.3.0      </span></span>
 <span><span class="co">#&gt; [13] purrr_1.0.2          fansi_1.0.6          crosstalk_1.2.1     </span></span>
 <span><span class="co">#&gt; [16] scales_1.3.0         shinydashboard_0.7.2 textshaping_0.3.7   </span></span>
 <span><span class="co">#&gt; [19] jquerylib_0.1.4      cli_3.6.2            shiny_1.8.1.1       </span></span>
 <span><span class="co">#&gt; [22] rlang_1.1.3          cowplot_1.1.3        munsell_0.5.1       </span></span>
-<span><span class="co">#&gt; [25] withr_3.0.0          cachem_1.0.8         yaml_2.3.8          </span></span>
+<span><span class="co">#&gt; [25] withr_3.0.0          cachem_1.1.0         yaml_2.3.8          </span></span>
 <span><span class="co">#&gt; [28] tools_4.4.0          rintrojs_0.3.4       memoise_2.0.1       </span></span>
 <span><span class="co">#&gt; [31] dplyr_1.1.4          colorspace_2.1-0     ggplot2_3.5.1       </span></span>
-<span><span class="co">#&gt; [34] httpuv_1.6.15        DT_0.33              BiocGenerics_0.49.1 </span></span>
+<span><span class="co">#&gt; [34] httpuv_1.6.15        DT_0.33              BiocGenerics_0.50.0 </span></span>
 <span><span class="co">#&gt; [37] mime_0.12            vctrs_0.6.5          R6_2.5.1            </span></span>
-<span><span class="co">#&gt; [40] stats4_4.4.0         lifecycle_1.0.4      S4Vectors_0.41.7    </span></span>
+<span><span class="co">#&gt; [40] stats4_4.4.0         lifecycle_1.0.4      S4Vectors_0.42.0    </span></span>
 <span><span class="co">#&gt; [43] fs_1.6.4             htmlwidgets_1.6.4    MASS_7.3-60.2       </span></span>
-<span><span class="co">#&gt; [46] shinyjs_2.1.0        ragg_1.3.0           fontawesome_0.5.2   </span></span>
+<span><span class="co">#&gt; [46] shinyjs_2.1.0        ragg_1.3.2           fontawesome_0.5.2   </span></span>
 <span><span class="co">#&gt; [49] pkgconfig_2.0.3      desc_1.4.3           later_1.3.2         </span></span>
 <span><span class="co">#&gt; [52] pkgdown_2.0.9.9000   bslib_0.7.0          pillar_1.9.0        </span></span>
 <span><span class="co">#&gt; [55] gtable_0.3.5         Rcpp_1.0.12          glue_1.7.0          </span></span>
-<span><span class="co">#&gt; [58] statmod_1.5.0        systemfonts_1.0.6    highr_0.10          </span></span>
-<span><span class="co">#&gt; [61] xfun_0.43            tibble_3.2.1         tidyselect_1.2.1    </span></span>
-<span><span class="co">#&gt; [64] knitr_1.46           farver_2.1.1         xtable_1.8-4        </span></span>
-<span><span class="co">#&gt; [67] htmltools_0.5.8.1    rmarkdown_2.26       compiler_4.4.0</span></span></code></pre></div>
+<span><span class="co">#&gt; [58] statmod_1.5.0        systemfonts_1.1.0    highr_0.10          </span></span>
+<span><span class="co">#&gt; [61] xfun_0.44            tibble_3.2.1         tidyselect_1.2.1    </span></span>
+<span><span class="co">#&gt; [64] knitr_1.46           farver_2.1.2         xtable_1.8-4        </span></span>
+<span><span class="co">#&gt; [67] htmltools_0.5.8.1    rmarkdown_2.26.2     compiler_4.4.0</span></span></code></pre></div>
 </div>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
         <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
     </nav>
 </div>
-
 </div>
-
-
-
       <footer><div class="copyright">
   <p></p>
 <p>Developed by <a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link">Federico Marini</a>, <a href="https://mikelove.github.io" class="external-link">Michael Love</a>, Florian Geier, <a href="https://github.com/mbstadler" class="external-link">Michael Stadler</a>.</p>
 </div>
-
 <div class="pkgdown">
   <p></p>
 <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
       </footer>
 </div>
-
-  
-
-
-  
-
   </body>
 </html>
