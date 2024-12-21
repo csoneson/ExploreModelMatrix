@@ -19,7 +19,7 @@ matrix graphically in an interactive application."><!-- mathjax --><script src="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ExploreModelMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.1</span>
       </span>
     </div>
 
@@ -76,7 +76,11 @@ matrix graphically in an interactive application.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ExploreModelMatrix</span><span class="op">(</span>sampleData <span class="op">=</span> <span class="cn">NULL</span>, designFormula <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ExploreModelMatrix</span><span class="op">(</span></span>
+<span>  sampleData <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  designFormula <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  addStopButton <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -94,6 +98,11 @@ choose among a collection of example designs provided in the app.</p></dd>
 <dd><p>(optional) A <code>formula</code>. All components of
 the terms must be present as columns in <code>sampleData</code>. If set to
 <code>NULL</code>, the design formula can be specified after launching the app.</p></dd>
+
+
+<dt id="arg-addstopbutton">addStopButton<a class="anchor" aria-label="anchor" href="#arg-addstopbutton"></a></dt>
+<dd><p>Logical scalar. If <code>TRUE</code> (default), will add a
+button to stop the app (by calling <code><a href="https://rdrr.io/pkg/shiny/man/stopApp.html" class="external-link">shiny::stopApp</a></code>).</p></dd>
 
 </dl></div>
     <div id="value">
