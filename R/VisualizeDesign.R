@@ -70,13 +70,14 @@
 #'   across everything
 #' @importFrom tidyr unite separate_rows
 #' @importFrom ggplot2 ggplot ggtitle annotate geom_vline theme geom_hline
-#'   theme_bw geom_text aes_string element_blank coord_flip aes element_text
+#'   theme_bw geom_text element_blank coord_flip aes element_text
 #'   scale_color_manual scale_x_discrete scale_y_discrete expansion
 #' @importFrom stats model.matrix as.formula cor var
 #' @importFrom methods is as
 #' @importFrom MASS ginv
 #' @importFrom magrittr %>%
 #' @importFrom S4Vectors DataFrame
+#' @importFrom rlang .data
 #'
 VisualizeDesign <- function(sampleData, designFormula = NULL,
                             flipCoordFitted = FALSE, flipCoordCoocc = FALSE,
@@ -304,12 +305,24 @@ VisualizeDesign <- function(sampleData, designFormula = NULL,
   ggp <- lapply(split(
     plot_data, f = plot_data$groupby),
     function(w) {
-      gg <- ggplot2::ggplot(
-        w,
-        ggplot2::aes_string(
-          x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
-          y = plot_terms[1],
-          label = "value")) +
+      if (length(plot_terms) == 1) {
+        gg <- ggplot2::ggplot(
+          w,
+          ggplot2::aes(
+            x = 1,
+            y = .data[[plot_terms[1]]],
+            label = .data$value)
+        )
+      } else {
+        gg <- ggplot2::ggplot(
+          w,
+          ggplot2::aes(
+            x = .data[[plot_terms[2]]],
+            y = .data[[plot_terms[1]]],
+            label = .data$value)
+        )
+      }
+      gg <- gg +
         ggplot2::scale_x_discrete(
           expand = ggplot2::expansion(mult = 0, add = 0.5)
         ) +
@@ -371,14 +384,26 @@ VisualizeDesign <- function(sampleData, designFormula = NULL,
     plot_data, f = plot_data$groupby),
     function(w) {
       w <- w %>% dplyr::select(dplyr::all_of(keepcols)) %>% dplyr::distinct()
-      gp <- ggplot2::ggplot(
-        w,
-        ggplot2::aes_string(
-          x = ifelse(length(plot_terms) == 1, 1, plot_terms[2]),
-          y = plot_terms[1],
-          fill = "nSamples",
-          label = "nSamples"
-        )) +
+      if (length(plot_terms) == 1) {
+        gp <- ggplot2::ggplot(
+          w,
+          ggplot2::aes(
+            x = 1,
+            y = .data[[plot_terms[1]]],
+            fill = .data$nSamples,
+            label = .data$nSamples
+          ))
+      } else {
+        gp <- ggplot2::ggplot(
+          w,
+          ggplot2::aes(
+            x = .data[[plot_terms[2]]],
+            y = .data[[plot_terms[1]]],
+            fill = .data$nSamples,
+            label = .data$nSamples
+          ))
+      }
+      gp <- gp +
         ggplot2::geom_tile(color = "black") +
         ggplot2::scale_x_discrete(
           expand = ggplot2::expansion(mult = 0, add = 0)
