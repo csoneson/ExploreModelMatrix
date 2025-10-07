@@ -1,7 +1,7 @@
 pandoc: 3.1.11
 pkgdown: 2.1.3.9000
-pkgdown_sha: fe04924b3df129bea60ac871614b01d87bcae147
+pkgdown_sha: 1f2f7401ca3d9d1983eb705a2203c4c4abd4184d
 articles:
   EMMdeploy: EMMdeploy.html
   ExploreModelMatrix: ExploreModelMatrix.html
-last_built: 2025-09-30T18:38Z
+last_built: 2025-10-07T15:50Z
