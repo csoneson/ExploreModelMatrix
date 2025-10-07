@@ -331,7 +331,7 @@ VisualizeDesign <- function(sampleData, designFormula = NULL,
         ggplot2::theme_bw() +
         ggplot2::geom_hline(yintercept = 0.5 +
                               seq_len(length(unique(
-                                sampleData[[plot_terms[1]]])) - 1)) +
+                                w[[plot_terms[1]]])) - 1)) +
         ggplot2::theme(
           panel.grid.major = ggplot2::element_blank(),
           panel.grid.minor = ggplot2::element_blank(),
@@ -343,7 +343,7 @@ VisualizeDesign <- function(sampleData, designFormula = NULL,
         gg <- gg +
           ggplot2::geom_vline(xintercept = 0.5 +
                                 seq_len(length(unique(
-                                  sampleData[[plot_terms[2]]])) - 1))
+                                  w[[plot_terms[2]]])) - 1))
       } else {
         if (flipCoordFitted) {
           gg <- gg + theme(axis.text.y = element_blank(),
