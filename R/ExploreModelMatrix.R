@@ -99,15 +99,15 @@ ExploreModelMatrix <- function(sampleData = NULL, designFormula = NULL,
         titleWidth = 600,
         shinydashboard::dropdownMenu(
           type = "tasks",
-          icon = shiny::icon("question-circle fa-1g"),
+          icon = shiny::icon("circle-question"),
           badgeStatus = NULL,
           headerText = "Documentation",
           shinydashboard::notificationItem(
             text = shiny::actionButton(
               "interface_overview", "Overview of the interface",
-              shiny::icon("hand-o-right")
+              shiny::icon("hand-point-right")
             ),
-            icon = shiny::icon(""), # tricking it to not have additional icon
+            icon = shiny::icon(name = NULL), # tricking it to not have additional icon
             status = "primary"
           )
         )
