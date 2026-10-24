@@ -46,7 +46,6 @@ Imports:
     S4Vectors,
     shinyjs,
     rlang
-RoxygenNote: 7.3.3
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
@@ -57,3 +56,4 @@ VignetteBuilder: knitr
 URL: https://github.com/csoneson/ExploreModelMatrix
 BugReports: https://github.com/csoneson/ExploreModelMatrix/issues
 biocViews: ExperimentalDesign, Regression, DifferentialExpression, ShinyApps
+Config/roxygen2/version: 8.1.0

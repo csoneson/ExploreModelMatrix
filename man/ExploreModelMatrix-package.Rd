@@ -25,6 +25,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Charlotte Soneson \email{charlottesoneson@gmail.com} (\href{https://orcid.org/0000-0003-3833-2169}{ORCID})
   \item Federico Marini \email{marinif@uni-mainz.de} (\href{https://orcid.org/0000-0003-3252-7758}{ORCID})
   \item Michael Love \email{michaelisaiahlove@gmail.com} (\href{https://orcid.org/0000-0001-8401-0545}{ORCID})
   \item Florian Geier \email{florian.geier@unibas.ch} (\href{https://orcid.org/0000-0002-9076-9264}{ORCID})
